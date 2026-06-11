@@ -411,3 +411,9 @@ MANUAL ACTION REQUIRED
 
 [INFO] 11.06.2026 | STAGE_6_IMPLEMENTED | Код этапа 6 и миграция готовы,
 unit-тесты и debug-сборка успешны | BUILD_VERIFIED
+
+[INFO] 11.06.2026 | GIT_COMMIT | Создан коммит этапа 6
+`e47b216 add WOD results and leaderboard flow` | OK
+
+[INFO] 11.06.2026 | GITHUB_PUSH | Изменения этапа 6 отправлены в
+`origin/main` | OK
