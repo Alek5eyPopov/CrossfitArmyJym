@@ -54,7 +54,7 @@ public class UserRepository {
     public void getUserById(@NonNull String userId, @NonNull UserCallback callback) {
         Log.d(TAG, "Getting user by ID: " + userId);
         
-        userApi.getUserById(userId).enqueue(new Callback<List<User>>() {
+        userApi.getUserById("eq." + userId).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
@@ -108,7 +108,7 @@ public class UserRepository {
     public void updateUser(@NonNull String userId, @NonNull User user, @NonNull VoidCallback callback) {
         Log.d(TAG, "Updating user: " + userId);
         
-        userApi.updateUser(userId, user).enqueue(new Callback<Void>() {
+        userApi.updateUser("eq." + userId, user).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -136,7 +136,7 @@ public class UserRepository {
     public void deleteUser(@NonNull String userId, @NonNull VoidCallback callback) {
         Log.d(TAG, "Deleting user: " + userId);
         
-        userApi.deleteUser(userId).enqueue(new Callback<Void>() {
+        userApi.deleteUser("eq." + userId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -164,7 +164,7 @@ public class UserRepository {
     public void getUsersByGroup(@NonNull String groupId, @NonNull UserListCallback callback) {
         Log.d(TAG, "Getting users by group: " + groupId);
         
-        userApi.getUsersByGroup(groupId).enqueue(new Callback<List<User>>() {
+        userApi.getUsersByGroup("eq." + groupId).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -191,7 +191,7 @@ public class UserRepository {
     public void getUsersByRole(@NonNull String role, @NonNull UserListCallback callback) {
         Log.d(TAG, "Getting users by role: " + role);
         
-        userApi.getUsersByRole(role).enqueue(new Callback<List<User>>() {
+        userApi.getUsersByRole("eq." + role).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
                 if (response.isSuccessful() && response.body() != null) {

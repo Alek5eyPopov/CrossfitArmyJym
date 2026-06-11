@@ -56,13 +56,14 @@ ViewModel. Для статуса `DONE` необходима проверка п
 Критерий завершения: миграция повторно применима, роли нельзя повысить с клиента,
 RLS проверена тестовыми пользователями трёх ролей.
 
-### Этап 2. Аутентификация и профиль — IMPLEMENTED
+### Этап 2. Аутентификация и профиль — COMPLETE
 
-- Login, signup, logout, splash и хранение токенов реализованы.
-- После Auth-запроса профиль из `public.profiles` отдельно не загружается.
-- Роль ошибочно ожидается в модели ответа Supabase Auth.
-- Refresh token сохраняется, но обновление access token не реализовано.
-- Не проверяется блокировка пользователя через `profiles.is_active`.
+- Login, signup, logout, splash и защищённое хранение токенов реализованы.
+- После Auth-запроса профиль отдельно загружается из `public.profiles`.
+- Роль, группа и статус активности берутся только из профиля, а не из Auth metadata.
+- Access token автоматически обновляется через refresh token перед истечением.
+- Заблокированный через `profiles.is_active` пользователь не допускается в приложение.
+- Регистрация корректно обрабатывает проекты с обязательным подтверждением email.
 
 Критерий завершения: вход, обновление сессии, загрузка профиля, блокировка и
 ролевая навигация проверены для athlete, trainer и admin.
@@ -247,3 +248,34 @@ MANUAL ACTION REQUIRED
 
 [INFO] 11.06.2026 15:31 | GITHUB_PUSH | Изменения этапа 2 отправлены в
 `origin/main` | OK
+
+[INFO] 11.06.2026 | SUPABASE_DEPLOY | Владелец проекта подтвердил применение
+`20260611_stage2_security.sql` в Supabase | APPLIED
+
+[INFO] 11.06.2026 | STAGE_3_START | Начато исправление аутентификации, загрузки
+профиля и обновления сессии по приоритетному плану | IN_PROGRESS
+
+[INFO] 11.06.2026 | AUTH_API | Исправлен контракт Supabase Auth:
+`GET /auth/v1/user`, добавлен refresh grant и отдельная модель Auth user | OK
+
+[INFO] 11.06.2026 | PROFILE_LOADING | После login, signup и восстановления
+сессии профиль загружается из `public.profiles`; проверяются роль и `is_active` |
+OK
+
+[INFO] 11.06.2026 | SESSION_REFRESH | Добавлено хранение времени истечения
+access token, предупредительное обновление сессии и повтор после HTTP 401 | OK
+
+[INFO] 11.06.2026 | AUTH_UI | Добавлена обработка email confirmation, logout
+выполняется через Auth API с обязательной локальной очисткой | OK
+
+[INFO] 11.06.2026 | SECURITY_LOGGING | HTTP BODY logging отключён; debug-сборка
+логирует только метод, URL и статус без паролей и токенов | OK
+
+[INFO] 11.06.2026 | TEST_CHECK | Выполнен `gradlew.bat testDebugUnitTest`,
+добавлены unit-тесты расчёта срока сессии | BUILD SUCCESSFUL
+
+[INFO] 11.06.2026 | BUILD_CHECK | Выполнен `gradlew.bat clean assembleDebug` |
+BUILD SUCCESSFUL
+
+[INFO] 11.06.2026 | STAGE_3_COMPLETE | Аутентификация, профиль и обновление
+сессии приведены к контракту Supabase и проверены локально | COMPLETE

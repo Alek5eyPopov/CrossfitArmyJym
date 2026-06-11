@@ -23,6 +23,7 @@ public final class PreferencesManager {
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_REFRESH_TOKEN = "refresh_token";
     private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_ACCESS_TOKEN_EXPIRES_AT = "access_token_expires_at";
     
     // Ключи для обычных SharedPreferences (не чувствительные данные)
     private static final String KEY_USER_ROLE = "user_role";
@@ -117,6 +118,14 @@ public final class PreferencesManager {
     @Nullable
     public String getUserId() {
         return encryptedPrefs.getString(KEY_USER_ID, null);
+    }
+
+    public void saveAccessTokenExpiresAt(long expiresAtMillis) {
+        encryptedPrefs.edit().putLong(KEY_ACCESS_TOKEN_EXPIRES_AT, expiresAtMillis).apply();
+    }
+
+    public long getAccessTokenExpiresAt() {
+        return encryptedPrefs.getLong(KEY_ACCESS_TOKEN_EXPIRES_AT, 0L);
     }
 
     // ==================== Regular Preferences (не чувствительные данные) ====================
@@ -226,6 +235,8 @@ public final class PreferencesManager {
      * @return true если пользователь авторизован
      */
     public boolean isAuthorized() {
-        return isLoggedIn() && getAuthToken() != null;
+        return isLoggedIn()
+                && getAuthToken() != null
+                && getRefreshToken() != null;
     }
 }

@@ -2,6 +2,8 @@ package com.crossfitarmyjym.app.data.api;
 
 import android.util.Log;
 
+import com.crossfitarmyjym.app.BuildConfig;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -56,7 +58,9 @@ public final class ApiClient {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
                 message -> Log.d(TAG, "HTTP: " + message)
         );
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        loggingInterceptor.setLevel(BuildConfig.DEBUG
+                ? HttpLoggingInterceptor.Level.BASIC
+                : HttpLoggingInterceptor.Level.NONE);
 
         // Настройка OkHttpClient
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()

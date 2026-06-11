@@ -128,6 +128,10 @@ public class SignupActivity extends AppCompatActivity {
             public void onSuccess(@Nullable User user) {
                 Log.d(TAG, "Signup successful");
                 showLoading(false);
+                if (user == null) {
+                    showToast("Не удалось загрузить профиль");
+                    return;
+                }
                 navigateToMainActivity(user);
             }
 
@@ -136,6 +140,13 @@ public class SignupActivity extends AppCompatActivity {
                 Log.e(TAG, "Signup failed: " + errorMessage);
                 showLoading(false);
                 showToast(errorMessage);
+            }
+
+            @Override
+            public void onEmailConfirmationRequired() {
+                showLoading(false);
+                showToast("Подтвердите email, затем войдите в приложение");
+                finish();
             }
         });
     }

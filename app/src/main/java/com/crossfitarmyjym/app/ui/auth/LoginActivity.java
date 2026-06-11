@@ -110,6 +110,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(@Nullable User user) {
                 Log.d(TAG, "Login successful");
                 showLoading(false);
+                if (user == null) {
+                    showToast("Не удалось загрузить профиль");
+                    return;
+                }
                 navigateToMainActivity(user);
             }
 

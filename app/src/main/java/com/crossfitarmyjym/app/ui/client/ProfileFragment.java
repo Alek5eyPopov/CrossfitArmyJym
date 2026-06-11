@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.crossfitarmyjym.app.data.model.Booking;
+import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
+import com.crossfitarmyjym.app.data.repository.AuthRepository;
 import com.crossfitarmyjym.app.databinding.FragmentProfileBinding;
 import com.crossfitarmyjym.app.ui.auth.LoginActivity;
 
@@ -111,7 +113,24 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logout() {
-        preferencesManager.clearAll();
+        binding.btnLogout.setEnabled(false);
+        AuthRepository.getInstance().logout(new AuthRepository.AuthCallback() {
+            @Override
+            public void onSuccess(@Nullable User user) {
+                navigateToLogin();
+            }
+
+            @Override
+            public void onError(@NonNull String errorMessage) {
+                navigateToLogin();
+            }
+        });
+    }
+
+    private void navigateToLogin() {
+        if (!isAdded()) {
+            return;
+        }
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

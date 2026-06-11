@@ -5,16 +5,17 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.UUID;
-
-/**
- * Ответ сервера при аутентификации.
- * Содержит данные пользователя и токены.
- */
 public class AuthResponse {
 
     @SerializedName("user")
-    private User user;
+    private AuthUser user;
+
+    // Signup without a session returns the user object at the top level.
+    @SerializedName("id")
+    private String directUserId;
+
+    @SerializedName("email")
+    private String directUserEmail;
 
     @SerializedName("access_token")
     private String accessToken;
@@ -28,23 +29,18 @@ public class AuthResponse {
     @SerializedName("refresh_token")
     private String refreshToken;
 
-    @SerializedName("provider_token")
     @Nullable
-    private String providerToken;
-
-    @SerializedName("provider_refresh_token")
-    @Nullable
-    private String providerRefreshToken;
-
-    public AuthResponse() {
+    public AuthUser getUser() {
+        if (user != null) {
+            return user;
+        }
+        if (directUserId != null && !directUserId.isEmpty()) {
+            return new AuthUser(directUserId, directUserEmail);
+        }
+        return null;
     }
 
-    @Nullable
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(@Nullable User user) {
+    public void setUser(@Nullable AuthUser user) {
         this.user = user;
     }
 
@@ -83,40 +79,11 @@ public class AuthResponse {
         this.refreshToken = refreshToken;
     }
 
-    @Nullable
-    public String getProviderToken() {
-        return providerToken;
+    public boolean hasSession() {
+        return !getAccessToken().isEmpty() && !getRefreshToken().isEmpty();
     }
 
-    public void setProviderToken(@Nullable String providerToken) {
-        this.providerToken = providerToken;
-    }
-
-    @Nullable
-    public String getProviderRefreshToken() {
-        return providerRefreshToken;
-    }
-
-    public void setProviderRefreshToken(@Nullable String providerRefreshToken) {
-        this.providerRefreshToken = providerRefreshToken;
-    }
-
-    /**
-     * Проверка успешности ответа.
-     * @return true если есть пользователь и токен
-     */
     public boolean isSuccess() {
-        return user != null && accessToken != null && !accessToken.isEmpty();
-    }
-
-    @Override
-    @NonNull
-    public String toString() {
-        return "AuthResponse{" +
-                "user=" + user +
-                ", accessToken='***'" +
-                ", tokenType='" + tokenType + '\'' +
-                ", expiresIn=" + expiresIn +
-                '}';
+        return getUser() != null && hasSession();
     }
 }
