@@ -6,8 +6,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -21,9 +19,7 @@ public interface GymClassApi {
      */
     @GET("classes")
     Call<List<GymClass>> getClassesFromDate(
-            @Header("Authorization") String authToken,
-            @Header("apikey") String apiKey,
-            @Query("scheduled_start") String gteDate,
+            @Query("and") String dateRange,
             @Query("order") String order,
             @Query("status") String status
     );
@@ -33,8 +29,6 @@ public interface GymClassApi {
      */
     @GET("classes")
     Call<List<GymClass>> getClassesByTrainer(
-            @Header("Authorization") String authToken,
-            @Header("apikey") String apiKey,
             @Query("trainer_id") String trainerId,
             @Query("order") String order
     );
@@ -44,8 +38,6 @@ public interface GymClassApi {
      */
     @GET("classes")
     Call<List<GymClass>> getClassById(
-            @Header("Authorization") String authToken,
-            @Header("apikey") String apiKey,
             @Query("id") String id
     );
 }

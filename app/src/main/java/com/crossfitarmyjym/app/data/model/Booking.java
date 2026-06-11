@@ -26,6 +26,9 @@ public class Booking {
     @SerializedName("cancelled_at")
     private String cancelledAt;
 
+    @SerializedName("classes")
+    private GymClass gymClass;
+
     public Booking() {
     }
 
@@ -59,6 +62,10 @@ public class Booking {
         return cancelledAt;
     }
 
+    public GymClass getGymClass() {
+        return gymClass;
+    }
+
     // --- Setters ---
 
     public void setId(String id) {
@@ -83,5 +90,9 @@ public class Booking {
 
     public void setCancelledAt(String cancelledAt) {
         this.cancelledAt = cancelledAt;
+    }
+
+    public void setGymClass(GymClass gymClass) {
+        this.gymClass = gymClass;
     }
 }

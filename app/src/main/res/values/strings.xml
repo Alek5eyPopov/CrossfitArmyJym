@@ -39,6 +39,11 @@
     <string name="edit">Редактировать</string>
     <string name="book">Записаться</string>
     <string name="unbook">Отмениться</string>
+    <string name="already_booked">Вы записаны</string>
+    <string name="booking_confirmed">Запись подтверждена</string>
+    <string name="booking_cancelled">Запись отменена</string>
+    <string name="class_details_unavailable">Детали занятия недоступны офлайн</string>
+    <string name="schedule_empty">На ближайшие 7 дней занятий нет</string>
     <string name="slots_left">Осталось мест: %1$d</string>
     <string name="trainer">Тренер: %1$s</string>
     <string name="date">Дата: %1$s</string>

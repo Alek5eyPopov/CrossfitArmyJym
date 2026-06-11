@@ -16,7 +16,9 @@ import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.databinding.FragmentScheduleBinding;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Фрагмент расписания занятий.
@@ -53,9 +55,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        adapter = new ScheduleAdapter(new ArrayList<>(), classId -> {
-            viewModel.bookClass(classId);
-        });
+        adapter = new ScheduleAdapter(viewModel::bookClass);
 
         binding.rvSchedule.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvSchedule.setAdapter(adapter);
@@ -64,9 +64,15 @@ public class ScheduleFragment extends Fragment {
     private void setupObservers() {
         viewModel.getClasses().observe(getViewLifecycleOwner(), gymClasses -> {
             if (gymClasses != null) {
-                adapter.updateData(gymClasses);
+                updateAdapter(gymClasses, viewModel.getBookedClassIds().getValue());
+                boolean empty = gymClasses.isEmpty();
+                binding.rvSchedule.setVisibility(empty ? View.GONE : View.VISIBLE);
+                binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
             }
         });
+
+        viewModel.getBookedClassIds().observe(getViewLifecycleOwner(), bookedIds ->
+                updateAdapter(viewModel.getClasses().getValue(), bookedIds));
 
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
@@ -83,6 +89,12 @@ public class ScheduleFragment extends Fragment {
                 Toast.makeText(requireContext(), status, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateAdapter(List<GymClass> classes, Set<String> bookedIds) {
+        adapter.submitData(
+                classes != null ? classes : Collections.emptyList(),
+                bookedIds != null ? bookedIds : Collections.emptySet());
     }
 
     @Override

@@ -95,4 +95,44 @@ public class GymClass {
     public String getCreatedAt() {
         return createdAt;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setTrainerId(String trainerId) {
+        this.trainerId = trainerId;
+    }
+
+    public void setWodId(String wodId) {
+        this.wodId = wodId;
+    }
+
+    public void setScheduledStart(String scheduledStart) {
+        this.scheduledStart = scheduledStart;
+    }
+
+    public void setScheduledEnd(String scheduledEnd) {
+        this.scheduledEnd = scheduledEnd;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public void setCurrentBookings(int currentBookings) {
+        this.currentBookings = currentBookings;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

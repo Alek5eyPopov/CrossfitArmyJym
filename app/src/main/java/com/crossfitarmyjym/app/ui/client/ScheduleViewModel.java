@@ -1,35 +1,31 @@
 package com.crossfitarmyjym.app.ui.client;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.data.repository.BookingRepository;
 import com.crossfitarmyjym.app.data.repository.ClassRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
-/**
- * ViewModel для экрана расписания занятий.
- * Загружает список занятий на неделю, управляет записью.
- */
 public class ScheduleViewModel extends AndroidViewModel {
-
-    private static final String TAG = "ScheduleViewModel";
 
     private final ClassRepository classRepository;
     private final BookingRepository bookingRepository;
-
-    private final MutableLiveData<List<GymClass>> classes = new MutableLiveData<>();
+    private final MutableLiveData<List<GymClass>> classes = new MutableLiveData<>(Collections.emptyList());
+    private final MutableLiveData<Set<String>> bookedClassIds = new MutableLiveData<>(Collections.emptySet());
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<String> bookingStatus = new MutableLiveData<>();
@@ -44,6 +40,10 @@ public class ScheduleViewModel extends AndroidViewModel {
         return classes;
     }
 
+    public LiveData<Set<String>> getBookedClassIds() {
+        return bookedClassIds;
+    }
+
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
@@ -56,61 +56,81 @@ public class ScheduleViewModel extends AndroidViewModel {
         return bookingStatus;
     }
 
-    /**
-     * Загрузить расписание на ближайшие 7 дней.
-     */
     public void loadSchedule() {
         isLoading.setValue(true);
         errorMessage.setValue(null);
-
-        String today = getTodayDateString();
-        Log.d(TAG, "Loading schedule from date: " + today);
-
-        classRepository.getClassesFromDate(today, new ClassRepository.ClassCallback() {
+        classRepository.getClassesFromDate(today(), new ClassRepository.ClassCallback() {
             @Override
             public void onSuccess(List<GymClass> gymClasses) {
-                Log.d(TAG, "Loaded " + gymClasses.size() + " classes");
                 classes.setValue(gymClasses);
-                isLoading.setValue(false);
+                loadBookingState();
             }
 
             @Override
             public void onError(@NonNull String error) {
-                Log.e(TAG, "Error loading schedule: " + error);
                 errorMessage.setValue(error);
                 isLoading.setValue(false);
             }
         });
     }
 
-    /**
-     * Записаться на занятие.
-     */
-    public void bookClass(String classId) {
+    public void refreshSchedule() {
         isLoading.setValue(true);
-        bookingStatus.setValue(null);
-
-        bookingRepository.createBooking(classId, new BookingRepository.SingleBookingCallback() {
+        classRepository.refreshClassesFromDate(today(), new ClassRepository.ClassCallback() {
             @Override
-            public void onSuccess(com.crossfitarmyjym.app.data.model.Booking booking) {
-                Log.d(TAG, "Successfully booked class: " + classId);
-                bookingStatus.setValue("Вы записаны!");
-                isLoading.setValue(false);
-                // Перезагружаем расписание, чтобы обновить количество мест
-                loadSchedule();
+            public void onSuccess(List<GymClass> gymClasses) {
+                classes.setValue(gymClasses);
+                loadBookingState();
             }
 
             @Override
             public void onError(@NonNull String error) {
-                Log.e(TAG, "Booking failed: " + error);
-                bookingStatus.setValue("Ошибка: " + error);
+                errorMessage.setValue(error);
                 isLoading.setValue(false);
             }
         });
     }
 
-    private String getTodayDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return sdf.format(new Date());
+    public void bookClass(String classId) {
+        isLoading.setValue(true);
+        bookingRepository.createBooking(classId, new BookingRepository.SingleBookingCallback() {
+            @Override
+            public void onSuccess(Booking booking) {
+                bookingStatus.setValue("Вы записаны на занятие");
+                refreshSchedule();
+            }
+
+            @Override
+            public void onError(@NonNull String error) {
+                bookingStatus.setValue(error);
+                isLoading.setValue(false);
+            }
+        });
+    }
+
+    private void loadBookingState() {
+        bookingRepository.refreshMyBookings(new BookingRepository.BookingCallback() {
+            @Override
+            public void onSuccess(List<Booking> bookings) {
+                Set<String> ids = new HashSet<>();
+                for (Booking booking : bookings) {
+                    if (booking.isConfirmed() && booking.getClassId() != null) {
+                        ids.add(booking.getClassId());
+                    }
+                }
+                bookedClassIds.setValue(ids);
+                isLoading.setValue(false);
+            }
+
+            @Override
+            public void onError(@NonNull String error) {
+                errorMessage.setValue(error);
+                isLoading.setValue(false);
+            }
+        });
+    }
+
+    private String today() {
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
     }
 }

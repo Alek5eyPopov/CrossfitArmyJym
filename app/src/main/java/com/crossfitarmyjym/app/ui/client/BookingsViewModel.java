@@ -1,7 +1,6 @@
 package com.crossfitarmyjym.app.ui.client;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,19 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.repository.BookingRepository;
 
+import java.util.Collections;
 import java.util.List;
 
-/**
- * ViewModel для экрана моих записей.
- * Загружает список записей пользователя, поддерживает отмену.
- */
 public class BookingsViewModel extends AndroidViewModel {
 
-    private static final String TAG = "BookingsViewModel";
-
     private final BookingRepository bookingRepository;
-
-    private final MutableLiveData<List<Booking>> bookings = new MutableLiveData<>();
+    private final MutableLiveData<List<Booking>> bookings =
+            new MutableLiveData<>(Collections.emptyList());
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<String> cancelStatus = new MutableLiveData<>();
@@ -49,51 +43,52 @@ public class BookingsViewModel extends AndroidViewModel {
         return cancelStatus;
     }
 
-    /**
-     * Загрузить записи текущего пользователя.
-     */
     public void loadMyBookings() {
+        load(false);
+    }
+
+    public void refreshMyBookings() {
+        load(true);
+    }
+
+    public void cancelBooking(String bookingId) {
+        isLoading.setValue(true);
+        cancelStatus.setValue(null);
+        bookingRepository.cancelBooking(bookingId, new BookingRepository.VoidCallback() {
+            @Override
+            public void onSuccess() {
+                cancelStatus.setValue("Запись отменена");
+                refreshMyBookings();
+            }
+
+            @Override
+            public void onError(@NonNull String error) {
+                cancelStatus.setValue(error);
+                isLoading.setValue(false);
+            }
+        });
+    }
+
+    private void load(boolean forceRefresh) {
         isLoading.setValue(true);
         errorMessage.setValue(null);
-
-        bookingRepository.getMyBookings(new BookingRepository.BookingCallback() {
+        BookingRepository.BookingCallback callback = new BookingRepository.BookingCallback() {
             @Override
             public void onSuccess(List<Booking> bookingList) {
-                Log.d(TAG, "Loaded " + bookingList.size() + " bookings");
                 bookings.setValue(bookingList);
                 isLoading.setValue(false);
             }
 
             @Override
             public void onError(@NonNull String error) {
-                Log.e(TAG, "Error loading bookings: " + error);
                 errorMessage.setValue(error);
                 isLoading.setValue(false);
             }
-        });
-    }
-
-    /**
-     * Отменить запись на занятие.
-     */
-    public void cancelBooking(String bookingId) {
-        isLoading.setValue(true);
-        cancelStatus.setValue(null);
-
-        bookingRepository.cancelBooking(bookingId, new BookingRepository.VoidCallback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "Booking cancelled: " + bookingId);
-                cancelStatus.setValue("Запись отменена");
-                isLoading.setValue(false);
-            }
-
-            @Override
-            public void onError(@NonNull String error) {
-                Log.e(TAG, "Cancel failed: " + error);
-                cancelStatus.setValue("Ошибка: " + error);
-                isLoading.setValue(false);
-            }
-        });
+        };
+        if (forceRefresh) {
+            bookingRepository.refreshMyBookings(callback);
+        } else {
+            bookingRepository.getMyBookings(callback);
+        }
     }
 }
