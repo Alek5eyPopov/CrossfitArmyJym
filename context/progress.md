@@ -241,3 +241,9 @@ MANUAL ACTION REQUIRED
 
 [INFO] 11.06.2026 15:28 | STAGE_2_IMPLEMENTED | Код и миграция этапа 2 готовы и
 проверены локально | IMPLEMENTED
+
+[INFO] 11.06.2026 15:31 | GIT_COMMIT | Создан коммит этапа 2
+`486eb09 harden Supabase roles and bookings` | OK
+
+[INFO] 11.06.2026 15:31 | GITHUB_PUSH | Изменения этапа 2 отправлены в
+`origin/main` | OK
