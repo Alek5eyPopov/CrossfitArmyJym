@@ -23,6 +23,14 @@
     <string name="nav_my_classes">Мои занятия</string>
     <string name="nav_wod_editor">WOD редактор</string>
     <string name="nav_clients">Клиенты</string>
+    <string name="mark_attendance">Посещаемость</string>
+    <string name="attendance">Посещаемость</string>
+    <string name="attended">Был</string>
+    <string name="save_attendance">Сохранить посещаемость</string>
+    <string name="attendance_empty">На занятие никто не записан</string>
+    <string name="trainer_classes_empty">У вас пока нет занятий</string>
+    <string name="bookings_count">Записано: %1$d из %2$d</string>
+    <string name="clients_empty">Нет доступных клиентов</string>
 
     <!-- Навигация (Админ) -->
     <string name="nav_users">Пользователи</string>

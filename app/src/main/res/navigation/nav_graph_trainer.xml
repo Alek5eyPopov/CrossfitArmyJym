@@ -9,7 +9,25 @@
         android:id="@+id/fragment_my_classes"
         android:name="com.crossfitarmyjym.app.ui.trainer.TrainerClassesFragment"
         android:label="Мои занятия"
-        tools:layout="@layout/fragment_my_classes" />
+        tools:layout="@layout/fragment_my_classes">
+        <action
+            android:id="@+id/action_classes_to_attendance"
+            app:destination="@id/fragment_attendance" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_attendance"
+        android:name="com.crossfitarmyjym.app.ui.trainer.AttendanceFragment"
+        android:label="Посещаемость"
+        tools:layout="@layout/fragment_attendance">
+        <argument
+            android:name="class_id"
+            app:argType="string" />
+        <argument
+            android:name="class_title"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_wod_editor"

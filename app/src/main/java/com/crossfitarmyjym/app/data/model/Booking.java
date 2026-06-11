@@ -29,6 +29,9 @@ public class Booking {
     @SerializedName("classes")
     private GymClass gymClass;
 
+    @SerializedName("profiles")
+    private User user;
+
     public Booking() {
     }
 
@@ -66,6 +69,10 @@ public class Booking {
         return gymClass;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     // --- Setters ---
 
     public void setId(String id) {
@@ -94,5 +101,9 @@ public class Booking {
 
     public void setGymClass(GymClass gymClass) {
         this.gymClass = gymClass;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

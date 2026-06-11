@@ -5,6 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.databinding.ActivityTrainerMainBinding;
@@ -25,7 +28,14 @@ public class TrainerMainActivity extends AppCompatActivity {
         
         binding = ActivityTrainerMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_trainer);
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
+            NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
+        }
+
         Log.d(TAG, "TrainerMainActivity created");
     }
 }

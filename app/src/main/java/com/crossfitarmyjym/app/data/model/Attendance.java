@@ -2,10 +2,6 @@ package com.crossfitarmyjym.app.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Модель посещаемости занятия.
- * Соответствует таблице attendance в Supabase.
- */
 public class Attendance {
 
     @SerializedName("id")
@@ -28,9 +24,6 @@ public class Attendance {
 
     @SerializedName("notes")
     private String notes;
-
-    public Attendance() {
-    }
 
     public String getId() {
         return id;
@@ -58,5 +51,33 @@ public class Attendance {
 
     public String getNotes() {
         return notes;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setAttended(boolean attended) {
+        this.attended = attended;
+    }
+
+    public void setCheckInTime(String checkInTime) {
+        this.checkInTime = checkInTime;
+    }
+
+    public void setMarkedBy(String markedBy) {
+        this.markedBy = markedBy;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

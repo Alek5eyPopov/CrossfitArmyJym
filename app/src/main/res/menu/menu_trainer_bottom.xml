@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_my_classes"
+        android:id="@+id/fragment_my_classes"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/nav_my_classes" />
     <item
-        android:id="@+id/navigation_wod_editor"
+        android:id="@+id/fragment_wod_editor"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/nav_wod_editor" />
     <item
-        android:id="@+id/navigation_clients"
+        android:id="@+id/fragment_clients"
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/nav_clients" />
 </menu>

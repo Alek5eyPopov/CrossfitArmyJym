@@ -29,6 +29,8 @@ public interface BookingApi {
     @GET("bookings")
     Call<List<Booking>> getBookingsByClass(
             @Query("class_id") String classId,
-            @Query("status") String status
+            @Query("status") String status,
+            @Query("select") String select,
+            @Query("order") String order
     );
 }

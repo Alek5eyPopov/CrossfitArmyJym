@@ -28,6 +28,7 @@ public final class ApiClient {
     private static UserApi userApi;
     private static GymClassApi gymClassApi;
     private static BookingApi bookingApi;
+    private static AttendanceApi attendanceApi;
     private static WodApi wodApi;
 
     // Приватный конструктор
@@ -137,6 +138,13 @@ public final class ApiClient {
         return bookingApi;
     }
 
+    public static AttendanceApi getAttendanceApi() {
+        if (attendanceApi == null) {
+            attendanceApi = getClient().create(AttendanceApi.class);
+        }
+        return attendanceApi;
+    }
+
     /**
      * Получение WodApi для работы с WOD.
      * @return WodApi instance
@@ -157,6 +165,7 @@ public final class ApiClient {
         userApi = null;
         gymClassApi = null;
         bookingApi = null;
+        attendanceApi = null;
         wodApi = null;
         Log.d(TAG, "ApiClient cleared");
     }

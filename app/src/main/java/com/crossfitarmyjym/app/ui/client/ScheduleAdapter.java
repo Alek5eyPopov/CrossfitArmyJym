@@ -70,7 +70,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    static String formatTime(String isoDate) {
+    public static String formatTime(String isoDate) {
         if (isoDate == null || isoDate.isEmpty()) {
             return "";
         }

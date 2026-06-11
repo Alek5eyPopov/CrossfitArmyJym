@@ -10,69 +10,66 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.crossfitarmyjym.app.databinding.FragmentClientsBinding;
+import com.crossfitarmyjym.app.databinding.FragmentAttendanceBinding;
 
-/**
- * Фрагмент для отметки посещаемости на занятии.
- * Отображает список клиентов с чекбоксами.
- */
 public class AttendanceFragment extends Fragment {
 
-    private FragmentClientsBinding binding;
+    private FragmentAttendanceBinding binding;
     private AttendanceViewModel viewModel;
-
-    private String classId;
-
-    public static AttendanceFragment newInstance(String classId) {
-        AttendanceFragment fragment = new AttendanceFragment();
-        Bundle args = new Bundle();
-        args.putString("class_id", classId);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private AttendanceAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentClientsBinding.inflate(inflater, container, false);
+        binding = FragmentAttendanceBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(AttendanceViewModel.class);
+        adapter = new AttendanceAdapter(viewModel::setAttended);
+        binding.rvAttendance.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvAttendance.setAdapter(adapter);
+        binding.btnSaveAttendance.setOnClickListener(v -> viewModel.saveAttendance());
 
-        if (getArguments() != null) {
-            classId = getArguments().getString("class_id");
+        Bundle args = getArguments();
+        String classId = args != null ? args.getString("class_id") : null;
+        String classTitle = args != null ? args.getString("class_title") : null;
+        if (classTitle != null && !classTitle.isEmpty()) {
+            binding.tvClassTitle.setText(classTitle);
         }
 
-        setupObservers();
+        viewModel.getAttendanceList().observe(getViewLifecycleOwner(), entries -> {
+            adapter.submitList(entries);
+            boolean empty = entries == null || entries.isEmpty();
+            binding.rvAttendance.setVisibility(empty ? View.GONE : View.VISIBLE);
+            binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.btnSaveAttendance.setEnabled(!empty);
+        });
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading -> {
+            binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+            binding.btnSaveAttendance.setEnabled(!loading
+                    && adapter.getItemCount() > 0);
+        });
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), this::showMessage);
+        viewModel.getSaveStatus().observe(getViewLifecycleOwner(), this::showMessage);
 
-        if (classId != null) {
+        if (classId == null || classId.isEmpty()) {
+            showMessage("Занятие не выбрано");
+        } else {
             viewModel.loadAttendance(classId);
         }
     }
 
-    private void setupObservers() {
-        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            // TODO: показать/скрыть ProgressBar
-        });
-
-        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
-            if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getSaveStatus().observe(getViewLifecycleOwner(), status -> {
-            if (status != null && !status.isEmpty()) {
-                Toast.makeText(requireContext(), status, Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void showMessage(String message) {
+        if (message != null && !message.isEmpty()) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
