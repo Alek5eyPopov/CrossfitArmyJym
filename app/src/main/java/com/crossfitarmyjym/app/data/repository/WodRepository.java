@@ -104,7 +104,9 @@ public class WodRepository {
             callback.onError("Тренер не авторизован");
             return;
         }
-        api.getTrainerGroups("eq." + trainerId, "eq.true", "name.asc")
+        String trainerFilter = "admin".equals(preferences.getUserRole())
+                ? null : "eq." + trainerId;
+        api.getTrainerGroups(trainerFilter, "eq.true", "name.asc")
                 .enqueue(new Callback<List<Group>>() {
                     @Override
                     public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {

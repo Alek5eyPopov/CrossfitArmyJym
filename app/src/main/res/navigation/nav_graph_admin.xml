@@ -21,6 +21,16 @@
         android:id="@+id/fragment_content"
         android:name="com.crossfitarmyjym.app.ui.admin.ContentFragment"
         android:label="Контент"
-        tools:layout="@layout/fragment_content" />
+        tools:layout="@layout/fragment_content">
+        <action
+            android:id="@+id/action_content_to_wod_editor"
+            app:destination="@id/fragment_admin_wod_editor" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_admin_wod_editor"
+        android:name="com.crossfitarmyjym.app.ui.trainer.WodEditorFragment"
+        android:label="Создать WOD"
+        tools:layout="@layout/fragment_wod_editor" />
 
 </navigation>

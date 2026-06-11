@@ -53,6 +53,12 @@ public class Group {
         return createdAt;
     }
 
+    public void setId(String id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setTrainerId(String trainerId) { this.trainerId = trainerId; }
+    public void setSchedule(String schedule) { this.schedule = schedule; }
+    public void setActive(boolean active) { isActive = active; }
+
     @Override
     public String toString() {
         return name != null ? name : "";

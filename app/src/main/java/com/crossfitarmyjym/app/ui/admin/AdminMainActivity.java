@@ -5,6 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.databinding.ActivityAdminMainBinding;
@@ -25,7 +28,13 @@ public class AdminMainActivity extends AppCompatActivity {
         
         binding = ActivityAdminMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
+
+        NavHostFragment navHost = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_admin);
+        if (navHost != null) {
+            NavController navController = navHost.getNavController();
+            NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
+        }
         Log.d(TAG, "AdminMainActivity created");
     }
 }
