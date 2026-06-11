@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Базовая тема приложения -->
+    <style name="Theme.CrossfitArmyJym" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Основные цвета -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!-- Цвета поверхности -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+
+        <!-- Текст -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <!-- Статус бар -->
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- Тема для экрана аутентификации (без статус бара) -->
+    <style name="Theme.CrossfitArmyJym.Auth" parent="Theme.CrossfitArmyJym">
+        <item name="android:windowFullscreen">false</item>
+    </style>
+
+    <!-- Тема для диалогов -->
+    <style name="Theme.CrossfitArmyJym.Dialog" parent="Theme.Material3.Light.Dialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <!-- Тема для всплывающих меню -->
+    <style name="Theme.CrossfitArmyJym.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:textColorPrimary">@color/text_primary</item>
+    </style>
+
+    <!-- Стили для TextInputLayout -->
+    <style name="Widget.CrossfitArmyJym.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="hintTextColor">@color/primary</item>
+    </style>
+
+    <!-- Стили для кнопок -->
+    <style name="Widget.CrossfitArmyJym.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+    </style>
+
+    <style name="Widget.CrossfitArmyJym.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/primary</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <!-- Стили для карточек -->
+    <style name="Widget.CrossfitArmyJym.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/card_background</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">8dp</item>
+    </style>
+</resources>

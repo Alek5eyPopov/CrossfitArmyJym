@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CrossfitArmyJym</string>
+
+    <!-- Аутентификация -->
+    <string name="login">Вход</string>
+    <string name="signup">Регистрация</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    <string name="logout">Выйти</string>
+
+    <!-- Навигация (Клиент) -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_schedule">Расписание</string>
+    <string name="nav_profile">Профиль</string>
+    <string name="nav_my_bookings">Мои записи</string>
+
+    <!-- Навигация (Тренер) -->
+    <string name="nav_my_classes">Мои занятия</string>
+    <string name="nav_wod_editor">WOD редактор</string>
+    <string name="nav_clients">Клиенты</string>
+
+    <!-- Навигация (Админ) -->
+    <string name="nav_users">Пользователи</string>
+    <string name="nav_statistics">Статистика</string>
+    <string name="nav_content">Контент</string>
+
+    <!-- Общие -->
+    <string name="loading">Загрузка…</string>
+    <string name="error">Ошибка</string>
+    <string name="retry">Повторить</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="book">Записаться</string>
+    <string name="unbook">Отмениться</string>
+    <string name="slots_left">Осталось мест: %1$d</string>
+    <string name="trainer">Тренер: %1$s</string>
+    <string name="date">Дата: %1$s</string>
+    <string name="time">Время: %1$s</string>
+
+    <!-- WOD -->
+    <string name="wod_of_the_day">WOD дня</string>
+    <string name="wod_title">Название WOD</string>
+    <string name="wod_description">Описание</string>
+    <string name="wod_video">Видео</string>
+
+    <!-- Роли -->
+    <string name="role_client">Клиент</string>
+    <string name="role_trainer">Тренер</string>
+    <string name="role_admin">Администратор</string>
+
+    <!-- Ошибки -->
+    <string name="error_network">Ошибка сети. Проверьте подключение.</string>
+    <string name="error_auth">Ошибка аутентификации</string>
+    <string name="error_empty_fields">Заполните все поля</string>
+    <string name="error_passwords_mismatch">Пароли не совпадают</string>
+    <string name="error_invalid_email">Неверный формат email</string>
+    <string name="error_empty_email">Введите email</string>
+    <string name="error_empty_password">Введите пароль</string>
+    <string name="error_password_too_short">Пароль должен содержать минимум 6 символов</string>
+    <string name="error_name_too_short">Имя слишком короткое</string>
+
+    <!-- Успех -->
+    <string name="success_login">Вход выполнен</string>
+    <string name="success_signup">Регистрация успешна</string>
+    <string name="success_booking">Вы записаны на занятие</string>
+    <string name="success_unbooking">Запись отменена</string>
+</resources>

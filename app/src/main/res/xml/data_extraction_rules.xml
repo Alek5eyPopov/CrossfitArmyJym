@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Исключаем чувствительные данные из извлечения -->
+        <exclude domain="sharedpref" path="encrypted_prefs.xml"/>
+        <exclude domain="database" path="crossfit_db"/>
+    </cloud-backup>
+</data-extraction-rules>

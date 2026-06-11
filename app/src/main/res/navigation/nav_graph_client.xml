@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_client"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.crossfitarmyjym.app.ui.client.HomeFragment"
+        android:label="Главная"
+        tools:layout="@layout/fragment_home_client" />
+
+    <fragment
+        android:id="@+id/fragment_schedule"
+        android:name="com.crossfitarmyjym.app.ui.client.ScheduleFragment"
+        android:label="Расписание"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/fragment_bookings"
+        android:name="com.crossfitarmyjym.app.ui.client.BookingsFragment"
+        android:label="Мои записи"
+        tools:layout="@layout/fragment_bookings" />
+
+    <fragment
+        android:id="@+id/fragment_profile"
+        android:name="com.crossfitarmyjym.app.ui.client.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

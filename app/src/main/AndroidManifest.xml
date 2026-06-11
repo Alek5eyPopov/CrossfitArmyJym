@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Разрешения для сетевого доступа -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Разрешения для уведомлений (будет использовано на Этапе 7) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_home"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_home"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CrossfitArmyJym"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+
+        <!-- Главная активность (будет определять роль и перенаправлять) -->
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CrossfitArmyJym">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Активности аутентификации -->
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrossfitArmyJym" />
+        <activity
+            android:name=".ui.auth.SignupActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrossfitArmyJym" />
+
+        <!-- Основные активности для разных ролей -->
+        <activity
+            android:name=".ui.client.ClientMainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrossfitArmyJym" />
+        <activity
+            android:name=".ui.trainer.TrainerMainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrossfitArmyJym" />
+        <activity
+            android:name=".ui.admin.AdminMainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrossfitArmyJym" />
+
+    </application>
+
+</manifest>
