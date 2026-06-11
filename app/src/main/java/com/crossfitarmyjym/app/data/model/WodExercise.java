@@ -29,6 +29,9 @@ public class WodExercise {
     @SerializedName("created_at")
     private String createdAt;
 
+    @SerializedName("exercises")
+    private Exercise exercise;
+
     public WodExercise() {
     }
 
@@ -58,5 +61,9 @@ public class WodExercise {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
     }
 }

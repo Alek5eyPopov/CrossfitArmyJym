@@ -10,14 +10,12 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- WOD Дня -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_wod"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardElevation="4dp"
             app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,21 +30,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wod_of_the_day"
+                    android:textColor="@color/primary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_wod_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="WOD будет загружен..."
+                    android:text="WOD загружается..."
                     android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_submit_result"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="Внести результат" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_leaderboard"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="Рейтинг" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Ближайшие занятия -->
         <TextView
             android:id="@+id/tv_schedule_title"
             android:layout_width="wrap_content"
@@ -66,6 +88,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_schedule_title" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

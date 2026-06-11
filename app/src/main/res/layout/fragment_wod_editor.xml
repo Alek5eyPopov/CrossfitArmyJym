@@ -5,33 +5,27 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WOD Редактор"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:text="Редактор WOD"
             android:textColor="@color/primary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <!-- Название WOD -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_wod_name"
             style="@style/Widget.CrossfitArmyJym.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Название WOD"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title">
+            android:hint="Название WOD">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_wod_name"
@@ -41,27 +35,129 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Формат WOD -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Формат" />
+
         <Spinner
             android:id="@+id/spinner_format"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Группа" />
+
+        <Spinner
+            android:id="@+id/spinner_group"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Дата YYYY-MM-DD">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_scheduled_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:hint="Лимит, мин">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_time_cap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_wod_name" />
+            android:text="Добавить упражнение"
+            android:textStyle="bold" />
 
-        <!-- Описание WOD -->
+        <Spinner
+            android:id="@+id/spinner_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Раунды">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_rounds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:hint="Вес, кг">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="0" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_exercise"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Добавить упражнение" />
+
+        <TextView
+            android:id="@+id/tv_selected_exercises"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Упражнения не добавлены" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_wod_description"
             style="@style/Widget.CrossfitArmyJym.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Описание WOD"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner_format">
+            android:layout_marginTop="12dp"
+            android:hint="Описание и примечания">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_wod_description"
@@ -69,29 +165,21 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:lines="4" />
+                android:lines="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Кнопка сохранения -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save_wod"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_wod_description" />
+            android:layout_marginTop="16dp"
+            android:text="@string/save" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_save_wod" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -1,17 +1,18 @@
 package com.crossfitarmyjym.app.data.repository;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.crossfitarmyjym.app.data.SupabaseConfig;
 import com.crossfitarmyjym.app.data.api.ApiClient;
 import com.crossfitarmyjym.app.data.api.WodApi;
 import com.crossfitarmyjym.app.data.local.AppDatabase;
-import com.crossfitarmyjym.app.data.local.entity.dao.WodDao;
 import com.crossfitarmyjym.app.data.local.entity.WodEntity;
+import com.crossfitarmyjym.app.data.local.entity.dao.WodDao;
+import com.crossfitarmyjym.app.data.model.Exercise;
+import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.Wod;
+import com.crossfitarmyjym.app.data.model.WodCompositionRequest;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 
 import java.text.SimpleDateFormat;
@@ -19,25 +20,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Репозиторий для работы с WOD (тренировками дня).
- * Получает данные из Supabase и кэширует в Room.
- */
 public class WodRepository {
 
-    private static final String TAG = "WodRepository";
-    private static final long CACHE_DURATION_MS = 10 * 60 * 1000; // 10 минут
-
+    private static final String WOD_SELECT = "*,wod_exercises(*,exercises(*))";
     private static WodRepository instance;
 
     private final WodApi api;
     private final WodDao dao;
-    private final PreferencesManager prefsManager;
+    private final PreferencesManager preferences;
+    private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
 
     public interface WodCallback {
         void onSuccess(Wod wod);
@@ -49,10 +47,20 @@ public class WodRepository {
         void onError(@NonNull String errorMessage);
     }
 
+    public interface GroupListCallback {
+        void onSuccess(List<Group> groups);
+        void onError(@NonNull String errorMessage);
+    }
+
+    public interface ExerciseListCallback {
+        void onSuccess(List<Exercise> exercises);
+        void onError(@NonNull String errorMessage);
+    }
+
     private WodRepository(Context context) {
-        this.api = ApiClient.getWodApi();
-        this.dao = AppDatabase.getInstance(context).wodDao();
-        this.prefsManager = PreferencesManager.getInstance();
+        api = ApiClient.getWodApi();
+        dao = AppDatabase.getInstance(context).wodDao();
+        preferences = PreferencesManager.getInstance();
     }
 
     public static synchronized WodRepository getInstance(Context context) {
@@ -62,134 +70,142 @@ public class WodRepository {
         return instance;
     }
 
-    /**
-     * Получить WOD на сегодня.
-     */
     public void getTodaysWod(WodCallback callback) {
-        String today = getTodayDateString();
-        Log.d(TAG, "Getting WOD for date: " + today);
-
-        // Пробуем кэш
-        WodEntity cached = dao.getWodByDate(today);
-        if (cached != null && isCacheValid(cached.getCachedAt())) {
-            Wod wod = entityToModel(cached);
-            if (wod != null) {
-                callback.onSuccess(wod);
-                return;
-            }
-        }
-
-        // Загружаем из сети
-        fetchWodFromApi(today, callback);
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+        api.getWodByDate("eq." + today, 1, WOD_SELECT).enqueue(wodResponse(callback, today));
     }
 
-    /**
-     * Получить WOD по ID.
-     */
     public void getWodById(String wodId, WodCallback callback) {
-        WodEntity cached = dao.getWodById(wodId);
-        if (cached != null && isCacheValid(cached.getCachedAt())) {
-            Wod wod = entityToModel(cached);
-            if (wod != null) {
-                callback.onSuccess(wod);
-                return;
-            }
-        }
-
-        String token = prefsManager.getAuthToken();
-        String apiKey = SupabaseConfig.getApiKeyHeader();
-
-        api.getWodById("Bearer " + token, apiKey, "eq." + wodId)
-                .enqueue(new Callback<List<Wod>>() {
-                    @Override
-                    public void onResponse(Call<List<Wod>> call, Response<List<Wod>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                            Wod wod = response.body().get(0);
-                            cacheWod(wod);
-                            callback.onSuccess(wod);
-                        } else {
-                            callback.onError("WOD не найден: " + response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Wod>> call, Throwable t) {
-                        Log.e(TAG, "Network error: " + t.getMessage());
-                        callback.onError("Ошибка сети: " + t.getMessage());
-                    }
-                });
+        api.getWodById("eq." + wodId, WOD_SELECT).enqueue(wodResponse(callback, null));
     }
 
-    /**
-     * Получить все WOD (для тренера/админа).
-     */
     public void getAllWods(WodListCallback callback) {
-        List<WodEntity> cached = dao.getAllWods();
-        if (cached != null && !cached.isEmpty() && isCacheValid(cached.get(0).getCachedAt())) {
-            callback.onSuccess(entitiesToModels(cached));
+        api.getWods(50, WOD_SELECT).enqueue(new Callback<List<Wod>>() {
+            @Override
+            public void onResponse(Call<List<Wod>> call, Response<List<Wod>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    cacheWods(response.body());
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError("Не удалось загрузить WOD: HTTP " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Wod>> call, Throwable throwable) {
+                databaseExecutor.execute(() -> callback.onSuccess(entitiesToModels(dao.getAllWods())));
+            }
+        });
+    }
+
+    public void getTrainerGroups(GroupListCallback callback) {
+        String trainerId = preferences.getUserId();
+        if (trainerId == null) {
+            callback.onError("Тренер не авторизован");
             return;
         }
-
-        String token = prefsManager.getAuthToken();
-        String apiKey = SupabaseConfig.getApiKeyHeader();
-
-        api.getWodByDate("Bearer " + token, apiKey, "", 50)
-                .enqueue(new Callback<List<Wod>>() {
+        api.getTrainerGroups("eq." + trainerId, "eq.true", "name.asc")
+                .enqueue(new Callback<List<Group>>() {
                     @Override
-                    public void onResponse(Call<List<Wod>> call, Response<List<Wod>> response) {
+                    public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            cacheWods(response.body());
                             callback.onSuccess(response.body());
                         } else {
-                            callback.onError("Ошибка загрузки: " + response.code());
+                            callback.onError("Не удалось загрузить группы: HTTP " + response.code());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Wod>> call, Throwable t) {
-                        callback.onError("Ошибка сети: " + t.getMessage());
+                    public void onFailure(Call<List<Group>> call, Throwable throwable) {
+                        callback.onError("Ошибка сети: " + throwable.getMessage());
                     }
                 });
     }
 
-    // --- Приватные методы ---
+    public void getExercises(ExerciseListCallback callback) {
+        api.getExercises("name.asc").enqueue(new Callback<List<Exercise>>() {
+            @Override
+            public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError("Не удалось загрузить упражнения: HTTP " + response.code());
+                }
+            }
 
-    private void fetchWodFromApi(String date, WodCallback callback) {
-        String token = prefsManager.getAuthToken();
-        String apiKey = SupabaseConfig.getApiKeyHeader();
+            @Override
+            public void onFailure(Call<List<Exercise>> call, Throwable throwable) {
+                callback.onError("Ошибка сети: " + throwable.getMessage());
+            }
+        });
+    }
 
-        api.getWodByDate("Bearer " + token, apiKey, "eq." + date, 1)
-                .enqueue(new Callback<List<Wod>>() {
-                    @Override
-                    public void onResponse(Call<List<Wod>> call, Response<List<Wod>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                            Wod wod = response.body().get(0);
-                            cacheWod(wod);
-                            callback.onSuccess(wod);
-                        } else {
-                            callback.onError("WOD на сегодня не найден");
-                        }
-                    }
+    public void createWod(WodCompositionRequest request, WodCallback callback) {
+        api.createWod(request).enqueue(new Callback<Wod>() {
+            @Override
+            public void onResponse(Call<Wod> call, Response<Wod> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    cacheWod(response.body());
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError("Не удалось создать WOD: HTTP " + response.code());
+                }
+            }
 
-                    @Override
-                    public void onFailure(Call<List<Wod>> call, Throwable t) {
-                        Log.e(TAG, "Network error: " + t.getMessage());
-                        // Fallback к кэшу
-                        WodEntity cached = dao.getWodByDate(date);
-                        if (cached != null) {
-                            Wod wod = entityToModel(cached);
-                            if (wod != null) {
-                                callback.onSuccess(wod);
-                                return;
-                            }
-                        }
-                        callback.onError("Ошибка сети: " + t.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<Wod> call, Throwable throwable) {
+                callback.onError("Ошибка сети: " + throwable.getMessage());
+            }
+        });
+    }
+
+    private Callback<List<Wod>> wodResponse(WodCallback callback, String fallbackDate) {
+        return new Callback<List<Wod>>() {
+            @Override
+            public void onResponse(Call<List<Wod>> call, Response<List<Wod>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    Wod wod = response.body().get(0);
+                    cacheWod(wod);
+                    callback.onSuccess(wod);
+                } else {
+                    loadFallback(callback, fallbackDate, "WOD не найден");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Wod>> call, Throwable throwable) {
+                loadFallback(callback, fallbackDate, "Ошибка сети: " + throwable.getMessage());
+            }
+        };
+    }
+
+    private void loadFallback(WodCallback callback, String date, String error) {
+        databaseExecutor.execute(() -> {
+            WodEntity entity = date == null ? null : dao.getWodByDate(date);
+            if (entity != null) {
+                callback.onSuccess(entityToModel(entity));
+            } else {
+                callback.onError(error);
+            }
+        });
     }
 
     private void cacheWod(Wod wod) {
-        if (wod.getId() == null) return;
+        if (wod == null || wod.getId() == null) return;
+        databaseExecutor.execute(() -> dao.insert(modelToEntity(wod)));
+    }
+
+    private void cacheWods(List<Wod> wods) {
+        databaseExecutor.execute(() -> {
+            List<WodEntity> entities = new ArrayList<>();
+            for (Wod wod : wods) {
+                if (wod.getId() != null) entities.add(modelToEntity(wod));
+            }
+            if (!entities.isEmpty()) dao.insertAll(entities);
+        });
+    }
+
+    private WodEntity modelToEntity(Wod wod) {
         WodEntity entity = new WodEntity(wod.getId());
         entity.setName(wod.getName());
         entity.setFormat(wod.getFormat());
@@ -198,49 +214,27 @@ public class WodRepository {
         entity.setTimeCapSeconds(wod.getTimeCapSeconds());
         entity.setNotes(wod.getNotes());
         entity.setCreatedAt(wod.getCreatedAt());
-        dao.insert(entity);
-    }
-
-    private void cacheWods(List<Wod> wods) {
-        List<WodEntity> entities = new ArrayList<>();
-        for (Wod wod : wods) {
-            if (wod.getId() == null) continue;
-            WodEntity entity = new WodEntity(wod.getId());
-            entity.setName(wod.getName());
-            entity.setFormat(wod.getFormat());
-            entity.setTrainerId(wod.getTrainerId());
-            entity.setScheduledDate(wod.getScheduledDate());
-            entity.setTimeCapSeconds(wod.getTimeCapSeconds());
-            entity.setNotes(wod.getNotes());
-            entity.setCreatedAt(wod.getCreatedAt());
-            entities.add(entity);
-        }
-        if (!entities.isEmpty()) {
-            dao.insertAll(entities);
-        }
+        return entity;
     }
 
     private Wod entityToModel(WodEntity entity) {
-        if (entity == null) return null;
         Wod wod = new Wod();
+        wod.setId(entity.getId());
+        wod.setName(entity.getName());
+        wod.setFormat(entity.getFormat());
+        wod.setTrainerId(entity.getTrainerId());
+        wod.setScheduledDate(entity.getScheduledDate());
+        wod.setTimeCapSeconds(entity.getTimeCapSeconds());
+        wod.setNotes(entity.getNotes());
+        wod.setCreatedAt(entity.getCreatedAt());
         return wod;
     }
 
     private List<Wod> entitiesToModels(List<WodEntity> entities) {
-        List<Wod> models = new ArrayList<>();
-        for (WodEntity entity : entities) {
-            Wod wod = entityToModel(entity);
-            if (wod != null) models.add(wod);
+        List<Wod> result = new ArrayList<>();
+        if (entities != null) {
+            for (WodEntity entity : entities) result.add(entityToModel(entity));
         }
-        return models;
-    }
-
-    private String getTodayDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return sdf.format(new Date());
-    }
-
-    private boolean isCacheValid(long cachedAt) {
-        return (System.currentTimeMillis() - cachedAt) < CACHE_DURATION_MS;
+        return result;
     }
 }

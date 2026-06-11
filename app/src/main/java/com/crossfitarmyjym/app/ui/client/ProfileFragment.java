@@ -17,6 +17,7 @@ import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 import com.crossfitarmyjym.app.data.repository.AuthRepository;
+import com.crossfitarmyjym.app.data.repository.ResultRepository;
 import com.crossfitarmyjym.app.databinding.FragmentProfileBinding;
 import com.crossfitarmyjym.app.ui.auth.LoginActivity;
 
@@ -31,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private BookingsViewModel bookingsViewModel;
     private PreferencesManager preferencesManager;
+    private ResultRepository resultRepository;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -50,12 +52,14 @@ public class ProfileFragment extends Fragment {
 
         preferencesManager = PreferencesManager.getInstance();
         bookingsViewModel = new ViewModelProvider(this).get(BookingsViewModel.class);
+        resultRepository = new ResultRepository();
 
         loadUserProfile();
         setupObservers();
         setupClickListeners();
 
         bookingsViewModel.loadMyBookings();
+        loadResultStats();
     }
 
     private void loadUserProfile() {
@@ -108,8 +112,28 @@ public class ProfileFragment extends Fragment {
             binding.tvWorkoutsCount.setText(String.valueOf(activeCount));
 
             // Считаем PR из bookings (заглушка)
-            binding.tvPrCount.setText("0");
         }
+    }
+
+    private void loadResultStats() {
+        resultRepository.getMyResults(new ResultRepository.ResultsCallback() {
+            @Override
+            public void onSuccess(List<com.crossfitarmyjym.app.data.model.Result> results) {
+                long prCount = results.stream()
+                        .filter(com.crossfitarmyjym.app.data.model.Result::isPr)
+                        .count();
+                if (binding != null) {
+                    binding.tvPrCount.setText(String.valueOf(prCount));
+                }
+            }
+
+            @Override
+            public void onError(@NonNull String error) {
+                if (binding != null) {
+                    binding.tvPrCount.setText("0");
+                }
+            }
+        });
     }
 
     private void logout() {

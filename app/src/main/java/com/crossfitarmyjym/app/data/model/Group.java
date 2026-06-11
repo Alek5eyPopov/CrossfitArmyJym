@@ -52,4 +52,9 @@ public class Group {
     public String getCreatedAt() {
         return createdAt;
     }
+
+    @Override
+    public String toString() {
+        return name != null ? name : "";
+    }
 }
