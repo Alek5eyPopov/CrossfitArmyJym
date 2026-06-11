@@ -279,3 +279,9 @@ BUILD SUCCESSFUL
 
 [INFO] 11.06.2026 | STAGE_3_COMPLETE | Аутентификация, профиль и обновление
 сессии приведены к контракту Supabase и проверены локально | COMPLETE
+
+[INFO] 11.06.2026 | GIT_COMMIT | Создан коммит этапа 3
+`35afa90 fix Supabase authentication sessions` | OK
+
+[INFO] 11.06.2026 | GITHUB_PUSH | Изменения этапа 3 отправлены в
+`origin/main` | OK
