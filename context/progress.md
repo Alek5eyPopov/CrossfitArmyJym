@@ -185,3 +185,13 @@ BUILD SUCCESSFUL
 
 [INFO] 11.06.2026 11:41 | STAGE_1_COMPLETE | Восстановлена воспроизводимая
 debug-сборка, создан `app-debug.apk` | BUILD_VERIFIED
+
+[INFO] 11.06.2026 11:47 | GIT_INIT | Рабочая папка инициализирована как
+Git-репозиторий, создана ветка `codex/stage-1-build`; секреты и build-артефакты
+исключены через `.gitignore` | OK
+
+[INFO] 11.06.2026 11:49 | GIT_COMMIT | Создан первый коммит
+`7d98ef3 restore Android debug build` | OK
+
+[WARN] 11.06.2026 11:52 | GITHUB_PUSH | GitHub CLI установлен, но web-device
+авторизация завершилась сетевым тайм-аутом | BLOCKED: требуется `gh auth login`
