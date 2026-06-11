@@ -317,3 +317,9 @@ MANUAL DEVICE CHECK REQUIRED
 
 [INFO] 11.06.2026 | STAGE_4_COMPLETE | Клиентский сценарий расписания, записи и
 отмены реализован и проверен локально | COMPLETE
+
+[INFO] 11.06.2026 | GIT_COMMIT | Создан коммит этапа 4
+`3a3a2b4 complete client booking flow` | OK
+
+[INFO] 11.06.2026 | GITHUB_PUSH | Изменения этапа 4 отправлены в
+`origin/main` | OK
