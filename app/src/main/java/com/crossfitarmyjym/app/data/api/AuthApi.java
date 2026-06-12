@@ -13,18 +13,18 @@ import retrofit2.http.POST;
 
 public interface AuthApi {
 
-    @POST("auth/v1/token?grant_type=password")
+    @POST("/auth/v1/token?grant_type=password")
     Call<AuthResponse> login(@Body LoginRequest request);
 
-    @POST("auth/v1/signup")
+    @POST("/auth/v1/signup")
     Call<AuthResponse> signup(@Body SignupRequest request);
 
-    @POST("auth/v1/token?grant_type=refresh_token")
+    @POST("/auth/v1/token?grant_type=refresh_token")
     Call<AuthResponse> refreshToken(@Body RefreshTokenRequest request);
 
-    @POST("auth/v1/logout")
+    @POST("/auth/v1/logout")
     Call<Void> logout();
 
-    @GET("auth/v1/user")
+    @GET("/auth/v1/user")
     Call<AuthUser> getCurrentUser();
 }

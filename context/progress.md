@@ -476,3 +476,13 @@ unit-тесты и debug-сборка успешны | BUILD_VERIFIED
 
 [INFO] 11.06.2026 | SUPABASE_DEPLOY | Владелец проекта подтвердил применение
 `20260611_stage7_admin_management.sql` в Supabase | APPLIED
+
+[ERROR] 12.06.2026 | AUTH_SIGNUP | Регистрация на эмуляторе возвращала HTTP 404:
+относительный путь `auth/v1/signup` добавлялся после REST base URL и формировал
+ошибочный адрес `/rest/v1/auth/v1/signup` | ROOT CAUSE FOUND
+
+[INFO] 12.06.2026 | AUTH_URL_FIX | Auth endpoints переведены на абсолютные пути
+`/auth/v1/*`; добавлен unit-тест разрешения signup URL | OK
+
+[INFO] 12.06.2026 | EMULATOR_DEPLOY | Unit-тесты и `assembleDebug` успешны,
+исправленный APK установлен на Pixel 10 через ADB | READY FOR RETEST
