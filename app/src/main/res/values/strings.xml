@@ -92,6 +92,17 @@
     <string name="schedule_empty_hint">На ближайшие 7 дней занятия пока не добавлены</string>
     <string name="bookings_empty_title">НЕТ АКТИВНЫХ ЗАПИСЕЙ</string>
     <string name="bookings_empty_hint">Выберите подходящую тренировку в расписании</string>
+    <string name="profile_title">ПРОФИЛЬ</string>
+    <string name="profile_subtitle">Личный кабинет атлета</string>
+    <string name="athlete_role">АТЛЕТ ARMY</string>
+    <string name="profile_progress">МОЙ ПРОГРЕСС</string>
+    <string name="active_bookings_metric">Активные записи</string>
+    <string name="personal_records_metric">Личные рекорды</string>
+    <string name="account_details">ДАННЫЕ АККАУНТА</string>
+    <string name="account_email_label">EMAIL</string>
+    <string name="account_role_label">РОЛЬ</string>
+    <string name="profile_motivation">СИЛА • ХАРАКТЕР • ДИСЦИПЛИНА</string>
+    <string name="logout_account">Выйти из аккаунта</string>
 
     <!-- Роли -->
     <string name="role_client">Клиент</string>

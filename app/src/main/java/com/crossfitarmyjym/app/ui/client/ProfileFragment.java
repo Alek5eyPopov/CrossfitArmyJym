@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
@@ -76,9 +76,10 @@ public class ProfileFragment extends Fragment {
         if (email != null) {
             binding.tvEmail.setText(email);
         }
-
-        // Статистика (заглушка, будет заполняться реальными данными позже)
-        // Можно загрузить через ResultRepository
+        binding.tvRole.setText("athlete".equals(role)
+                ? getString(R.string.athlete_role)
+                : roleLabel(role).toUpperCase());
+        binding.tvAccountRole.setText(roleLabel(role));
     }
 
     private void setupObservers() {
@@ -110,9 +111,17 @@ public class ProfileFragment extends Fragment {
         if (bookings != null) {
             long activeCount = bookings.stream().filter(Booking::isConfirmed).count();
             binding.tvWorkoutsCount.setText(String.valueOf(activeCount));
-
-            // Считаем PR из bookings (заглушка)
         }
+    }
+
+    private String roleLabel(String role) {
+        if ("trainer".equals(role)) {
+            return getString(R.string.role_trainer);
+        }
+        if ("admin".equals(role)) {
+            return getString(R.string.role_admin);
+        }
+        return getString(R.string.role_client);
     }
 
     private void loadResultStats() {
