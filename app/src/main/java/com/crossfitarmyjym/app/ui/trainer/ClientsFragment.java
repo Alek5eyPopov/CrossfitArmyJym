@@ -40,7 +40,7 @@ public class ClientsFragment extends Fragment {
             adapter.submitList(clients);
             boolean empty = clients == null || clients.isEmpty();
             binding.rvClients.setVisibility(empty ? View.GONE : View.VISIBLE);
-            binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.emptyContainer.setVisibility(empty ? View.VISIBLE : View.GONE);
         });
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading ->
                 binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE));

@@ -41,8 +41,9 @@ public class TrainerClassesAdapter
         String location = gymClass.getLocation();
         holder.binding.tvClassName.setText(
                 location == null || location.isEmpty() ? "CrossFit" : location);
-        holder.binding.tvClassTime.setText(
-                ScheduleAdapter.formatTime(gymClass.getScheduledStart()));
+        holder.binding.tvDateDay.setText(ScheduleAdapter.formatDay(gymClass.getScheduledStart()));
+        holder.binding.tvDateMonth.setText(ScheduleAdapter.formatMonth(gymClass.getScheduledStart()));
+        holder.binding.tvClassTime.setText(ScheduleAdapter.formatClock(gymClass.getScheduledStart()));
         holder.binding.tvBookingsCount.setText(holder.itemView.getContext().getString(
                 R.string.bookings_count,
                 gymClass.getCurrentBookings(),

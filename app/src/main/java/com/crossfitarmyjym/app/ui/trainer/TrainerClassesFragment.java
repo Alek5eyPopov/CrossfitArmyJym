@@ -44,7 +44,7 @@ public class TrainerClassesFragment extends Fragment {
             adapter.submitList(classes);
             boolean empty = classes == null || classes.isEmpty();
             binding.rvClasses.setVisibility(empty ? View.GONE : View.VISIBLE);
-            binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.emptyContainer.setVisibility(empty ? View.VISIBLE : View.GONE);
         });
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading ->
                 binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE));

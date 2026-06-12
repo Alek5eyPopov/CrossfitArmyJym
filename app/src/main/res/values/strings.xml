@@ -103,6 +103,19 @@
     <string name="account_role_label">РОЛЬ</string>
     <string name="profile_motivation">СИЛА • ХАРАКТЕР • ДИСЦИПЛИНА</string>
     <string name="logout_account">Выйти из аккаунта</string>
+    <string name="trainer_classes_title">МОИ ЗАНЯТИЯ</string>
+    <string name="trainer_classes_subtitle">Управление группами и посещаемостью</string>
+    <string name="trainer_clients_title">АТЛЕТЫ</string>
+    <string name="trainer_clients_subtitle">Активные участники ваших групп</string>
+    <string name="trainer_attendance_title">ПОСЕЩАЕМОСТЬ</string>
+    <string name="trainer_attendance_subtitle">Отметьте присутствующих на тренировке</string>
+    <string name="trainer_wod_title">WOD РЕДАКТОР</string>
+    <string name="trainer_wod_subtitle">Создайте тренировку для выбранной группы</string>
+    <string name="trainer_empty_title">ЗАНЯТИЙ НЕТ</string>
+    <string name="trainer_clients_empty_title">АТЛЕТЫ НЕ НАЙДЕНЫ</string>
+    <string name="attendance_empty_title">СПИСОК ПУСТ</string>
+    <string name="athlete_label">АТЛЕТ</string>
+    <string name="group_training_label">ГРУППОВАЯ ТРЕНИРОВКА</string>
 
     <!-- Роли -->
     <string name="role_client">Клиент</string>
