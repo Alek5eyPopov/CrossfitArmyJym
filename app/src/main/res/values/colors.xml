@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Основные цвета бренда -->
-    <color name="primary">#FF5722</color>
-    <color name="primary_dark">#E64A19</color>
-    <color name="primary_light">#FF8A65</color>
-    <color name="accent">#2196F3</color>
+    <!-- Фирменная палитра ARMY -->
+    <color name="army_red">#F23D3D</color>
+    <color name="army_red_dark">#D92F35</color>
+    <color name="army_red_light">#FF6B68</color>
+    <color name="army_navy">#092331</color>
+    <color name="army_navy_light">#173746</color>
+    <color name="army_off_white">#F4F4F2</color>
+    <color name="army_pattern">#E5E6E6</color>
+
+    <!-- Совместимые имена для существующих экранов -->
+    <color name="primary">@color/army_red</color>
+    <color name="primary_dark">@color/army_navy</color>
+    <color name="primary_light">@color/army_red_light</color>
+    <color name="accent">@color/army_red</color>
 
     <!-- Цвета для разных ролей -->
     <color name="client_color">#4CAF50</color>
@@ -12,13 +21,13 @@
     <color name="admin_color">#F44336</color>
 
     <!-- Текст -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#BDBDBD</color>
+    <color name="text_primary">#101820</color>
+    <color name="text_secondary">#60717A</color>
+    <color name="text_hint">#94A0A6</color>
     <color name="text_on_primary">#FFFFFF</color>
 
     <!-- Фон -->
-    <color name="background">#FAFAFA</color>
+    <color name="background">@color/army_off_white</color>
     <color name="surface">#FFFFFF</color>
     <color name="card_background">#FFFFFF</color>
 
@@ -29,7 +38,7 @@
     <color name="info">#2196F3</color>
 
     <!-- Дополнительно -->
-    <color name="divider">#E0E0E0</color>
+    <color name="divider">#D9DEDF</color>
     <color name="ripple">#BDBDBD</color>
     <color name="overlay">#80000000</color>
 

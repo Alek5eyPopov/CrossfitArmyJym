@@ -14,7 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.crossfitarmyjym.app.R;
+import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.data.model.LeaderboardEntry;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.model.WodExercise;
@@ -40,6 +43,14 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        binding.cardWorkoutAction.setOnClickListener(v ->
+                binding.getRoot().smoothScrollTo(0, binding.cardWod.getTop()));
+        binding.cardScheduleAction.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.fragment_schedule));
+        binding.cardBookingsAction.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.fragment_bookings));
+        binding.btnOpenSchedule.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.fragment_schedule));
         binding.btnSubmitResult.setOnClickListener(v -> showResultDialog());
         binding.btnLeaderboard.setOnClickListener(v -> viewModel.loadLeaderboard());
         observe();
@@ -53,6 +64,10 @@ public class HomeFragment extends Fragment {
             binding.btnSubmitResult.setEnabled(wod != null);
             binding.btnLeaderboard.setEnabled(wod != null);
         });
+        viewModel.getNextClass().observe(getViewLifecycleOwner(), gymClass ->
+                binding.tvNextClass.setText(gymClass == null
+                        ? getString(R.string.no_upcoming_training)
+                        : formatNextClass(gymClass)));
         viewModel.getLeaderboard().observe(getViewLifecycleOwner(), this::showLeaderboard);
         viewModel.getMessage().observe(getViewLifecycleOwner(), message -> {
             if (message != null) Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
@@ -83,6 +98,21 @@ public class HomeFragment extends Fragment {
             text.append("\n\n").append(wod.getNotes());
         }
         return text.toString();
+    }
+
+    private String formatNextClass(GymClass gymClass) {
+        String start = gymClass.getScheduledStart();
+        String dateTime = "Время уточняется";
+        if (start != null && start.length() >= 16) {
+            dateTime = start.substring(8, 10) + "." + start.substring(5, 7)
+                    + " в " + start.substring(11, 16);
+        }
+        String location = gymClass.getLocation();
+        if (location == null || location.trim().isEmpty()) {
+            location = "Основной зал";
+        }
+        return dateTime + "\n" + location + "\nСвободных мест: "
+                + Math.max(0, gymClass.getAvailableSlots());
     }
 
     private void showResultDialog() {

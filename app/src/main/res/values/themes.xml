@@ -18,6 +18,10 @@
         <!-- Статус бар -->
         <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/army_navy</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorSecondary">@color/army_red</item>
+        <item name="colorOnSecondary">@color/text_on_primary</item>
     </style>
 
     <!-- Тема для экрана аутентификации (без статус бара) -->
@@ -47,6 +51,8 @@
     <style name="Widget.CrossfitArmyJym.Button" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/primary</item>
         <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">6dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Widget.CrossfitArmyJym.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
@@ -57,7 +63,24 @@
     <!-- Стили для карточек -->
     <style name="Widget.CrossfitArmyJym.Card" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">@color/card_background</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">14dp</item>
+    </style>
+
+    <style name="TextAppearance.CrossfitArmyJym.SectionTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/army_navy</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.06</item>
+    </style>
+
+    <style name="TextAppearance.CrossfitArmyJym.Action" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/army_navy</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 </resources>
