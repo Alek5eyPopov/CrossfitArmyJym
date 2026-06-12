@@ -16,7 +16,10 @@ import com.crossfitarmyjym.app.data.model.RefreshTokenRequest;
 import com.crossfitarmyjym.app.data.model.SignupRequest;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -275,7 +278,45 @@ public class AuthRepository {
     }
 
     private String authError(String prefix, Response<?> response) {
+        String serverMessage = readAuthErrorMessage(response);
+        if ("Email not confirmed".equalsIgnoreCase(serverMessage)
+                || "email_not_confirmed".equalsIgnoreCase(serverMessage)) {
+            return "Email не подтверждён. Откройте письмо Supabase или подтвердите пользователя в панели";
+        }
+        if ("Invalid login credentials".equalsIgnoreCase(serverMessage)
+                || "invalid_credentials".equalsIgnoreCase(serverMessage)) {
+            return "Неверный email или пароль";
+        }
+        if (serverMessage != null && !serverMessage.isEmpty()) {
+            return prefix + ": " + serverMessage;
+        }
         return prefix + " (код " + response.code() + ")";
+    }
+
+    @Nullable
+    private String readAuthErrorMessage(Response<?> response) {
+        if (response.errorBody() == null) {
+            return null;
+        }
+        try {
+            JsonObject json = JsonParser.parseString(response.errorBody().string())
+                    .getAsJsonObject();
+            if (json.has("message")) {
+                return json.get("message").getAsString();
+            }
+            if (json.has("error_description")) {
+                return json.get("error_description").getAsString();
+            }
+            if (json.has("error_code")) {
+                return json.get("error_code").getAsString();
+            }
+            if (json.has("code")) {
+                return json.get("code").getAsString();
+            }
+        } catch (IOException | RuntimeException error) {
+            Log.w(TAG, "Could not parse Supabase auth error", error);
+        }
+        return null;
     }
 
     private String networkError(Throwable error) {

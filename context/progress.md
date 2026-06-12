@@ -486,3 +486,10 @@ unit-тесты и debug-сборка успешны | BUILD_VERIFIED
 
 [INFO] 12.06.2026 | EMULATOR_DEPLOY | Unit-тесты и `assembleDebug` успешны,
 исправленный APK установлен на Pixel 10 через ADB | READY FOR RETEST
+
+[WARN] 12.06.2026 | AUTH_LOGIN | Supabase Auth вернул HTTP 400 после успешной
+регистрации; наиболее вероятная причина — обязательное подтверждение email |
+EMAIL CONFIRMATION REQUIRED
+
+[INFO] 12.06.2026 | AUTH_ERROR_UI | Добавлен разбор JSON-ошибок Supabase Auth:
+email confirmation и неверные credentials отображаются понятным текстом | OK
