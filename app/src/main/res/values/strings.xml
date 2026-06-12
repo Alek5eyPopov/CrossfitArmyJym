@@ -117,6 +117,31 @@
     <string name="athlete_label">АТЛЕТ</string>
     <string name="group_training_label">ГРУППОВАЯ ТРЕНИРОВКА</string>
 
+    <!-- Администратор -->
+    <string name="admin_users_title">ПОЛЬЗОВАТЕЛИ</string>
+    <string name="admin_users_subtitle">Роли, группы и доступ участников клуба</string>
+    <string name="admin_statistics_title">СТАТИСТИКА ЗАЛА</string>
+    <string name="admin_statistics_subtitle">Ключевые показатели CrossFit ARMY</string>
+    <string name="admin_content_title">УПРАВЛЕНИЕ ЗАЛОМ</string>
+    <string name="admin_content_subtitle">Группы, занятия и программы WOD</string>
+    <string name="admin_user_icon">Профиль пользователя</string>
+    <string name="admin_edit">ИЗМЕНИТЬ</string>
+    <string name="admin_delete">Удалить</string>
+    <string name="admin_create">СОЗДАТЬ</string>
+    <string name="admin_people_section">УЧАСТНИКИ</string>
+    <string name="admin_training_section">ТРЕНИРОВОЧНЫЙ ПРОЦЕСС</string>
+    <string name="admin_activity_section">АКТИВНОСТЬ</string>
+    <string name="admin_groups_section">ГРУППЫ</string>
+    <string name="admin_classes_section">ЗАНЯТИЯ</string>
+    <string name="admin_wod_section">ПРОГРАММЫ WOD</string>
+    <string name="admin_users_metric">Всего</string>
+    <string name="admin_active_metric">Активны</string>
+    <string name="admin_groups_metric">Группы</string>
+    <string name="admin_classes_metric">Занятия</string>
+    <string name="admin_bookings_metric">Записи</string>
+    <string name="admin_attendance_metric">Посещения</string>
+    <string name="admin_results_metric">Результаты</string>
+
     <!-- Роли -->
     <string name="role_client">Клиент</string>
     <string name="role_trainer">Тренер</string>

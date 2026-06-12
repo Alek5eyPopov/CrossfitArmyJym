@@ -22,7 +22,11 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:background="@color/surface"
+        android:background="@color/army_navy"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_admin_bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
