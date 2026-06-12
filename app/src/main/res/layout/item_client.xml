@@ -59,7 +59,7 @@
             android:fontFamily="sans-serif-condensed"
             android:text="@string/athlete_label"
             android:textColor="@color/text_on_primary"
-            android:textSize="9sp"
+            android:textSize="11sp"
             android:textStyle="bold" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

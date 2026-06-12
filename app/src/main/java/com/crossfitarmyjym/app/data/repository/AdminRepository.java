@@ -209,7 +209,12 @@ public class AdminRepository {
         ListCallback<User> users() {
             return listener(items -> {
                 users = items.size();
-                activeUsers = (int) items.stream().filter(User::isActive).count();
+                activeUsers = 0;
+                for (User user : items) {
+                    if (user.isActive()) {
+                        activeUsers++;
+                    }
+                }
             });
         }
 
@@ -217,16 +222,22 @@ public class AdminRepository {
         ListCallback<GymClass> classes() { return listener(items -> classes = items.size()); }
         ListCallback<Booking> bookings() { return listener(items -> bookings = items.size()); }
         ListCallback<Attendance> attendance() {
-            return listener(items -> attended = (int) items.stream()
-                    .filter(Attendance::isAttended).count());
+            return listener(items -> {
+                attended = 0;
+                for (Attendance attendance : items) {
+                    if (attendance.isAttended()) {
+                        attended++;
+                    }
+                }
+            });
         }
         ListCallback<Result> results() { return listener(items -> results = items.size()); }
 
-        private <T> ListCallback<T> listener(java.util.function.Consumer<List<T>> consumer) {
+        private <T> ListCallback<T> listener(ListConsumer<T> consumer) {
             return new ListCallback<T>() {
                 @Override
                 public void onSuccess(List<T> items) {
-                    consumer.accept(items);
+                    consumer.consume(items);
                     finish();
                 }
 
@@ -238,6 +249,10 @@ public class AdminRepository {
                     }
                 }
             };
+        }
+
+        private interface ListConsumer<T> {
+            void consume(List<T> items);
         }
 
         private void finish() {

@@ -76,7 +76,7 @@
                         android:letterSpacing="0.06"
                         android:text="@string/army_tagline"
                         android:textColor="#BFD0D7"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -277,7 +277,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:enabled="false"
-                        android:text="Внести результат"
+                        android:text="@string/submit_result"
                         android:textSize="12sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -288,7 +288,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:enabled="false"
-                        android:text="Рейтинг"
+                        android:text="@string/leaderboard"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>

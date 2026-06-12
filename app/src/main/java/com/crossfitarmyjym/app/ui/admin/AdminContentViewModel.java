@@ -13,6 +13,7 @@ import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.repository.AdminRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,13 @@ public class AdminContentViewModel extends AndroidViewModel {
         repository.getWods(listCallback(wods));
         repository.getUsers(new AdminRepository.ListCallback<User>() {
             @Override public void onSuccess(List<User> items) {
-                trainers.postValue(items.stream().filter(User::isTrainer).toList());
+                List<User> trainerItems = new ArrayList<>();
+                for (User user : items) {
+                    if (user.isTrainer()) {
+                        trainerItems.add(user);
+                    }
+                }
+                trainers.postValue(trainerItems);
                 loading.postValue(false);
             }
             @Override public void onError(@NonNull String value) {

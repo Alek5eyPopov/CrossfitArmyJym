@@ -22,6 +22,7 @@ import com.crossfitarmyjym.app.databinding.FragmentProfileBinding;
 import com.crossfitarmyjym.app.ui.auth.LoginActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Фрагмент профиля пользователя.
@@ -78,7 +79,7 @@ public class ProfileFragment extends Fragment {
         }
         binding.tvRole.setText("athlete".equals(role)
                 ? getString(R.string.athlete_role)
-                : roleLabel(role).toUpperCase());
+                : roleLabel(role).toUpperCase(Locale.getDefault()));
         binding.tvAccountRole.setText(roleLabel(role));
     }
 
@@ -109,7 +110,12 @@ public class ProfileFragment extends Fragment {
 
     private void updateBookingsStats(List<Booking> bookings) {
         if (bookings != null) {
-            long activeCount = bookings.stream().filter(Booking::isConfirmed).count();
+            long activeCount = 0;
+            for (Booking booking : bookings) {
+                if (booking.isConfirmed()) {
+                    activeCount++;
+                }
+            }
             binding.tvWorkoutsCount.setText(String.valueOf(activeCount));
         }
     }
@@ -128,9 +134,12 @@ public class ProfileFragment extends Fragment {
         resultRepository.getMyResults(new ResultRepository.ResultsCallback() {
             @Override
             public void onSuccess(List<com.crossfitarmyjym.app.data.model.Result> results) {
-                long prCount = results.stream()
-                        .filter(com.crossfitarmyjym.app.data.model.Result::isPr)
-                        .count();
+                long prCount = 0;
+                for (com.crossfitarmyjym.app.data.model.Result result : results) {
+                    if (result.isPr()) {
+                        prCount++;
+                    }
+                }
                 if (binding != null) {
                     binding.tvPrCount.setText(String.valueOf(prCount));
                 }

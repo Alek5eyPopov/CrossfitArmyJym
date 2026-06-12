@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="ОСНОВНОЕ"
+                    android:text="@string/wod_main_section"
                     android:textColor="@color/army_navy"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Название WOD">
+                    android:hint="@string/wod_name_hint">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_wod_name"
                         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Формат"
+                    android:text="@string/wod_format_label"
                     android:textColor="@color/text_secondary"
                     android:textStyle="bold" />
                 <Spinner
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Группа"
+                    android:text="@string/wod_group_label"
                     android:textColor="@color/text_secondary"
                     android:textStyle="bold" />
                 <Spinner
@@ -108,7 +108,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Дата YYYY-MM-DD">
+                        android:hint="@string/wod_date_hint">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_scheduled_date"
                             android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:hint="Лимит, мин">
+                        android:hint="@string/wod_time_cap_hint">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_time_cap"
                             android:layout_width="match_parent"
@@ -148,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="УПРАЖНЕНИЯ"
+                    android:text="@string/wod_exercises_section"
                     android:textColor="@color/army_navy"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -166,13 +166,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Раунды">
+                        android:hint="@string/wod_rounds_hint">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_rounds"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="1" />
+                            android:text="@string/one" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.CrossfitArmyJym.TextInputLayout"
@@ -180,13 +180,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:hint="Вес, кг">
+                        android:hint="@string/wod_weight_hint">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_weight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="0" />
+                            android:text="@string/zero" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
                 <com.google.android.material.button.MaterialButton
@@ -194,7 +194,7 @@
                     style="@style/Widget.CrossfitArmyJym.Button.Outlined"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Добавить упражнение"
+                    android:text="@string/wod_add_exercise"
                     app:cornerRadius="8dp" />
                 <TextView
                     android:id="@+id/tv_selected_exercises"
@@ -203,7 +203,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_diagonal_pattern"
                     android:padding="12dp"
-                    android:text="Упражнения не добавлены"
+                    android:text="@string/wod_no_exercises"
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -216,7 +216,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
-            android:hint="Описание и примечания">
+            android:hint="@string/wod_description_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_wod_description"
                 android:layout_width="match_parent"

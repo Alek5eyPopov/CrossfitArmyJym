@@ -100,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_red"
                         android:textSize="34sp"
                         android:textStyle="bold" />
@@ -132,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_red"
                         android:textSize="34sp"
                         android:textStyle="bold" />
@@ -182,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_navy"
                         android:textSize="34sp"
                         android:textStyle="bold" />
@@ -214,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_navy"
                         android:textSize="34sp"
                         android:textStyle="bold" />
@@ -265,7 +265,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_red"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -297,7 +297,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_red"
                         android:textSize="30sp"
                         android:textStyle="bold" />
@@ -329,7 +329,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="@color/army_red"
                         android:textSize="30sp"
                         android:textStyle="bold" />

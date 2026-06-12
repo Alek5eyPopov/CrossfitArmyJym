@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.databinding.ItemAdminUserBinding;
 
@@ -60,7 +61,13 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
         void bind(User user) {
             binding.tvName.setText(user.getFullName());
             binding.tvEmail.setText(user.getEmail());
-            binding.tvRole.setText(user.getRole() + (user.isActive() ? " • активен" : " • заблокирован"));
+        binding.tvRole.setText(binding.getRoot().getContext().getString(
+                R.string.admin_user_status,
+                user.getRole(),
+                binding.getRoot().getContext().getString(
+                        user.isActive() ? R.string.admin_status_active : R.string.admin_status_blocked
+                )
+        ));
             binding.btnEdit.setOnClickListener(v -> listener.onEdit(user));
         }
     }

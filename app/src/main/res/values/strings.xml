@@ -116,6 +116,31 @@
     <string name="attendance_empty_title">СПИСОК ПУСТ</string>
     <string name="athlete_label">АТЛЕТ</string>
     <string name="group_training_label">ГРУППОВАЯ ТРЕНИРОВКА</string>
+    <string name="submit_result">Внести результат</string>
+    <string name="leaderboard">Рейтинг</string>
+    <string name="profile_name_placeholder">Имя пользователя</string>
+    <string name="profile_email_placeholder">email@example.com</string>
+    <string name="zero">0</string>
+    <string name="one">1</string>
+
+    <!-- WOD редактор -->
+    <string name="wod_main_section">ОСНОВНОЕ</string>
+    <string name="wod_name_hint">Название WOD</string>
+    <string name="wod_format_label">Формат</string>
+    <string name="wod_group_label">Группа</string>
+    <string name="wod_date_hint">Дата YYYY-MM-DD</string>
+    <string name="wod_time_cap_hint">Лимит, мин</string>
+    <string name="wod_exercises_section">УПРАЖНЕНИЯ</string>
+    <string name="wod_rounds_hint">Раунды</string>
+    <string name="wod_weight_hint">Вес, кг</string>
+    <string name="wod_add_exercise">Добавить упражнение</string>
+    <string name="wod_no_exercises">Упражнения не добавлены</string>
+    <string name="wod_description_hint">Описание и примечания</string>
+    <string name="admin_edit_symbol">✎</string>
+    <string name="admin_delete_symbol">×</string>
+    <string name="admin_user_status">%1$s • %2$s</string>
+    <string name="admin_status_active">активен</string>
+    <string name="admin_status_blocked">заблокирован</string>
 
     <!-- Администратор -->
     <string name="admin_users_title">ПОЛЬЗОВАТЕЛИ</string>
