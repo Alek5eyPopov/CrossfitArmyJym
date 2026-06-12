@@ -27,7 +27,12 @@
     <!-- Тема для экрана аутентификации (без статус бара) -->
     <style name="Theme.CrossfitArmyJym.Auth" parent="Theme.CrossfitArmyJym">
         <item name="android:windowFullscreen">false</item>
+        <item name="android:statusBarColor">@color/army_navy</item>
+        <item name="android:navigationBarColor">@color/army_navy</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="Theme.CrossfitArmyJym.Launch" parent="Theme.CrossfitArmyJym.Auth" />
 
     <!-- Тема для диалогов -->
     <style name="Theme.CrossfitArmyJym.Dialog" parent="Theme.Material3.Light.Dialog">
@@ -43,8 +48,15 @@
 
     <!-- Стили для TextInputLayout -->
     <style name="Widget.CrossfitArmyJym.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/primary</item>
-        <item name="hintTextColor">@color/primary</item>
+        <item name="boxStrokeColor">@color/auth_input_stroke</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+        <item name="boxBackgroundColor">@color/surface</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="startIconTint">@color/text_secondary</item>
+        <item name="endIconTint">@color/text_secondary</item>
     </style>
 
     <!-- Стили для кнопок -->

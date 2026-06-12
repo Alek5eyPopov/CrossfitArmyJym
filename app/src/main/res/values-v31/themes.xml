@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.CrossfitArmyJym.Launch" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/army_navy</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/army_emblem_white</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/army_red</item>
+        <item name="android:windowSplashScreenAnimationDuration">250</item>
+        <item name="android:statusBarColor">@color/army_navy</item>
+        <item name="android:navigationBarColor">@color/army_navy</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

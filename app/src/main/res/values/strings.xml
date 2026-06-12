@@ -12,6 +12,12 @@
     <string name="no_account">Нет аккаунта?</string>
     <string name="have_account">Уже есть аккаунт?</string>
     <string name="logout">Выйти</string>
+    <string name="auth_welcome">ДОБРО ПОЖАЛОВАТЬ</string>
+    <string name="auth_login_subtitle">Войдите, чтобы продолжить тренировку</string>
+    <string name="auth_signup_title">СТАТЬ ЧАСТЬЮ КОМАНДЫ</string>
+    <string name="auth_signup_subtitle">Создайте аккаунт и начните тренироваться</string>
+    <string name="full_name_optional">Полное имя (необязательно)</string>
+    <string name="auth_footer">СТАРЫЙ ОСКОЛ • CROSSFIT CLUB</string>
 
     <!-- Навигация (Клиент) -->
     <string name="nav_home">Главная</string>
