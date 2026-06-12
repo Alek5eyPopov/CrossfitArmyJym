@@ -35,15 +35,18 @@ public class BookingsFragment extends Fragment {
         adapter = new BookingsAdapter(viewModel::cancelBooking);
         binding.rvBookings.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvBookings.setAdapter(adapter);
+        binding.btnRefresh.setOnClickListener(v -> viewModel.refreshMyBookings());
 
         viewModel.getBookings().observe(getViewLifecycleOwner(), bookings -> {
             adapter.submitList(bookings);
             boolean empty = bookings == null || bookings.isEmpty();
             binding.rvBookings.setVisibility(empty ? View.GONE : View.VISIBLE);
-            binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.emptyContainer.setVisibility(empty ? View.VISIBLE : View.GONE);
         });
-        viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading ->
-                binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE));
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), loading -> {
+            binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+            binding.btnRefresh.setEnabled(!loading);
+        });
         viewModel.getCancelStatus().observe(getViewLifecycleOwner(), status -> showMessage(status));
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> showMessage(error));
 

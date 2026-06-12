@@ -50,6 +50,7 @@ public class ScheduleFragment extends Fragment {
 
         setupRecyclerView();
         setupObservers();
+        binding.btnRefresh.setOnClickListener(v -> viewModel.refreshSchedule());
 
         viewModel.loadSchedule();
     }
@@ -67,7 +68,7 @@ public class ScheduleFragment extends Fragment {
                 updateAdapter(gymClasses, viewModel.getBookedClassIds().getValue());
                 boolean empty = gymClasses.isEmpty();
                 binding.rvSchedule.setVisibility(empty ? View.GONE : View.VISIBLE);
-                binding.tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+                binding.emptyContainer.setVisibility(empty ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -76,6 +77,7 @@ public class ScheduleFragment extends Fragment {
 
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+            binding.btnRefresh.setEnabled(!isLoading);
         });
 
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {

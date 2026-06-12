@@ -79,6 +79,19 @@
     <string name="next_training">БЛИЖАЙШАЯ ТРЕНИРОВКА</string>
     <string name="no_upcoming_training">Ближайших тренировок пока нет</string>
     <string name="open_schedule">Открыть расписание</string>
+    <string name="schedule_title">РАСПИСАНИЕ</string>
+    <string name="schedule_subtitle">Выберите тренировку на ближайшие 7 дней</string>
+    <string name="bookings_title">МОИ ЗАПИСИ</string>
+    <string name="bookings_subtitle">Ваши предстоящие тренировки</string>
+    <string name="refresh">Обновить</string>
+    <string name="main_box">ОСНОВНОЙ ЗАЛ</string>
+    <string name="training_label">CROSSFIT ТРЕНИРОВКА</string>
+    <string name="booking_active">ЗАПИСЬ АКТИВНА</string>
+    <string name="booking_cancelled_label">ЗАПИСЬ ОТМЕНЕНА</string>
+    <string name="schedule_empty_title">ТРЕНИРОВОК НЕТ</string>
+    <string name="schedule_empty_hint">На ближайшие 7 дней занятия пока не добавлены</string>
+    <string name="bookings_empty_title">НЕТ АКТИВНЫХ ЗАПИСЕЙ</string>
+    <string name="bookings_empty_hint">Выберите подходящую тренировку в расписании</string>
 
     <!-- Роли -->
     <string name="role_client">Клиент</string>

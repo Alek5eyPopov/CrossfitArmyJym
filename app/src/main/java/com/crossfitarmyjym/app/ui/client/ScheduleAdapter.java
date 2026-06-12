@@ -12,6 +12,7 @@ import com.crossfitarmyjym.app.databinding.ItemScheduleClassBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         String location = gymClass.getLocation();
         holder.binding.tvClassName.setText(
                 location == null || location.isEmpty() ? "CrossFit" : location);
-        holder.binding.tvClassTime.setText(formatTime(gymClass.getScheduledStart()));
+        Date classDate = parseDate(gymClass.getScheduledStart());
+        holder.binding.tvDateDay.setText(formatDate(classDate, "dd", "--"));
+        holder.binding.tvDateMonth.setText(
+                formatDate(classDate, "MMM", "---").replace(".", "").toUpperCase(Locale.getDefault()));
+        holder.binding.tvClassTime.setText(formatDate(classDate, "HH:mm", "Время уточняется"));
 
         int available = Math.max(gymClass.getAvailableSlots(), 0);
         holder.binding.tvAvailableSlots.setText(
@@ -71,9 +76,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     public static String formatTime(String isoDate) {
-        if (isoDate == null || isoDate.isEmpty()) {
-            return "";
-        }
+        Date date = parseDate(isoDate);
+        return formatDate(date, "dd.MM, HH:mm", isoDate == null ? "" : isoDate);
+    }
+
+    private static Date parseDate(String isoDate) {
+        if (isoDate == null || isoDate.isEmpty()) return null;
         String[] patterns = {
                 "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
                 "yyyy-MM-dd'T'HH:mm:ssXXX",
@@ -82,13 +90,31 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         for (String pattern : patterns) {
             try {
                 SimpleDateFormat input = new SimpleDateFormat(pattern, Locale.US);
-                SimpleDateFormat output = new SimpleDateFormat("dd.MM, HH:mm", Locale.getDefault());
-                return output.format(input.parse(isoDate));
+                return input.parse(isoDate);
             } catch (Exception ignored) {
                 // Try the next Supabase timestamp representation.
             }
         }
-        return isoDate;
+        return null;
+    }
+
+    private static String formatDate(Date date, String pattern, String fallback) {
+        if (date == null) return fallback;
+        return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
+    }
+
+    public static String formatDay(String isoDate) {
+        return formatDate(parseDate(isoDate), "dd", "--");
+    }
+
+    public static String formatMonth(String isoDate) {
+        return formatDate(parseDate(isoDate), "MMM", "---")
+                .replace(".", "")
+                .toUpperCase(Locale.getDefault());
+    }
+
+    public static String formatClock(String isoDate) {
+        return formatDate(parseDate(isoDate), "HH:mm", "Время уточняется");
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

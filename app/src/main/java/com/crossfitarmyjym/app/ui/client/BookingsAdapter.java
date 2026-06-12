@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.crossfitarmyjym.app.R;
@@ -41,14 +42,20 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
         String location = gymClass != null ? gymClass.getLocation() : null;
         holder.binding.tvClassName.setText(
                 location == null || location.isEmpty() ? "CrossFit" : location);
-        holder.binding.tvClassTime.setText(
-                gymClass != null
-                        ? ScheduleAdapter.formatTime(gymClass.getScheduledStart())
-                        : holder.itemView.getContext().getString(R.string.class_details_unavailable));
+        String scheduledStart = gymClass != null ? gymClass.getScheduledStart() : null;
+        holder.binding.tvDateDay.setText(ScheduleAdapter.formatDay(scheduledStart));
+        holder.binding.tvDateMonth.setText(ScheduleAdapter.formatMonth(scheduledStart));
+        holder.binding.tvClassTime.setText(gymClass != null
+                ? ScheduleAdapter.formatClock(scheduledStart)
+                : holder.itemView.getContext().getString(R.string.class_details_unavailable));
 
         boolean confirmed = booking.isConfirmed();
-        holder.binding.tvBookingStatus.setText(
-                confirmed ? R.string.booking_confirmed : R.string.booking_cancelled);
+        holder.binding.tvBookingStatus.setText(confirmed
+                ? R.string.booking_active : R.string.booking_cancelled_label);
+        holder.binding.tvBookingStatus.setBackgroundResource(confirmed
+                ? R.drawable.bg_status_active : R.drawable.bg_status_cancelled);
+        holder.binding.tvBookingStatus.setTextColor(ContextCompat.getColor(
+                holder.itemView.getContext(), confirmed ? R.color.success : R.color.text_secondary));
         holder.binding.btnCancel.setEnabled(confirmed);
         holder.binding.btnCancel.setOnClickListener(v -> listener.onCancel(booking.getId()));
     }
