@@ -764,3 +764,23 @@ testDebugUnitTest и assembleDebug; сборка завершена успешн
 
 [INFO] 14.06.2026 | LAUNCHER_ICON_STAGE_COMPLETE | Отдельный фирменный ярлык
 приложения реализован и проверен | COMPLETE
+
+[INFO] 14.06.2026 | BOTTOM_NAV_SPACING_STAGE_START | Начат этап корректировки
+расстояния между иконками и подписями нижней навигации | IN_PROGRESS
+
+[INFO] 14.06.2026 | BOTTOM_NAV_SHARED_DIMENS | Для клиента, тренера и администратора
+добавлены единые размеры панели: высота 64dp, промежуток между иконкой и подписью 4dp,
+верхний отступ 8dp и нижний отступ 6dp | OK
+
+[INFO] 14.06.2026 | BOTTOM_NAV_CONTENT_MARGIN | Нижний отступ контейнера контента
+увеличен синхронно с высотой панели до 64dp, поэтому навигация не перекрывает экраны | OK
+
+[INFO] 14.06.2026 | BOTTOM_NAV_SECURITY_CHECK | Временная локальная проверка
+activity завершена; ClientMainActivity, TrainerMainActivity и AdminMainActivity
+возвращены к защищённому состоянию `exported=false` | OK
+
+[INFO] 14.06.2026 | BOTTOM_NAV_BUILD_CHECK | Выполнены lintDebug,
+testDebugUnitTest и assembleDebug; итоговая защищённая сборка завершена успешно | OK
+
+[INFO] 14.06.2026 | BOTTOM_NAV_SPACING_STAGE_COMPLETE | Отступ между иконками и
+подписями нижней навигации унифицирован для всех трёх ролей | COMPLETE
