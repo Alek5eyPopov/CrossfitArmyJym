@@ -7,6 +7,7 @@ from pglast import parse_plpgsql, parse_sql
 paths = [
     Path("database/supabase_schema.sql"),
     *sorted(Path("database/migrations").glob("*.sql")),
+    Path("database/seed_demo.sql"),
 ]
 
 total_statements = 0
@@ -38,9 +39,23 @@ for path in paths:
         *language_before_body.findall(sql),
         *language_after_body.findall(sql),
     ]
+    do_blocks = re.findall(
+        r"DO\s+\$\$(.*?)\$\$\s*;",
+        sql,
+        re.IGNORECASE | re.DOTALL,
+    )
 
     for function in functions:
         parse_plpgsql(function)
+
+    for index, body in enumerate(do_blocks):
+        parse_plpgsql(
+            "CREATE OR REPLACE FUNCTION "
+            f"pg_temp.__validate_do_{index}() RETURNS void "
+            "LANGUAGE plpgsql AS $$"
+            f"{body}"
+            "$$;"
+        )
 
     if path.parent.name == "migrations":
         created_policies = {
@@ -67,10 +82,11 @@ for path in paths:
             )
 
     total_statements += len(statements)
-    total_functions += len(functions)
+    total_functions += len(functions) + len(do_blocks)
     print(
         f"{path}: {len(statements)} PostgreSQL statements, "
-        f"{len(functions)} PL/pgSQL functions"
+        f"{len(functions)} PL/pgSQL functions, "
+        f"{len(do_blocks)} DO blocks"
     )
 
 print(
