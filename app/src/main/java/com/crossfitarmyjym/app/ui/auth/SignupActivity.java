@@ -145,7 +145,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onEmailConfirmationRequired() {
                 showLoading(false);
-                showToast("Подтвердите email, затем войдите в приложение");
+                showToast(getString(R.string.email_confirmation_sent));
                 finish();
             }
         });

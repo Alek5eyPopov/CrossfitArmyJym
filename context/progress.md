@@ -677,3 +677,27 @@ build/releases/CrossfitArmyJym-trial-2026-06-12.apk, SHA-256 CAF737D29E0043F347B
 
 [INFO] 12.06.2026 | UI_REDESIGN_FINAL_COMPLETE | Финальный этап редизайна,
 аудита и подготовки пробной Android-сборки завершён | COMPLETE
+
+[INFO] 14.06.2026 | EMAIL_CONFIRMATION_STAGE_START | Начат этап фирменного
+подтверждения email через Supabase и Android deep link | IN_PROGRESS
+
+[INFO] 14.06.2026 | EMAIL_REDIRECT | Регистрация передаёт в Supabase разрешённый
+redirect `crossfitarmyjym://email-confirmed`; URL покрыт unit-тестом Retrofit | OK
+
+[INFO] 14.06.2026 | EMAIL_CONFIRMED_SCREEN | Добавлена экспортируемая только через
+точный intent-filter EmailConfirmedActivity в стиле ARMY с переходом на экран входа | OK
+
+[INFO] 14.06.2026 | EMAIL_ERROR_STATE | Экран подтверждения распознаёт параметры
+ошибки в query и fragment и показывает отдельное состояние просроченной или использованной ссылки | OK
+
+[INFO] 14.06.2026 | EMAIL_TEMPLATE | Подготовлен адаптивный HTML-шаблон письма
+`database/email_templates/confirm_signup.html` с фирменной палитрой и `{{ .ConfirmationURL }}` | OK
+
+[INFO] 14.06.2026 | EMAIL_SETUP_GUIDE | Добавлена инструкция
+`database/EMAIL_CONFIRMATION_SETUP.md` для Redirect URLs, темы письма, шаблона и ручной проверки | OK
+
+[INFO] 14.06.2026 | EMAIL_CONFIRMATION_DEVICE_CHECK | Успешный и ошибочный deep link,
+а также кнопка перехода в LoginActivity проверены на Pixel 10 | OK
+
+[INFO] 14.06.2026 | EMAIL_CONFIRMATION_STAGE_COMPLETE | Фирменное письмо и экран
+результата подтверждения email реализованы и проверены | COMPLETE

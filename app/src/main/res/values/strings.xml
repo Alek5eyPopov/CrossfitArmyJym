@@ -18,6 +18,13 @@
     <string name="auth_signup_subtitle">Создайте аккаунт и начните тренироваться</string>
     <string name="full_name_optional">Полное имя (необязательно)</string>
     <string name="auth_footer">СТАРЫЙ ОСКОЛ • CROSSFIT CLUB</string>
+    <string name="email_confirmed_title">ПОЧТА ПОДТВЕРЖДЕНА</string>
+    <string name="email_confirmed_message">Аккаунт активирован. Теперь вы можете войти в приложение и начать тренироваться вместе с ARMY.</string>
+    <string name="email_confirmed_login">ВОЙТИ В ПРИЛОЖЕНИЕ</string>
+    <string name="email_confirmation_failed_title">ССЫЛКА НЕ СРАБОТАЛА</string>
+    <string name="email_confirmation_failed_message">Ссылка могла устареть или уже была использована. Вернитесь к экрану входа и попробуйте войти.</string>
+    <string name="email_confirmation_back">ВЕРНУТЬСЯ К ВХОДУ</string>
+    <string name="email_confirmation_sent">Письмо отправлено. Подтвердите email и вернитесь в приложение.</string>
 
     <!-- Навигация (Клиент) -->
     <string name="nav_home">Главная</string>

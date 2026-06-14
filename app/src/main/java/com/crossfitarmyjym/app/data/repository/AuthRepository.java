@@ -29,6 +29,8 @@ import retrofit2.Response;
 public class AuthRepository {
 
     private static final String TAG = "AuthRepository";
+    public static final String EMAIL_CONFIRMATION_REDIRECT =
+            "crossfitarmyjym://email-confirmed";
     private static AuthRepository instance;
 
     private final AuthApi authApi;
@@ -76,7 +78,10 @@ public class AuthRepository {
 
     public void signup(@NonNull String email, @NonNull String password,
                        @Nullable String fullName, @NonNull AuthCallback callback) {
-        authApi.signup(new SignupRequest(email, password, fullName))
+        authApi.signup(
+                        EMAIL_CONFIRMATION_REDIRECT,
+                        new SignupRequest(email, password, fullName)
+                )
                 .enqueue(new Callback<AuthResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<AuthResponse> call,

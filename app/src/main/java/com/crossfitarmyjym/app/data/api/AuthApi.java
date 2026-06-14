@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface AuthApi {
 
@@ -17,7 +18,10 @@ public interface AuthApi {
     Call<AuthResponse> login(@Body LoginRequest request);
 
     @POST("/auth/v1/signup")
-    Call<AuthResponse> signup(@Body SignupRequest request);
+    Call<AuthResponse> signup(
+            @Query("redirect_to") String redirectTo,
+            @Body SignupRequest request
+    );
 
     @POST("/auth/v1/token?grant_type=refresh_token")
     Call<AuthResponse> refreshToken(@Body RefreshTokenRequest request);

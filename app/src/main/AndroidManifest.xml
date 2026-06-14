@@ -43,6 +43,22 @@
             android:name=".ui.auth.SignupActivity"
             android:exported="false"
             android:theme="@style/Theme.CrossfitArmyJym.Auth" />
+        <activity
+            android:name=".ui.auth.EmailConfirmedActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.CrossfitArmyJym.Auth">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="email-confirmed"
+                    android:scheme="crossfitarmyjym" />
+            </intent-filter>
+        </activity>
 
         <!-- Основные активности для разных ролей -->
         <activity

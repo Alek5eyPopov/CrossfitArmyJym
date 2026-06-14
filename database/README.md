@@ -1,5 +1,8 @@
 # Supabase database
 
+Настройка фирменного письма и Android-перехода после подтверждения email описана в
+[`EMAIL_CONFIRMATION_SETUP.md`](EMAIL_CONFIRMATION_SETUP.md).
+
 ## Порядок применения
 
 Для нового проекта:
