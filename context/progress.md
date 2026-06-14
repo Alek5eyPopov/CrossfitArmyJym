@@ -742,3 +742,25 @@ testDebugUnitTest и assembleDebug; сборка завершена успешн
 
 [INFO] 14.06.2026 | GITHUB_PAGES_STAGE_COMPLETE | Бесплатная публичная страница
 подтверждения email опубликована и доступна по HTTPS | COMPLETE
+
+[INFO] 14.06.2026 | LAUNCHER_ICON_STAGE_START | Начат этап настройки отдельного
+ярлыка приложения для Android launcher | IN_PROGRESS
+
+[INFO] 14.06.2026 | ARMY_ADAPTIVE_ICON | Добавлена фирменная adaptive icon:
+красный фон, белая звезда и шеврон; предусмотрен legacy-вариант для Android 6–7 | OK
+
+[INFO] 14.06.2026 | LAUNCHER_APP_LABEL | Подпись приложения под ярлыком изменена
+с технического `CrossfitArmyJym` на пользовательское `CrossFit ARMY` | OK
+
+[INFO] 14.06.2026 | LAUNCHER_APK_CHECK | Метаданные APK подтверждают adaptive icon
+для всех плотностей, label `CrossFit ARMY` и SplashActivity как MAIN/LAUNCHER | OK
+
+[INFO] 14.06.2026 | LAUNCHER_DEVICE_CHECK | APK установлен на Pixel 10,
+launcher-компонент успешно разрешается системой; автоматическое размещение на домашнем
+экране зависит от настройки лаунчера «Добавлять значки новых приложений» | OK
+
+[INFO] 14.06.2026 | LAUNCHER_BUILD_CHECK | Выполнены lintDebug,
+testDebugUnitTest и assembleDebug; сборка завершена успешно | OK
+
+[INFO] 14.06.2026 | LAUNCHER_ICON_STAGE_COMPLETE | Отдельный фирменный ярлык
+приложения реализован и проверен | COMPLETE

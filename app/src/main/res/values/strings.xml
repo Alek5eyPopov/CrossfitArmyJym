@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CrossfitArmyJym</string>
+    <string name="app_name">CrossFit ARMY</string>
 
     <!-- Аутентификация -->
     <string name="login">Вход</string>
