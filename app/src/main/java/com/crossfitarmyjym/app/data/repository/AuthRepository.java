@@ -30,7 +30,7 @@ public class AuthRepository {
 
     private static final String TAG = "AuthRepository";
     public static final String EMAIL_CONFIRMATION_REDIRECT =
-            "crossfitarmyjym://email-confirmed";
+            "https://alek5eypopov.github.io/CrossfitArmyJym/email-confirmed/";
     private static AuthRepository instance;
 
     private final AuthApi authApi;

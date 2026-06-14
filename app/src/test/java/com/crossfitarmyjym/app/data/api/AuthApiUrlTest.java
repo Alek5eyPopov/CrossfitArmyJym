@@ -20,13 +20,14 @@ public class AuthApiUrlTest {
                 .create(AuthApi.class);
 
         String url = api.signup(
-                "crossfitarmyjym://email-confirmed",
+                "https://alek5eypopov.github.io/CrossfitArmyJym/email-confirmed/",
                 new SignupRequest("test@example.com", "password", "Test User")
         ).request().url().toString();
 
         assertEquals(
                 "https://project.supabase.co/auth/v1/signup"
-                        + "?redirect_to=crossfitarmyjym%3A%2F%2Femail-confirmed",
+                        + "?redirect_to=https%3A%2F%2Falek5eypopov.github.io"
+                        + "%2FCrossfitArmyJym%2Femail-confirmed%2F",
                 url
         );
     }

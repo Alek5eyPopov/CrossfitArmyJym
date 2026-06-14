@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092331">
+  <title>Подтверждение email | CrossFit ARMY</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #092331;
+      --navy-light: #173746;
+      --red: #f23d3d;
+      --red-dark: #d92f35;
+      --off-white: #f4f4f2;
+      --surface: #ffffff;
+      --text: #101820;
+      --muted: #60717a;
+      --hint: #94a0a6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      min-height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .brand {
+      display: flex;
+      min-height: 270px;
+      align-items: center;
+      justify-content: center;
+      padding: 38px 24px;
+      text-align: center;
+    }
+
+    .city {
+      display: inline-block;
+      border-radius: 3px;
+      background: var(--red);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 8px 15px;
+    }
+
+    .club {
+      margin-top: 12px;
+      color: white;
+      font-family: Impact, "Arial Narrow", Arial, sans-serif;
+      font-size: clamp(46px, 10vw, 72px);
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      line-height: 1;
+    }
+
+    .panel {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      flex: 1;
+      justify-content: center;
+      border-radius: 48px 48px 0 0;
+      background:
+        linear-gradient(135deg, rgba(9, 35, 49, 0.025) 25%, transparent 25%) 0 0 / 22px 22px,
+        var(--off-white);
+      padding: 52px 24px 44px;
+    }
+
+    .content {
+      width: min(100%, 620px);
+      min-width: 0;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .emblem {
+      position: relative;
+      width: 124px;
+      height: 124px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 12px 30px rgba(9, 35, 49, 0.16);
+    }
+
+    .star {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      color: white;
+      font-size: 58px;
+      line-height: 1;
+      transform: translateX(-50%);
+    }
+
+    .chevron {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      width: 52px;
+      height: 28px;
+      border-right: 9px solid white;
+      border-bottom: 9px solid white;
+      transform: translateX(-50%) rotate(45deg) skew(8deg, 8deg);
+    }
+
+    h1 {
+      margin: 30px 0 0;
+      color: var(--navy);
+      font-family: Impact, "Arial Narrow", Arial, sans-serif;
+      font-size: clamp(34px, 8vw, 52px);
+      letter-spacing: 0.045em;
+      line-height: 1.08;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+
+    .accent {
+      width: 76px;
+      height: 5px;
+      margin: 18px auto 0;
+      background: var(--red);
+    }
+
+    .message {
+      max-width: 540px;
+      margin: 26px auto 0;
+      color: var(--muted);
+      font-size: clamp(17px, 4vw, 20px);
+      line-height: 1.55;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 36px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--red);
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 18px 22px;
+      text-decoration: none;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .button:hover {
+      background: var(--red-dark);
+      transform: translateY(-1px);
+    }
+
+    .button:focus-visible {
+      outline: 4px solid rgba(242, 61, 61, 0.3);
+      outline-offset: 3px;
+    }
+
+    .fallback {
+      margin: 18px auto 0;
+      color: var(--hint);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 32px;
+      color: var(--hint);
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .error .emblem {
+      background: var(--red-dark);
+    }
+
+    .error .star,
+    .error .chevron {
+      display: none;
+    }
+
+    .error .emblem::after {
+      content: "!";
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 82px;
+      font-weight: 800;
+      line-height: 124px;
+    }
+
+    @media (max-width: 480px) {
+      .panel {
+        overflow: hidden;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      h1 {
+        font-size: clamp(27px, 8vw, 34px);
+        letter-spacing: 0.025em;
+      }
+    }
+
+    @media (min-width: 760px) {
+      .page {
+        padding: 34px;
+      }
+
+      .brand {
+        min-height: 240px;
+      }
+
+      .panel {
+        width: min(100%, 760px);
+        min-height: 620px;
+        align-self: center;
+        border-radius: 38px;
+        padding: 58px 58px 46px;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="page">
+    <header class="brand">
+      <div>
+        <div class="city">СТАРЫЙ ОСКОЛ</div>
+        <div class="club">АРМИЯ</div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="content">
+        <div class="emblem" aria-hidden="true">
+          <div class="star">★</div>
+          <div class="chevron"></div>
+        </div>
+
+        <h1 id="title">Почта подтверждена</h1>
+        <div class="accent"></div>
+        <p class="message" id="message">
+          Аккаунт активирован. Теперь вы можете открыть приложение и войти с созданными данными.
+        </p>
+
+        <a class="button" id="open-app" href="crossfitarmyjym://email-confirmed">
+          ОТКРЫТЬ ПРИЛОЖЕНИЕ
+        </a>
+
+        <p class="fallback" id="fallback">
+          Если приложение не открылось, запустите CrossFit ARMY вручную и войдите в аккаунт.
+        </p>
+        <div class="footer">Сила • Характер • Дисциплина</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var hashParams = new URLSearchParams(window.location.hash.slice(1));
+      var queryParams = new URLSearchParams(window.location.search);
+      var error = hashParams.get("error_description")
+        || queryParams.get("error_description")
+        || hashParams.get("error")
+        || queryParams.get("error");
+
+      if (!error) {
+        return;
+      }
+
+      document.getElementById("page").classList.add("error");
+      document.getElementById("title").textContent = "Ссылка не сработала";
+      document.getElementById("message").textContent =
+        "Ссылка могла устареть или уже была использована. Откройте приложение и попробуйте войти.";
+      document.getElementById("open-app").textContent = "ПЕРЕЙТИ К ВХОДУ";
+      document.getElementById("open-app").href =
+        "crossfitarmyjym://email-confirmed?error=access_denied";
+      document.getElementById("fallback").textContent =
+        "Если войти не удаётся, зарегистрируйтесь снова или запросите новое письмо.";
+    }());
+  </script>
+</body>
+</html>

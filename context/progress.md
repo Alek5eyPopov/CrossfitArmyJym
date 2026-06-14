@@ -701,3 +701,27 @@ redirect `crossfitarmyjym://email-confirmed`; URL покрыт unit-тестом
 
 [INFO] 14.06.2026 | EMAIL_CONFIRMATION_STAGE_COMPLETE | Фирменное письмо и экран
 результата подтверждения email реализованы и проверены | COMPLETE
+
+[INFO] 14.06.2026 | EMAIL_WEB_LANDING_STAGE_START | Начат этап публичной
+веб-страницы результата подтверждения email для открытия ссылки в браузере | IN_PROGRESS
+
+[INFO] 14.06.2026 | GITHUB_PAGES_LANDING | В каталоге `docs` добавлена адаптивная
+страница GitHub Pages в стиле ARMY с успешным и ошибочным состояниями подтверждения | OK
+
+[INFO] 14.06.2026 | HTTPS_EMAIL_REDIRECT | Redirect регистрации изменён на
+`https://alek5eypopov.github.io/CrossfitArmyJym/email-confirmed/`; URL покрыт
+unit-тестом Retrofit | OK
+
+[INFO] 14.06.2026 | WEB_TO_APP_TRANSITION | На публичной странице добавлена кнопка
+перехода в Android-приложение через `crossfitarmyjym://email-confirmed`; существующая
+EmailConfirmedActivity продолжает обрабатывать успешный и ошибочный сценарии | OK
+
+[INFO] 14.06.2026 | EMAIL_WEB_SETUP_GUIDE | Инструкция Supabase дополнена настройкой
+GitHub Pages из ветки `main`, каталога `/docs`, новым Redirect URL и сценарием проверки | OK
+
+[INFO] 14.06.2026 | EMAIL_WEB_BUILD_CHECK | Выполнены lintDebug,
+testDebugUnitTest и assembleDebug; сборка завершена успешно | OK
+
+[INFO] 14.06.2026 | EMAIL_WEB_LANDING_STAGE_COMPLETE | Публичная фирменная страница
+подтверждения email реализована; для публикации требуется включить GitHub Pages и
+добавить HTTPS Redirect URL в Supabase Dashboard | COMPLETE
