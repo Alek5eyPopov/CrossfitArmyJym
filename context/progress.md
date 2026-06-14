@@ -725,3 +725,20 @@ testDebugUnitTest и assembleDebug; сборка завершена успешн
 [INFO] 14.06.2026 | EMAIL_WEB_LANDING_STAGE_COMPLETE | Публичная фирменная страница
 подтверждения email реализована; для публикации требуется включить GitHub Pages и
 добавить HTTPS Redirect URL в Supabase Dashboard | COMPLETE
+
+[INFO] 14.06.2026 | GITHUB_PAGES_STAGE_START | Начат этап публикации фирменной
+страницы подтверждения email через GitHub Pages | IN_PROGRESS
+
+[INFO] 14.06.2026 | REPOSITORY_PUBLIC | Репозиторий
+`Alek5eyPopov/CrossfitArmyJym` переведён из приватного состояния в публичное,
+что позволяет использовать GitHub Pages бесплатно | OK
+
+[INFO] 14.06.2026 | GITHUB_PAGES_PUBLISHED | GitHub Pages настроен на источник
+`main:/docs`; публикация коммита `9760bca` завершена успешно, HTTPS включён | OK
+
+[INFO] 14.06.2026 | GITHUB_PAGES_HTTP_CHECK | Страница
+`https://alek5eypopov.github.io/CrossfitArmyJym/email-confirmed/` отвечает HTTP 200
+и содержит deep link `crossfitarmyjym://email-confirmed` | OK
+
+[INFO] 14.06.2026 | GITHUB_PAGES_STAGE_COMPLETE | Бесплатная публичная страница
+подтверждения email опубликована и доступна по HTTPS | COMPLETE
