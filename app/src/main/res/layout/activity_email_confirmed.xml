@@ -69,16 +69,12 @@
 
             <TextView
                 android:id="@+id/tv_title"
+                style="@style/Widget.CrossfitArmyJym.ScreenTitle.OnLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
-                android:letterSpacing="0.04"
-                android:text="@string/email_confirmed_title"
-                android:textColor="@color/army_navy"
-                android:textSize="29sp"
-                android:textStyle="bold" />
+                android:text="@string/email_confirmed_title" />
 
             <View
                 android:layout_width="72dp"

@@ -81,7 +81,7 @@
     <string name="home_greeting">ГОТОВ К ТРЕНИРОВКЕ?</string>
     <string name="quick_actions">БЫСТРЫЕ ДЕЙСТВИЯ</string>
     <string name="action_workout">WORKOUT</string>
-    <string name="action_schedule">РАСПИСАНИЕ</string>
+    <string name="action_schedule">ЗАНЯТИЯ</string>
     <string name="action_bookings">МОИ ЗАПИСИ</string>
     <string name="next_training">БЛИЖАЙШАЯ ТРЕНИРОВКА</string>
     <string name="no_upcoming_training">Ближайших тренировок пока нет</string>

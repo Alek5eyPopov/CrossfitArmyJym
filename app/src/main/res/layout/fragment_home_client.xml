@@ -135,11 +135,11 @@
                     android:padding="12dp">
 
                     <TextView
+                        style="@style/Widget.CrossfitArmyJym.QuickActionLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/action_workout"
-                        android:textAppearance="@style/TextAppearance.CrossfitArmyJym.Action" />
+                        android:text="@string/action_workout" />
 
                     <View
                         android:layout_width="match_parent"
@@ -171,11 +171,11 @@
                     android:padding="12dp">
 
                     <TextView
+                        style="@style/Widget.CrossfitArmyJym.QuickActionLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/action_schedule"
-                        android:textAppearance="@style/TextAppearance.CrossfitArmyJym.Action" />
+                        android:text="@string/action_schedule" />
 
                     <View
                         android:layout_width="match_parent"
@@ -206,11 +206,11 @@
                     android:padding="12dp">
 
                     <TextView
+                        style="@style/Widget.CrossfitArmyJym.QuickActionLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/action_bookings"
-                        android:textAppearance="@style/TextAppearance.CrossfitArmyJym.Action" />
+                        android:text="@string/action_bookings" />
 
                     <View
                         android:layout_width="match_parent"

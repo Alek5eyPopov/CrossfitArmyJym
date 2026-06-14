@@ -65,11 +65,25 @@
         <item name="android:textColor">@color/text_on_primary</item>
         <item name="cornerRadius">6dp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">15sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
     </style>
 
     <style name="Widget.CrossfitArmyJym.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
         <item name="strokeColor">@color/primary</item>
         <item name="android:textColor">@color/primary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">15sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
     </style>
 
     <!-- Стили для карточек -->
@@ -94,5 +108,39 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.CrossfitArmyJym.QuickActionLabel" parent="Widget.AppCompat.TextView">
+        <item name="android:breakStrategy">simple</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:hyphenationFrequency">none</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/army_navy</item>
+        <item name="android:textStyle">bold</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">15sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
+    </style>
+
+    <style name="Widget.CrossfitArmyJym.ScreenTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textStyle">bold</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">20sp</item>
+        <item name="autoSizeMaxTextSize">30sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
+    </style>
+
+    <style name="Widget.CrossfitArmyJym.ScreenTitle.OnDark">
+        <item name="android:textColor">@color/text_on_primary</item>
+    </style>
+
+    <style name="Widget.CrossfitArmyJym.ScreenTitle.OnLight">
+        <item name="android:textColor">@color/army_navy</item>
     </style>
 </resources>

@@ -21,14 +21,10 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp">
             <TextView
-                android:layout_width="wrap_content"
+                style="@style/Widget.CrossfitArmyJym.ScreenTitle.OnDark"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:letterSpacing="0.05"
-                android:text="@string/trainer_wod_title"
-                android:textColor="@color/text_on_primary"
-                android:textSize="29sp"
-                android:textStyle="bold" />
+                android:text="@string/trainer_wod_title" />
             <View
                 android:layout_width="72dp"
                 android:layout_height="4dp"

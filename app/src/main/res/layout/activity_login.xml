@@ -68,14 +68,10 @@
 
             <TextView
                 android:id="@+id/tv_welcome"
-                android:layout_width="wrap_content"
+                style="@style/Widget.CrossfitArmyJym.ScreenTitle.OnLight"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:letterSpacing="0.05"
-                android:text="@string/auth_welcome"
-                android:textColor="@color/army_navy"
-                android:textSize="27sp"
-                android:textStyle="bold" />
+                android:text="@string/auth_welcome" />
 
             <View
                 android:layout_width="64dp"
