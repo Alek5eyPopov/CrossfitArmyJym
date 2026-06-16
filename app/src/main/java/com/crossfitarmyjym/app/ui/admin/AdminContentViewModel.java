@@ -7,8 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.GymClass;
+import com.crossfitarmyjym.app.data.model.LoadType;
+import com.crossfitarmyjym.app.data.model.TrainingTask;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.repository.AdminRepository;
@@ -23,16 +26,24 @@ public class AdminContentViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Group>> groups = new MutableLiveData<>();
     private final MutableLiveData<List<GymClass>> classes = new MutableLiveData<>();
     private final MutableLiveData<List<Wod>> wods = new MutableLiveData<>();
+    private final MutableLiveData<List<Exercise>> exercises = new MutableLiveData<>();
+    private final MutableLiveData<List<LoadType>> loadTypes = new MutableLiveData<>();
+    private final MutableLiveData<List<TrainingTask>> trainingTasks = new MutableLiveData<>();
     private final MutableLiveData<List<User>> trainers = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> message = new MutableLiveData<>();
     private final MutableLiveData<String> error = new MutableLiveData<>();
 
-    public AdminContentViewModel(@NonNull Application application) { super(application); }
+    public AdminContentViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public LiveData<List<Group>> getGroups() { return groups; }
     public LiveData<List<GymClass>> getClasses() { return classes; }
     public LiveData<List<Wod>> getWods() { return wods; }
+    public LiveData<List<Exercise>> getExercises() { return exercises; }
+    public LiveData<List<LoadType>> getLoadTypes() { return loadTypes; }
+    public LiveData<List<TrainingTask>> getTrainingTasks() { return trainingTasks; }
     public LiveData<List<User>> getTrainers() { return trainers; }
     public LiveData<Boolean> getLoading() { return loading; }
     public LiveData<String> getMessage() { return message; }
@@ -43,8 +54,12 @@ public class AdminContentViewModel extends AndroidViewModel {
         repository.getGroups(listCallback(groups));
         repository.getClasses(listCallback(classes));
         repository.getWods(listCallback(wods));
+        repository.getExercises(listCallback(exercises));
+        repository.getLoadTypes(listCallback(loadTypes));
+        repository.getTrainingTasks(listCallback(trainingTasks));
         repository.getUsers(new AdminRepository.ListCallback<User>() {
-            @Override public void onSuccess(List<User> items) {
+            @Override
+            public void onSuccess(List<User> items) {
                 List<User> trainerItems = new ArrayList<>();
                 for (User user : items) {
                     if (user.isTrainer()) {
@@ -54,7 +69,9 @@ public class AdminContentViewModel extends AndroidViewModel {
                 trainers.postValue(trainerItems);
                 loading.postValue(false);
             }
-            @Override public void onError(@NonNull String value) {
+
+            @Override
+            public void onError(@NonNull String value) {
                 error.postValue(value);
                 loading.postValue(false);
             }
@@ -93,21 +110,67 @@ public class AdminContentViewModel extends AndroidViewModel {
         action(callback -> repository.deleteWod(wod.getId(), callback), "WOD удалён");
     }
 
+    public void saveExercise(Exercise exercise, Map<String, Object> fields) {
+        action(exercise == null
+                ? callback -> repository.createExercise(fields, callback)
+                : callback -> repository.updateExercise(exercise.getId(), fields, callback),
+                "Упражнение сохранено");
+    }
+
+    public void deleteExercise(Exercise exercise) {
+        action(callback -> repository.deleteExercise(exercise.getId(), callback),
+                "Упражнение удалено");
+    }
+
+    public void saveLoadType(LoadType loadType, Map<String, Object> fields) {
+        action(loadType == null
+                ? callback -> repository.createLoadType(fields, callback)
+                : callback -> repository.updateLoadType(loadType.getId(), fields, callback),
+                "Тип нагрузки сохранён");
+    }
+
+    public void deleteLoadType(LoadType loadType) {
+        action(callback -> repository.deleteLoadType(loadType.getId(), callback),
+                "Тип нагрузки удалён");
+    }
+
+    public void saveTrainingTask(TrainingTask task, Map<String, Object> fields) {
+        action(task == null
+                ? callback -> repository.createTrainingTask(fields, callback)
+                : callback -> repository.updateTrainingTask(task.getId(), fields, callback),
+                "Шаблон задания сохранён");
+    }
+
+    public void deleteTrainingTask(TrainingTask task) {
+        action(callback -> repository.deleteTrainingTask(task.getId(), callback),
+                "Шаблон задания удалён");
+    }
+
     private <T> AdminRepository.ListCallback<T> listCallback(MutableLiveData<List<T>> target) {
         return new AdminRepository.ListCallback<T>() {
-            @Override public void onSuccess(List<T> items) { target.postValue(items); }
-            @Override public void onError(@NonNull String value) { error.postValue(value); }
+            @Override
+            public void onSuccess(List<T> items) {
+                target.postValue(items);
+            }
+
+            @Override
+            public void onError(@NonNull String value) {
+                error.postValue(value);
+            }
         };
     }
 
     private void action(Action action, String successMessage) {
         loading.setValue(true);
         action.run(new AdminRepository.ActionCallback() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
                 message.postValue(successMessage);
                 load();
             }
-            @Override public void onError(@NonNull String value) {
+
+            @Override
+            public void onError(@NonNull String value) {
                 error.postValue(value);
                 loading.postValue(false);
             }

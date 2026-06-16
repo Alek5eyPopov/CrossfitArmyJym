@@ -179,6 +179,9 @@
     <string name="admin_groups_section">ГРУППЫ</string>
     <string name="admin_classes_section">ЗАНЯТИЯ</string>
     <string name="admin_wod_section">ПРОГРАММЫ WOD</string>
+    <string name="admin_exercises_section">УПРАЖНЕНИЯ</string>
+    <string name="admin_load_types_section">ТИПЫ НАГРУЗКИ</string>
+    <string name="admin_task_templates_section">ШАБЛОНЫ ЗАДАНИЙ</string>
     <string name="admin_users_metric">Всего</string>
     <string name="admin_active_metric">Активны</string>
     <string name="admin_groups_metric">Группы</string>
