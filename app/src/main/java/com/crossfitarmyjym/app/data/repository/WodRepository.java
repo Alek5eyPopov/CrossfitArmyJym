@@ -20,6 +20,7 @@ import com.crossfitarmyjym.app.data.model.WodCompositionRequest;
 import com.crossfitarmyjym.app.data.model.WodTaskCompositionRequest;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -291,7 +292,7 @@ public class WodRepository {
 
             @Override
             public void onFailure(Call<PersonalRecord> call, Throwable throwable) {
-                callback.onError("Ошибка сети: " + throwable.getMessage());
+                callback.onError(formatNetworkError(throwable));
             }
         });
     }
@@ -351,9 +352,16 @@ public class WodRepository {
 
             @Override
             public void onFailure(Call<List<PersonalRecord>> call, Throwable throwable) {
-                callback.onError("Ошибка сети: " + throwable.getMessage());
+                callback.onError(formatNetworkError(throwable));
             }
         };
+    }
+
+    private String formatNetworkError(Throwable throwable) {
+        if (throwable instanceof SocketTimeoutException) {
+            return "Таймаут запроса к Supabase. Проверьте соединение и попробуйте ещё раз";
+        }
+        return "Ошибка сети: " + throwable.getMessage();
     }
 
     private <T> Callback<List<T>> referenceActionResponse(ReferenceActionCallback callback,

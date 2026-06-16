@@ -14,7 +14,10 @@ import com.crossfitarmyjym.app.data.model.Result;
 import com.crossfitarmyjym.app.data.repository.ResultRepository;
 import com.crossfitarmyjym.app.data.repository.WodRepository;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProfileViewModel extends AndroidViewModel {
 
@@ -83,30 +86,57 @@ public class ProfileViewModel extends AndroidViewModel {
     }
 
     private void loadPersonalRecords() {
-        wodRepository.getMyPersonalRecordBests(new WodRepository.PersonalRecordListCallback() {
-            @Override
-            public void onSuccess(List<PersonalRecord> records) {
-                personalRecordBests.postValue(records);
-                loading.postValue(false);
-            }
-
-            @Override
-            public void onError(@NonNull String error) {
-                loading.postValue(false);
-                errorMessage.postValue(error);
-            }
-        });
         wodRepository.getMyPersonalRecords(new WodRepository.PersonalRecordListCallback() {
             @Override
             public void onSuccess(List<PersonalRecord> records) {
                 personalRecordHistory.postValue(records);
+                personalRecordBests.postValue(calculateBestRecords(records));
+                loading.postValue(false);
             }
 
             @Override
             public void onError(@NonNull String error) {
+                loading.postValue(false);
                 errorMessage.postValue(error);
             }
         });
+    }
+
+    private List<PersonalRecord> calculateBestRecords(List<PersonalRecord> records) {
+        Map<String, PersonalRecord> bestByExercise = new LinkedHashMap<>();
+        if (records == null) {
+            return new ArrayList<>();
+        }
+
+        for (PersonalRecord record : records) {
+            String exerciseKey = record.getExerciseId();
+            if (exerciseKey == null || exerciseKey.trim().isEmpty()) {
+                exerciseKey = record.getExerciseName();
+            }
+            if (exerciseKey == null || exerciseKey.trim().isEmpty()) {
+                continue;
+            }
+
+            PersonalRecord current = bestByExercise.get(exerciseKey);
+            if (current == null || isBetter(record, current)) {
+                bestByExercise.put(exerciseKey, record);
+            }
+        }
+        return new ArrayList<>(bestByExercise.values());
+    }
+
+    private boolean isBetter(PersonalRecord candidate, PersonalRecord current) {
+        if (candidate.getResultValue() == null || current.getResultValue() == null) {
+            return false;
+        }
+
+        String direction = candidate.getExercise() != null
+                ? candidate.getExercise().getPrBetterDirection()
+                : null;
+        if ("min".equalsIgnoreCase(direction)) {
+            return candidate.getResultValue() < current.getResultValue();
+        }
+        return candidate.getResultValue() > current.getResultValue();
     }
 
     private void loadWodResults() {
