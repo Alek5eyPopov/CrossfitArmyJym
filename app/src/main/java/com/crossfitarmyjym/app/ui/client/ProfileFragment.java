@@ -21,14 +21,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.model.Exercise;
-import com.crossfitarmyjym.app.data.model.PersonalRecord;
-import com.crossfitarmyjym.app.data.model.Result;
 import com.crossfitarmyjym.app.data.model.User;
-import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 import com.crossfitarmyjym.app.data.repository.AuthRepository;
 import com.crossfitarmyjym.app.databinding.FragmentProfileBinding;
 import com.crossfitarmyjym.app.ui.auth.LoginActivity;
+import com.crossfitarmyjym.app.ui.progress.ProgressFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -120,15 +118,15 @@ public class ProfileFragment extends Fragment {
         profileViewModel.getPersonalRecordBests().observe(getViewLifecycleOwner(), records -> {
             int count = records != null ? records.size() : 0;
             binding.tvPrCount.setText(String.valueOf(count));
-            binding.tvPrBests.setText(formatPersonalRecords(records, getString(R.string.no_pr_records)));
+            binding.tvPrBests.setText(ProgressFormatter.personalRecords(requireContext(), records));
         });
 
         profileViewModel.getPersonalRecordHistory().observe(getViewLifecycleOwner(), records -> {
-            binding.tvPrHistory.setText(formatPersonalRecords(records, getString(R.string.no_pr_records)));
+            binding.tvPrHistory.setText(ProgressFormatter.personalRecords(requireContext(), records));
         });
 
         profileViewModel.getWodResults().observe(getViewLifecycleOwner(), results -> {
-            binding.tvWodResults.setText(formatWodResults(results));
+            binding.tvWodResults.setText(ProgressFormatter.wodResults(requireContext(), results));
         });
 
         profileViewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
@@ -173,97 +171,6 @@ public class ProfileFragment extends Fragment {
             return getString(R.string.role_admin);
         }
         return getString(R.string.role_client);
-    }
-
-    private String formatPersonalRecords(List<PersonalRecord> records, String emptyText) {
-        if (records == null || records.isEmpty()) {
-            return emptyText;
-        }
-
-        StringBuilder builder = new StringBuilder();
-        int limit = Math.min(records.size(), 8);
-        for (int i = 0; i < limit; i++) {
-            PersonalRecord record = records.get(i);
-            if (i > 0) {
-                builder.append("\n");
-            }
-            builder.append("• ")
-                    .append(resolveExerciseName(record))
-                    .append(" - ")
-                    .append(nonEmpty(record.getResultText(), formatResultValue(record)));
-            String achievedAt = displayDate(record.getAchievedAt());
-            if (!achievedAt.isEmpty()) {
-                builder.append(" · ").append(achievedAt);
-            }
-        }
-        if (records.size() > limit) {
-            builder.append("\n+").append(records.size() - limit).append(" еще");
-        }
-        return builder.toString();
-    }
-
-    private String formatWodResults(List<Result> results) {
-        if (results == null || results.isEmpty()) {
-            return getString(R.string.no_wod_results);
-        }
-
-        StringBuilder builder = new StringBuilder();
-        int limit = Math.min(results.size(), 8);
-        for (int i = 0; i < limit; i++) {
-            Result result = results.get(i);
-            if (i > 0) {
-                builder.append("\n");
-            }
-            Wod wod = result.getWod();
-            String wodName = wod != null ? wod.getName() : null;
-            builder.append("• ")
-                    .append(nonEmpty(wodName, "WOD"))
-                    .append(" - ")
-                    .append(nonEmpty(result.getFormattedScore(), String.valueOf(result.getScore())));
-            String completedAt = displayDate(result.getCompletedAt());
-            if (!completedAt.isEmpty()) {
-                builder.append(" · ").append(completedAt);
-            }
-        }
-        if (results.size() > limit) {
-            builder.append("\n+").append(results.size() - limit).append(" еще");
-        }
-        return builder.toString();
-    }
-
-    private String resolveExerciseName(PersonalRecord record) {
-        if (record.getExerciseName() != null && !record.getExerciseName().trim().isEmpty()) {
-            return record.getExerciseName();
-        }
-        if (record.getExercise() != null && record.getExercise().getName() != null
-                && !record.getExercise().getName().trim().isEmpty()) {
-            return record.getExercise().getName();
-        }
-        return "Упражнение";
-    }
-
-    private String formatResultValue(PersonalRecord record) {
-        if (record.getResultValue() == null) {
-            return "";
-        }
-        String value = String.format(Locale.getDefault(), "%.2f", record.getResultValue())
-                .replaceAll("[,.]00$", "");
-        if (record.getUnit() != null && !record.getUnit().trim().isEmpty()) {
-            return value + " " + record.getUnit().trim();
-        }
-        return value;
-    }
-
-    private String displayDate(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return "";
-        }
-        int dateLength = Math.min(10, value.length());
-        return value.substring(0, dateLength);
-    }
-
-    private String nonEmpty(String value, String fallback) {
-        return value != null && !value.trim().isEmpty() ? value.trim() : fallback;
     }
 
     private void showAddPrDialog() {

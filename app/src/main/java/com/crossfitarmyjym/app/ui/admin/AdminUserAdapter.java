@@ -17,6 +17,7 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
 
     public interface Listener {
         void onEdit(User user);
+        void onProgress(User user);
     }
 
     private final Listener listener;
@@ -69,6 +70,7 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
                 )
         ));
             binding.btnEdit.setOnClickListener(v -> listener.onEdit(user));
+            binding.btnProgress.setOnClickListener(v -> listener.onProgress(user));
         }
     }
 }

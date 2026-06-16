@@ -181,6 +181,7 @@
     <string name="admin_content_subtitle">Группы, занятия и программы WOD</string>
     <string name="admin_user_icon">Профиль пользователя</string>
     <string name="admin_edit">ИЗМЕНИТЬ</string>
+    <string name="admin_user_progress">ПРОГРЕСС</string>
     <string name="admin_delete">Удалить</string>
     <string name="admin_create">СОЗДАТЬ</string>
     <string name="admin_people_section">УЧАСТНИКИ</string>

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.databinding.FragmentUsersBinding;
+import com.crossfitarmyjym.app.ui.progress.AthleteProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class UsersFragment extends Fragment {
     private AdminUsersViewModel viewModel;
     private AdminUserAdapter adapter;
     private List<Group> groups = new ArrayList<>();
+    private AthleteProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -43,7 +45,18 @@ public class UsersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(AdminUsersViewModel.class);
-        adapter = new AdminUserAdapter(this::showEditDialog);
+        adapter = new AdminUserAdapter(new AdminUserAdapter.Listener() {
+            @Override
+            public void onEdit(User user) {
+                showEditDialog(user);
+            }
+
+            @Override
+            public void onProgress(User user) {
+                showProgressDialog(user);
+                viewModel.loadUserProgress(user);
+            }
+        });
         binding.rvUsers.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvUsers.setAdapter(adapter);
         binding.btnRefresh.setOnClickListener(v -> viewModel.load());
@@ -58,8 +71,35 @@ public class UsersFragment extends Fragment {
         });
         viewModel.getLoading().observe(getViewLifecycleOwner(), value ->
                 binding.progressBar.setVisibility(Boolean.TRUE.equals(value) ? View.VISIBLE : View.GONE));
+        viewModel.getProgressLoading().observe(getViewLifecycleOwner(), value -> {
+            if (Boolean.TRUE.equals(value) && progressDialog != null) {
+                progressDialog.setLoading();
+            }
+        });
+        viewModel.getSelectedUserBests().observe(getViewLifecycleOwner(), records -> {
+            if (progressDialog != null) {
+                progressDialog.setBests(records);
+            }
+        });
+        viewModel.getSelectedUserPrHistory().observe(getViewLifecycleOwner(), records -> {
+            if (progressDialog != null) {
+                progressDialog.setHistory(records);
+            }
+        });
+        viewModel.getSelectedUserWodResults().observe(getViewLifecycleOwner(), results -> {
+            if (progressDialog != null) {
+                progressDialog.setWodResults(results);
+            }
+        });
         viewModel.getMessage().observe(getViewLifecycleOwner(), this::toast);
         viewModel.getError().observe(getViewLifecycleOwner(), this::toast);
+    }
+
+    private void showProgressDialog(@NonNull User user) {
+        String title = user.getFullName().isEmpty() ? user.getEmail() : user.getFullName();
+        progressDialog = new AthleteProgressDialog(requireContext(), title);
+        progressDialog.setOnDismissListener(dialog -> progressDialog = null);
+        progressDialog.show();
     }
 
     private void showEditDialog(User user) {
@@ -115,6 +155,9 @@ public class UsersFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
         binding = null;
     }
 }
