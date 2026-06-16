@@ -65,6 +65,7 @@ public class HomeViewModel extends AndroidViewModel {
                         message.postValue(result.isPr()
                                 ? "Результат сохранён. Новый личный рекорд!"
                                 : "Результат сохранён");
+                        loadLeaderboard();
                     }
 
                     @Override

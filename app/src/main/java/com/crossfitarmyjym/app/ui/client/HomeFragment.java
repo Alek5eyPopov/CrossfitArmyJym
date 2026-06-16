@@ -154,16 +154,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void showResultDialog() {
+        Wod wod = viewModel.getTodaysWod().getValue();
+        String format = wod != null ? wod.getFormat() : null;
+
         LinearLayout container = new LinearLayout(requireContext());
         container.setOrientation(LinearLayout.VERTICAL);
         int padding = (int) (20 * getResources().getDisplayMetrics().density);
         container.setPadding(padding, 0, padding, 0);
         EditText scoreInput = new EditText(requireContext());
-        scoreInput.setHint("Числовой результат");
+        scoreInput.setHint(WodResultInputParser.scoreHint(format));
         scoreInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         container.addView(scoreInput);
         EditText displayInput = new EditText(requireContext());
-        displayInput.setHint("Например 12:45 или 120 reps");
+        displayInput.setHint(WodResultInputParser.displayHint(format));
         container.addView(displayInput);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
@@ -175,12 +178,16 @@ public class HomeFragment extends Fragment {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                 .setOnClickListener(v -> {
                     try {
-                        double score = Double.parseDouble(scoreInput.getText().toString());
-                        if (score < 0) throw new NumberFormatException();
-                        viewModel.submitResult(score, displayInput.getText().toString().trim());
+                        WodResultInputParser.ParsedResult result = WodResultInputParser.parse(
+                                format,
+                                scoreInput.getText().toString(),
+                                displayInput.getText().toString()
+                        );
+                        viewModel.submitResult(result.getScore(), result.getFormattedScore());
                         dialog.dismiss();
                     } catch (NumberFormatException error) {
-                        scoreInput.setError("Введите число не меньше нуля");
+                        scoreInput.setError("Введите число или результат в формате подсказки");
+                        displayInput.setError("Проверьте формат результата");
                     }
                 }));
         dialog.show();
