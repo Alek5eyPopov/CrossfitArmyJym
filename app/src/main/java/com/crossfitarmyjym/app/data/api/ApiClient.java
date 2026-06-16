@@ -3,6 +3,8 @@ package com.crossfitarmyjym.app.data.api;
 import android.util.Log;
 
 import com.crossfitarmyjym.app.BuildConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -72,10 +74,14 @@ public final class ApiClient {
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new AuthInterceptor());
 
+        Gson gson = new GsonBuilder()
+                .serializeNulls()
+                .create();
+
         return new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .client(okHttpClient.build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 

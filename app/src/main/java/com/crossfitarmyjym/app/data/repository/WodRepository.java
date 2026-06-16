@@ -20,6 +20,7 @@ import com.crossfitarmyjym.app.data.model.WodCompositionRequest;
 import com.crossfitarmyjym.app.data.model.WodTaskCompositionRequest;
 import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -286,7 +287,7 @@ public class WodRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body());
                 } else {
-                    callback.onError("Не удалось сохранить PR: HTTP " + response.code());
+                    callback.onError(formatHttpError(response, "Не удалось сохранить PR"));
                 }
             }
 
@@ -362,6 +363,26 @@ public class WodRepository {
             return "Таймаут запроса к Supabase. Проверьте соединение и попробуйте ещё раз";
         }
         return "Ошибка сети: " + throwable.getMessage();
+    }
+
+    private String formatHttpError(Response<?> response, String errorPrefix) {
+        String details = readErrorBody(response);
+        String message = errorPrefix + ": HTTP " + response.code();
+        if (!details.isEmpty()) {
+            return message + " - " + details;
+        }
+        return message;
+    }
+
+    private String readErrorBody(Response<?> response) {
+        if (response.errorBody() == null) {
+            return "";
+        }
+        try {
+            return response.errorBody().string();
+        } catch (IOException e) {
+            return "";
+        }
     }
 
     private <T> Callback<List<T>> referenceActionResponse(ReferenceActionCallback callback,
