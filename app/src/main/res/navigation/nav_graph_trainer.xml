@@ -41,4 +41,10 @@
         android:label="Клиенты"
         tools:layout="@layout/fragment_clients" />
 
+    <fragment
+        android:id="@+id/fragment_profile"
+        android:name="com.crossfitarmyjym.app.ui.client.ProfileFragment"
+        android:label="@string/nav_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>

@@ -33,4 +33,10 @@
         android:label="Создать WOD"
         tools:layout="@layout/fragment_wod_editor" />
 
+    <fragment
+        android:id="@+id/fragment_profile"
+        android:name="com.crossfitarmyjym.app.ui.client.ProfileFragment"
+        android:label="@string/nav_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
