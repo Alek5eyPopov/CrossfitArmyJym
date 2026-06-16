@@ -858,3 +858,26 @@ testDebugUnitTest и assembleDebug; сборка завершена успешн
 
 [INFO] 16.06.2026 | ROLE_PROFILE_STAGE_COMPLETE | Тренер и администратор получили
 доступ к экрану профиля и выходу из учётной записи через нижнюю навигацию | COMPLETE
+
+[INFO] 16.06.2026 | WOD_TASK_MODEL_STAGE_START | Начат этап подготовки серверной модели
+для нового WOD-конструктора, заданий, типов нагрузки, RX/Optional-вариантов и истории личных PR | IN_PROGRESS
+
+[INFO] 16.06.2026 | WOD_TASK_SCHEMA | Добавлена миграция
+`database/migrations/20260616_stage8_wod_tasks_prs.sql` с таблицами `load_types`, `training_tasks`,
+`wod_tasks`, `personal_records` и view `personal_record_bests` | OK
+
+[INFO] 16.06.2026 | WOD_TASK_RPC | Добавлены RPC `create_wod_with_tasks(...)` для атомарного
+создания WOD из нескольких заданий и `submit_personal_record(...)` для добавления нового личного PR | OK
+
+[INFO] 16.06.2026 | WOD_TASK_RLS | Настроены RLS-политики: упражнения, типы нагрузки и задания
+создают/редактируют тренеры и администраторы; атлеты читают доступные данные и добавляют только свои PR | OK
+
+[INFO] 16.06.2026 | ATHLETE_RESULT_HISTORY_LOCK | Политика прямого обновления собственных строк
+`results` удалена, чтобы атлет не мог редактировать старый WOD-результат с клиента | OK
+
+[INFO] 16.06.2026 | WOD_TASK_DATABASE_GUIDE | `database/README.md` дополнен описанием миграции
+этапа WOD 2.0 и порядком применения новой серверной модели | OK
+
+[INFO] 16.06.2026 | WOD_TASK_MODEL_STAGE_COMPLETE | Серверная модель WOD 2.0, заданий,
+типов нагрузки, RX/Optional-вариантов и истории личных PR подготовлена и проверена SQL-валидатором:
+337 PostgreSQL statements и 14 PL/pgSQL functions | COMPLETE
