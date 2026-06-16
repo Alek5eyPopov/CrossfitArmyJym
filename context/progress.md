@@ -881,3 +881,23 @@ testDebugUnitTest и assembleDebug; сборка завершена успешн
 [INFO] 16.06.2026 | WOD_TASK_MODEL_STAGE_COMPLETE | Серверная модель WOD 2.0, заданий,
 типов нагрузки, RX/Optional-вариантов и истории личных PR подготовлена и проверена SQL-валидатором:
 337 PostgreSQL statements и 14 PL/pgSQL functions | COMPLETE
+
+[INFO] 16.06.2026 | WOD_ANDROID_CONTRACT_STAGE_START | Начат этап подключения Android-кода
+к серверной модели WOD 2.0 после применения миграции в Supabase | IN_PROGRESS
+
+[INFO] 16.06.2026 | WOD_ANDROID_MODELS | Добавлены Java-модели `LoadType`, `TrainingTask`,
+`WodTask`, `WodTaskInput`, `WodTaskCompositionRequest`, `PersonalRecord` и `PersonalRecordRequest`;
+`Wod` теперь принимает `wod_tasks`, а `Exercise` хранит поля для PR | OK
+
+[INFO] 16.06.2026 | WOD_ANDROID_API | `WodApi` и `WodRepository` расширены справочниками
+`load_types`, `training_tasks`, новым RPC `create_wod_with_tasks(...)`, историей PR и лучшими PR | OK
+
+[INFO] 16.06.2026 | WOD_ANDROID_CONTRACT_TESTS | Gson-тесты дополнены проверкой RPC-параметров
+для создания WOD из заданий и сохранения личного PR | OK
+
+[INFO] 16.06.2026 | WOD_ANDROID_BUILD_CHECK | Выполнены `testDebugUnitTest` и `assembleDebug`;
+Android-контракты новой WOD-модели компилируются без ошибок | OK
+
+[INFO] 16.06.2026 | WOD_ANDROID_CONTRACT_STAGE_COMPLETE | Android-слой подключён к
+серверной модели WOD 2.0 на уровне моделей, Retrofit API, репозитория и контрактных тестов;
+старый экран WOD пока сохранён для совместимости до следующего UI-этапа | COMPLETE

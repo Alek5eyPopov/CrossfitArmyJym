@@ -40,6 +40,9 @@ public class Wod {
     @SerializedName("wod_exercises")
     private List<WodExercise> exercises;
 
+    @SerializedName("wod_tasks")
+    private List<WodTask> tasks;
+
     public Wod() {
     }
 
@@ -81,6 +84,10 @@ public class Wod {
 
     public List<WodExercise> getExercises() {
         return exercises;
+    }
+
+    public List<WodTask> getTasks() {
+        return tasks;
     }
 
     public void setId(String id) { this.id = id; }

@@ -2,41 +2,22 @@ package com.crossfitarmyjym.app.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Модель упражнения.
- * Соответствует таблице exercises в Supabase.
- */
-public class Exercise {
+public class LoadType {
 
     @SerializedName("id")
     private String id;
 
+    @SerializedName("code")
+    private String code;
+
     @SerializedName("name")
     private String name;
-
-    @SerializedName("category")
-    private String category;
 
     @SerializedName("description")
     private String description;
 
-    @SerializedName("video_url")
-    private String videoUrl;
-
-    @SerializedName("difficulty")
-    private String difficulty;
-
-    @SerializedName("unit_type")
-    private String unitType;
-
     @SerializedName("is_active")
     private boolean active;
-
-    @SerializedName("pr_unit")
-    private String prUnit;
-
-    @SerializedName("pr_better_direction")
-    private String prBetterDirection;
 
     @SerializedName("created_by")
     private String createdBy;
@@ -47,47 +28,24 @@ public class Exercise {
     @SerializedName("updated_at")
     private String updatedAt;
 
-    public Exercise() {
-    }
-
     public String getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public String getUnitType() {
-        return unitType;
-    }
-
     public boolean isActive() {
         return active;
-    }
-
-    public String getPrUnit() {
-        return prUnit;
-    }
-
-    public String getPrBetterDirection() {
-        return prBetterDirection;
     }
 
     public String getCreatedBy() {
