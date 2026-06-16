@@ -102,7 +102,8 @@ public interface WodApi {
     @GET("results")
     Call<List<Result>> getMyResults(
             @Query("user_id") String userId,
-            @Query("order") String order
+            @Query("order") String order,
+            @Query("select") String select
     );
 
     @POST("rpc/submit_personal_record")

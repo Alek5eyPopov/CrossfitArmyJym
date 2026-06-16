@@ -105,6 +105,12 @@
     <string name="profile_progress">МОЙ ПРОГРЕСС</string>
     <string name="active_bookings_metric">Активные записи</string>
     <string name="personal_records_metric">Личные рекорды</string>
+    <string name="my_pr_section">МОИ PR</string>
+    <string name="add_pr">Добавить PR</string>
+    <string name="pr_history_section">ИСТОРИЯ PR</string>
+    <string name="wod_results_section">РЕЗУЛЬТАТЫ WOD</string>
+    <string name="no_pr_records">PR пока не добавлены</string>
+    <string name="no_wod_results">Результатов WOD пока нет</string>
     <string name="account_details">ДАННЫЕ АККАУНТА</string>
     <string name="account_email_label">EMAIL</string>
     <string name="account_role_label">РОЛЬ</string>

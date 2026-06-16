@@ -35,6 +35,9 @@ public class Result {
     @SerializedName("created_at")
     private String createdAt;
 
+    @SerializedName("wods")
+    private Wod wod;
+
     public Result() {
     }
 
@@ -72,5 +75,9 @@ public class Result {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public Wod getWod() {
+        return wod;
     }
 }

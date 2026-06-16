@@ -17,6 +17,8 @@ import retrofit2.Response;
 
 public class ResultRepository {
 
+    private static final String RESULT_SELECT = "*,wods(id,name,scheduled_date,format)";
+
     private final WodApi api = ApiClient.getWodApi();
 
     public interface ResultCallback {
@@ -79,7 +81,7 @@ public class ResultRepository {
             callback.onError("Пользователь не авторизован");
             return;
         }
-        api.getMyResults("eq." + userId, "completed_at.desc")
+        api.getMyResults("eq." + userId, "completed_at.desc", RESULT_SELECT)
                 .enqueue(new Callback<List<Result>>() {
                     @Override
                     public void onResponse(Call<List<Result>> call, Response<List<Result>> response) {
