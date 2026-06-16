@@ -81,6 +81,14 @@ public class ResultRepository {
             callback.onError("Пользователь не авторизован");
             return;
         }
+        getResultsForUser(userId, callback);
+    }
+
+    public void getResultsForUser(String userId, ResultsCallback callback) {
+        if (userId == null || userId.trim().isEmpty()) {
+            callback.onError("Атлет не выбран");
+            return;
+        }
         api.getMyResults("eq." + userId, "completed_at.desc", RESULT_SELECT)
                 .enqueue(new Callback<List<Result>>() {
                     @Override

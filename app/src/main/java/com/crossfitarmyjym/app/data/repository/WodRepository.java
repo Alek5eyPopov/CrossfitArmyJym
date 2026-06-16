@@ -302,6 +302,14 @@ public class WodRepository {
             callback.onError("Пользователь не авторизован");
             return;
         }
+        getPersonalRecordsForUser(userId, callback);
+    }
+
+    public void getPersonalRecordsForUser(String userId, PersonalRecordListCallback callback) {
+        if (userId == null || userId.trim().isEmpty()) {
+            callback.onError("Атлет не выбран");
+            return;
+        }
         api.getPersonalRecords("eq." + userId, "achieved_at.desc", PERSONAL_RECORD_SELECT)
                 .enqueue(personalRecordListResponse(callback,
                         "Не удалось загрузить историю PR"));
@@ -311,6 +319,14 @@ public class WodRepository {
         String userId = preferences.getUserId();
         if (userId == null) {
             callback.onError("Пользователь не авторизован");
+            return;
+        }
+        getPersonalRecordBestsForUser(userId, callback);
+    }
+
+    public void getPersonalRecordBestsForUser(String userId, PersonalRecordListCallback callback) {
+        if (userId == null || userId.trim().isEmpty()) {
+            callback.onError("Атлет не выбран");
             return;
         }
         api.getPersonalRecordBests("eq." + userId, "exercise_name.asc")

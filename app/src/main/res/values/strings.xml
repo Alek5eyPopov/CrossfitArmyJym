@@ -120,6 +120,10 @@
     <string name="trainer_classes_subtitle">Управление группами и посещаемостью</string>
     <string name="trainer_clients_title">АТЛЕТЫ</string>
     <string name="trainer_clients_subtitle">Активные участники ваших групп</string>
+    <string name="client_progress_hint">Смотреть прогресс</string>
+    <string name="client_progress_bests">ЛУЧШИЕ PR</string>
+    <string name="client_progress_pr_history">ИСТОРИЯ PR</string>
+    <string name="client_progress_wod_results">РЕЗУЛЬТАТЫ WOD</string>
     <string name="trainer_attendance_title">ПОСЕЩАЕМОСТЬ</string>
     <string name="trainer_attendance_subtitle">Отметьте присутствующих на тренировке</string>
     <string name="trainer_wod_title">WOD РЕДАКТОР</string>

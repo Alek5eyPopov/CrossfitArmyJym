@@ -14,7 +14,12 @@ import java.util.List;
 
 public class ClientsAdapter extends RecyclerView.Adapter<ClientsAdapter.ViewHolder> {
 
+    public interface ClientClickListener {
+        void onClientClick(User user);
+    }
+
     private List<User> clients = new ArrayList<>();
+    private ClientClickListener clickListener;
 
     @NonNull
     @Override
@@ -29,6 +34,11 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientsAdapter.ViewHold
         String name = user.getFullName();
         holder.binding.tvClientName.setText(name.isEmpty() ? user.getEmail() : name);
         holder.binding.tvClientEmail.setText(user.getEmail());
+        holder.binding.getRoot().setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onClientClick(user);
+            }
+        });
     }
 
     @Override
@@ -39,6 +49,10 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientsAdapter.ViewHold
     public void submitList(List<User> newClients) {
         clients = newClients != null ? newClients : new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+    public void setClientClickListener(ClientClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
