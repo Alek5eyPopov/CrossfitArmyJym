@@ -21,6 +21,7 @@ import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.data.model.LeaderboardEntry;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.model.WodExercise;
+import com.crossfitarmyjym.app.data.model.WodTask;
 import com.crossfitarmyjym.app.databinding.FragmentHomeClientBinding;
 
 import java.util.List;
@@ -83,21 +84,58 @@ public class HomeFragment extends Fragment {
         if (wod.getTimeCapSeconds() > 0) {
             text.append("\nЛимит: ").append(wod.getTimeCapSeconds() / 60).append(" мин");
         }
-        List<WodExercise> exercises = wod.getExercises();
-        if (exercises != null) {
-            for (WodExercise item : exercises) {
-                if (item.getExercise() == null) continue;
-                text.append("\n• ").append(item.getExercise().getName())
-                        .append(" — ").append(item.getRounds()).append(" раунд.");
-                if (item.getRecommendedWeightKg() > 0) {
-                    text.append(", ").append(item.getRecommendedWeightKg()).append(" кг");
-                }
-            }
+
+        List<WodTask> tasks = wod.getTasks();
+        if (tasks != null && !tasks.isEmpty()) {
+            appendTaskList(text, tasks);
+        } else {
+            appendLegacyExerciseList(text, wod.getExercises());
         }
+
         if (wod.getNotes() != null && !wod.getNotes().isEmpty()) {
             text.append("\n\n").append(wod.getNotes());
         }
         return text.toString();
+    }
+
+    private void appendTaskList(StringBuilder text, List<WodTask> tasks) {
+        for (WodTask task : tasks) {
+            text.append("\n").append(task.getPosition()).append(". ")
+                    .append(task.getTitle());
+            if (task.getRxExercise() != null) {
+                text.append("\nRX: ").append(task.getRxExercise().getName());
+            }
+            if (task.getLoadType() != null) {
+                text.append(" • ").append(task.getLoadType().getName());
+            }
+            if (task.getRxLoadDescription() != null
+                    && !task.getRxLoadDescription().trim().isEmpty()) {
+                text.append(" • ").append(task.getRxLoadDescription());
+            }
+            if (task.getOptionalExercise() != null
+                    || (task.getOptionalLoadDescription() != null
+                    && !task.getOptionalLoadDescription().trim().isEmpty())) {
+                text.append("\nOptional: ");
+                text.append(task.getOptionalExercise() == null
+                        ? "вариант тренера" : task.getOptionalExercise().getName());
+                if (task.getOptionalLoadDescription() != null
+                        && !task.getOptionalLoadDescription().trim().isEmpty()) {
+                    text.append(" • ").append(task.getOptionalLoadDescription());
+                }
+            }
+        }
+    }
+
+    private void appendLegacyExerciseList(StringBuilder text, List<WodExercise> exercises) {
+        if (exercises == null) return;
+        for (WodExercise item : exercises) {
+            if (item.getExercise() == null) continue;
+            text.append("\n• ").append(item.getExercise().getName())
+                    .append(" — ").append(item.getRounds()).append(" раунд.");
+            if (item.getRecommendedWeightKg() > 0) {
+                text.append(", ").append(item.getRecommendedWeightKg()).append(" кг");
+            }
+        }
     }
 
     private String formatNextClass(GymClass gymClass) {

@@ -35,7 +35,12 @@ import retrofit2.Response;
 public class WodRepository {
 
     private static final String WOD_SELECT =
-            "*,wod_exercises(*,exercises(*)),wod_tasks(*)";
+            "*,wod_exercises(*,exercises(*))," +
+                    "wod_tasks(*," +
+                    "rx_exercise:exercises!wod_tasks_rx_exercise_id_fkey(*)," +
+                    "load_type:load_types!wod_tasks_load_type_id_fkey(*)," +
+                    "optional_exercise:exercises!wod_tasks_optional_exercise_id_fkey(*)," +
+                    "optional_load_type:load_types!wod_tasks_optional_load_type_id_fkey(*))";
     private static final String TRAINING_TASK_SELECT =
             "*,rx_exercise:exercises!training_tasks_rx_exercise_id_fkey(*)," +
                     "load_type:load_types!training_tasks_load_type_id_fkey(*)," +

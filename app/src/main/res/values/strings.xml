@@ -142,6 +142,16 @@
     <string name="wod_weight_hint">Вес, кг</string>
     <string name="wod_add_exercise">Добавить упражнение</string>
     <string name="wod_no_exercises">Упражнения не добавлены</string>
+    <string name="wod_tasks_section">ЗАДАНИЯ WOD</string>
+    <string name="wod_task_title_hint">Название задания</string>
+    <string name="wod_rx_exercise_label">RX упражнение</string>
+    <string name="wod_load_type_label">Тип нагрузки</string>
+    <string name="wod_rx_load_hint">RX нагрузка: вес, повторы, время</string>
+    <string name="wod_optional_exercise_label">Optional упражнение</string>
+    <string name="wod_optional_load_hint">Optional нагрузка</string>
+    <string name="wod_task_notes_hint">Комментарий к заданию</string>
+    <string name="wod_add_task">Добавить задание</string>
+    <string name="wod_no_tasks">Задания не добавлены</string>
     <string name="wod_description_hint">Описание и примечания</string>
     <string name="admin_edit_symbol">✎</string>
     <string name="admin_delete_symbol">×</string>

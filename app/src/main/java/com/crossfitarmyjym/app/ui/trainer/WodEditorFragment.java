@@ -15,7 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
-import com.crossfitarmyjym.app.data.model.WodExerciseInput;
+import com.crossfitarmyjym.app.data.model.LoadType;
+import com.crossfitarmyjym.app.data.model.WodTaskInput;
 import com.crossfitarmyjym.app.databinding.FragmentWodEditorBinding;
 
 import java.text.SimpleDateFormat;
@@ -29,12 +30,15 @@ import java.util.Objects;
 public class WodEditorFragment extends Fragment {
 
     private static final String[] FORMATS = {"amrap", "emom", "for_time", "tabata", "ladder"};
+    private static final String NO_OPTIONAL_EXERCISE = "Без optional";
 
     private FragmentWodEditorBinding binding;
     private WodEditorViewModel viewModel;
     private final List<Group> groups = new ArrayList<>();
     private final List<Exercise> exercises = new ArrayList<>();
-    private final List<WodExerciseInput> selectedExercises = new ArrayList<>();
+    private final List<Exercise> optionalExercises = new ArrayList<>();
+    private final List<LoadType> loadTypes = new ArrayList<>();
+    private final List<WodTaskInput> selectedTasks = new ArrayList<>();
     private final List<String> selectedLabels = new ArrayList<>();
 
     @Nullable
@@ -53,7 +57,7 @@ public class WodEditorFragment extends Fragment {
                 new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date())
         );
         binding.spinnerFormat.setAdapter(spinnerAdapter(Arrays.asList(FORMATS)));
-        binding.btnAddExercise.setOnClickListener(v -> addExercise());
+        binding.btnAddTask.setOnClickListener(v -> addTask());
         binding.btnSaveWod.setOnClickListener(v -> saveWod());
         observe();
         viewModel.loadReferenceData();
@@ -67,19 +71,32 @@ public class WodEditorFragment extends Fragment {
         });
         viewModel.getExercises().observe(getViewLifecycleOwner(), value -> {
             exercises.clear();
-            if (value != null) exercises.addAll(value);
-            binding.spinnerExercise.setAdapter(spinnerAdapter(exercises));
+            optionalExercises.clear();
+            if (value != null) {
+                exercises.addAll(value);
+                optionalExercises.addAll(value);
+            }
+            binding.spinnerRxExercise.setAdapter(spinnerAdapter(exercises));
+            binding.spinnerOptionalExercise.setAdapter(optionalExerciseAdapter());
+        });
+        viewModel.getLoadTypes().observe(getViewLifecycleOwner(), value -> {
+            loadTypes.clear();
+            if (value != null) loadTypes.addAll(value);
+            binding.spinnerLoadType.setAdapter(spinnerAdapter(loadTypes));
         });
         viewModel.getIsSaving().observe(getViewLifecycleOwner(), saving -> {
-            binding.btnSaveWod.setEnabled(!Boolean.TRUE.equals(saving));
-            binding.progressBar.setVisibility(Boolean.TRUE.equals(saving) ? View.VISIBLE : View.GONE);
+            boolean isSaving = Boolean.TRUE.equals(saving);
+            binding.btnSaveWod.setEnabled(!isSaving);
+            binding.btnAddTask.setEnabled(!isSaving);
+            binding.progressBar.setVisibility(isSaving ? View.VISIBLE : View.GONE);
         });
         viewModel.getSaveResult().observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-                selectedExercises.clear();
+                selectedTasks.clear();
                 selectedLabels.clear();
-                updateExerciseSummary();
+                updateTaskSummary();
+                clearTaskInputs();
             }
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), message -> {
@@ -95,34 +112,103 @@ public class WodEditorFragment extends Fragment {
         return adapter;
     }
 
-    private void addExercise() {
-        int position = binding.spinnerExercise.getSelectedItemPosition();
-        if (position < 0 || position >= exercises.size()) {
+    private ArrayAdapter<String> optionalExerciseAdapter() {
+        List<String> labels = new ArrayList<>();
+        labels.add(NO_OPTIONAL_EXERCISE);
+        for (Exercise exercise : optionalExercises) {
+            labels.add(exercise.getName());
+        }
+        return spinnerAdapter(labels);
+    }
+
+    private void addTask() {
+        int exercisePosition = binding.spinnerRxExercise.getSelectedItemPosition();
+        int loadTypePosition = binding.spinnerLoadType.getSelectedItemPosition();
+        if (exercisePosition < 0 || exercisePosition >= exercises.size()) {
             Toast.makeText(requireContext(), "Список упражнений пуст", Toast.LENGTH_SHORT).show();
             return;
         }
-        Exercise exercise = exercises.get(position);
-        for (WodExerciseInput item : selectedExercises) {
-            if (exercise.getId().equals(item.getExerciseId())) {
-                Toast.makeText(requireContext(), "Упражнение уже добавлено", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (loadTypePosition < 0 || loadTypePosition >= loadTypes.size()) {
+            Toast.makeText(requireContext(), "Список типов нагрузки пуст", Toast.LENGTH_SHORT).show();
+            return;
         }
-        int rounds = parseInt(binding.etRounds.getText(), 1);
-        int weight = parseInt(binding.etWeight.getText(), 0);
-        selectedExercises.add(new WodExerciseInput(exercise.getId(), rounds, weight, null));
-        selectedLabels.add(exercise.getName() + ": " + rounds + " раунд., " + weight + " кг");
-        updateExerciseSummary();
+
+        Exercise rxExercise = exercises.get(exercisePosition);
+        LoadType loadType = loadTypes.get(loadTypePosition);
+        String title = text(binding.etTaskTitle.getText());
+        String rxLoad = text(binding.etRxLoad.getText());
+        if (rxLoad.isEmpty()) {
+            binding.tilRxLoad.setError("Опишите RX нагрузку");
+            return;
+        }
+        binding.tilRxLoad.setError(null);
+
+        Exercise optionalExercise = selectedOptionalExercise();
+        String optionalLoad = text(binding.etOptionalLoad.getText());
+        String notes = text(binding.etTaskNotes.getText());
+        int position = selectedTasks.size() + 1;
+        String taskTitle = title.isEmpty() ? rxExercise.getName() : title;
+
+        selectedTasks.add(WodTaskInput.direct(
+                position,
+                taskTitle,
+                rxExercise.getId(),
+                loadType.getId(),
+                rxLoad,
+                optionalExercise == null ? null : optionalExercise.getId(),
+                optionalExercise == null ? null : loadType.getId(),
+                optionalLoad,
+                notes
+        ));
+        selectedLabels.add(buildTaskLabel(position, taskTitle, rxExercise, loadType,
+                rxLoad, optionalExercise, optionalLoad));
+        updateTaskSummary();
+        clearTaskInputs();
     }
 
-    private void updateExerciseSummary() {
-        binding.tvSelectedExercises.setText(selectedLabels.isEmpty()
-                ? "Упражнения не добавлены"
-                : TextUtils.join("\n", selectedLabels));
+    private Exercise selectedOptionalExercise() {
+        int position = binding.spinnerOptionalExercise.getSelectedItemPosition();
+        int exerciseIndex = position - 1;
+        if (exerciseIndex < 0 || exerciseIndex >= optionalExercises.size()) {
+            return null;
+        }
+        return optionalExercises.get(exerciseIndex);
+    }
+
+    private String buildTaskLabel(int position, String title, Exercise rxExercise,
+                                  LoadType loadType, String rxLoad,
+                                  Exercise optionalExercise, String optionalLoad) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(position).append(". ").append(title).append('\n')
+                .append("RX: ").append(rxExercise.getName())
+                .append(" • ").append(loadType.getName())
+                .append(" • ").append(rxLoad);
+        if (optionalExercise != null || !optionalLoad.isEmpty()) {
+            builder.append('\n').append("Optional: ");
+            builder.append(optionalExercise == null ? rxExercise.getName() : optionalExercise.getName());
+            if (!optionalLoad.isEmpty()) {
+                builder.append(" • ").append(optionalLoad);
+            }
+        }
+        return builder.toString();
+    }
+
+    private void updateTaskSummary() {
+        binding.tvSelectedTasks.setText(selectedLabels.isEmpty()
+                ? getString(com.crossfitarmyjym.app.R.string.wod_no_tasks)
+                : TextUtils.join("\n\n", selectedLabels));
+    }
+
+    private void clearTaskInputs() {
+        binding.etTaskTitle.setText("");
+        binding.etRxLoad.setText("");
+        binding.etOptionalLoad.setText("");
+        binding.etTaskNotes.setText("");
+        binding.spinnerOptionalExercise.setSelection(0);
     }
 
     private void saveWod() {
-        String name = Objects.requireNonNull(binding.etWodName.getText()).toString().trim();
+        String name = text(binding.etWodName.getText());
         if (name.isEmpty()) {
             binding.tilWodName.setError("Введите название WOD");
             return;
@@ -133,7 +219,7 @@ public class WodEditorFragment extends Fragment {
             Toast.makeText(requireContext(), "Выберите доступную группу", Toast.LENGTH_SHORT).show();
             return;
         }
-        String date = Objects.requireNonNull(binding.etScheduledDate.getText()).toString().trim();
+        String date = text(binding.etScheduledDate.getText());
         if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
             Toast.makeText(requireContext(), "Дата должна быть в формате YYYY-MM-DD",
                     Toast.LENGTH_SHORT).show();
@@ -148,8 +234,12 @@ public class WodEditorFragment extends Fragment {
                 date,
                 minutes * 60,
                 notes,
-                new ArrayList<>(selectedExercises)
+                new ArrayList<>(selectedTasks)
         );
+    }
+
+    private String text(CharSequence value) {
+        return value == null ? "" : value.toString().trim();
     }
 
     private int parseInt(CharSequence value, int fallback) {

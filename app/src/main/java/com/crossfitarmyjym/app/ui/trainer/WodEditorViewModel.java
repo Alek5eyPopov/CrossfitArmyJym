@@ -9,9 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
+import com.crossfitarmyjym.app.data.model.LoadType;
 import com.crossfitarmyjym.app.data.model.Wod;
-import com.crossfitarmyjym.app.data.model.WodCompositionRequest;
-import com.crossfitarmyjym.app.data.model.WodExerciseInput;
+import com.crossfitarmyjym.app.data.model.WodTaskCompositionRequest;
+import com.crossfitarmyjym.app.data.model.WodTaskInput;
 import com.crossfitarmyjym.app.data.repository.WodRepository;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class WodEditorViewModel extends AndroidViewModel {
     private final WodRepository repository;
     private final MutableLiveData<List<Group>> groups = new MutableLiveData<>();
     private final MutableLiveData<List<Exercise>> exercises = new MutableLiveData<>();
+    private final MutableLiveData<List<LoadType>> loadTypes = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isSaving = new MutableLiveData<>(false);
     private final MutableLiveData<String> saveResult = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
@@ -32,6 +34,7 @@ public class WodEditorViewModel extends AndroidViewModel {
 
     public LiveData<List<Group>> getGroups() { return groups; }
     public LiveData<List<Exercise>> getExercises() { return exercises; }
+    public LiveData<List<LoadType>> getLoadTypes() { return loadTypes; }
     public LiveData<Boolean> getIsSaving() { return isSaving; }
     public LiveData<String> getSaveResult() { return saveResult; }
     public LiveData<String> getErrorMessage() { return errorMessage; }
@@ -59,18 +62,29 @@ public class WodEditorViewModel extends AndroidViewModel {
                 errorMessage.postValue(error);
             }
         });
+        repository.getLoadTypes(new WodRepository.LoadTypeListCallback() {
+            @Override
+            public void onSuccess(List<LoadType> value) {
+                loadTypes.postValue(value);
+            }
+
+            @Override
+            public void onError(@NonNull String error) {
+                errorMessage.postValue(error);
+            }
+        });
     }
 
     public void createWod(String name, String format, String groupId, String date,
                           int timeCapSeconds, String notes,
-                          List<WodExerciseInput> selectedExercises) {
-        if (selectedExercises == null || selectedExercises.isEmpty()) {
-            errorMessage.setValue("Добавьте хотя бы одно упражнение");
+                          List<WodTaskInput> selectedTasks) {
+        if (selectedTasks == null || selectedTasks.isEmpty()) {
+            errorMessage.setValue("Добавьте хотя бы одно задание");
             return;
         }
         isSaving.setValue(true);
-        repository.createWod(new WodCompositionRequest(
-                name, format, groupId, date, timeCapSeconds, notes, selectedExercises
+        repository.createWodWithTasks(new WodTaskCompositionRequest(
+                name, format, groupId, date, timeCapSeconds, notes, selectedTasks
         ), new WodRepository.WodCallback() {
             @Override
             public void onSuccess(Wod wod) {
