@@ -14,6 +14,7 @@ import com.crossfitarmyjym.app.data.model.WodCompositionRequest;
 import com.crossfitarmyjym.app.data.model.WodTaskCompositionRequest;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -55,10 +56,22 @@ public interface WodApi {
             @Query("order") String order
     );
 
+    @POST("exercises")
+    Call<List<Exercise>> createExercise(
+            @Query("select") String select,
+            @Body Map<String, Object> fields
+    );
+
     @GET("load_types")
     Call<List<LoadType>> getLoadTypes(
             @Query("is_active") String active,
             @Query("order") String order
+    );
+
+    @POST("load_types")
+    Call<List<LoadType>> createLoadType(
+            @Query("select") String select,
+            @Body Map<String, Object> fields
     );
 
     @GET("training_tasks")
@@ -66,6 +79,12 @@ public interface WodApi {
             @Query("is_active") String active,
             @Query("order") String order,
             @Query("select") String select
+    );
+
+    @POST("training_tasks")
+    Call<List<TrainingTask>> createTrainingTask(
+            @Query("select") String select,
+            @Body Map<String, Object> fields
     );
 
     @POST("rpc/create_wod_with_exercises")

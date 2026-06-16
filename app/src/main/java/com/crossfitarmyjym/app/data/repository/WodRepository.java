@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -91,6 +92,11 @@ public class WodRepository {
 
     public interface PersonalRecordListCallback {
         void onSuccess(List<PersonalRecord> records);
+        void onError(@NonNull String errorMessage);
+    }
+
+    public interface ReferenceActionCallback {
+        void onSuccess();
         void onError(@NonNull String errorMessage);
     }
 
@@ -217,6 +223,21 @@ public class WodRepository {
                 });
     }
 
+    public void createExercise(Map<String, Object> fields, ReferenceActionCallback callback) {
+        api.createExercise("*", fields).enqueue(referenceActionResponse(callback,
+                "Не удалось создать упражнение"));
+    }
+
+    public void createLoadType(Map<String, Object> fields, ReferenceActionCallback callback) {
+        api.createLoadType("*", fields).enqueue(referenceActionResponse(callback,
+                "Не удалось создать тип нагрузки"));
+    }
+
+    public void createTrainingTask(Map<String, Object> fields, ReferenceActionCallback callback) {
+        api.createTrainingTask("*", fields).enqueue(referenceActionResponse(callback,
+                "Не удалось создать шаблон задания"));
+    }
+
     public void createWod(WodCompositionRequest request, WodCallback callback) {
         api.createWod(request).enqueue(new Callback<Wod>() {
             @Override
@@ -314,6 +335,25 @@ public class WodRepository {
 
             @Override
             public void onFailure(Call<List<PersonalRecord>> call, Throwable throwable) {
+                callback.onError("Ошибка сети: " + throwable.getMessage());
+            }
+        };
+    }
+
+    private <T> Callback<List<T>> referenceActionResponse(ReferenceActionCallback callback,
+                                                          String errorPrefix) {
+        return new Callback<List<T>>() {
+            @Override
+            public void onResponse(Call<List<T>> call, Response<List<T>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                } else {
+                    callback.onError(errorPrefix + ": HTTP " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<T>> call, Throwable throwable) {
                 callback.onError("Ошибка сети: " + throwable.getMessage());
             }
         };

@@ -7,9 +7,12 @@ import com.crossfitarmyjym.app.data.api.ApiClient;
 import com.crossfitarmyjym.app.data.model.AdminStats;
 import com.crossfitarmyjym.app.data.model.Attendance;
 import com.crossfitarmyjym.app.data.model.Booking;
+import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.GymClass;
+import com.crossfitarmyjym.app.data.model.LoadType;
 import com.crossfitarmyjym.app.data.model.Result;
+import com.crossfitarmyjym.app.data.model.TrainingTask;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 
@@ -102,6 +105,54 @@ public class AdminRepository {
         enqueueVoid(api.deleteWod("eq." + id), callback);
     }
 
+    public void getExercises(ListCallback<Exercise> callback) {
+        enqueueList(api.getExercises("name.asc"), callback, "упражнения");
+    }
+
+    public void createExercise(Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.createExercise("*", fields), callback);
+    }
+
+    public void updateExercise(String id, Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.updateExercise("eq." + id, "*", fields), callback);
+    }
+
+    public void deleteExercise(String id, ActionCallback callback) {
+        enqueueVoid(api.deleteExercise("eq." + id), callback);
+    }
+
+    public void getLoadTypes(ListCallback<LoadType> callback) {
+        enqueueList(api.getLoadTypes("name.asc"), callback, "типы нагрузки");
+    }
+
+    public void createLoadType(Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.createLoadType("*", fields), callback);
+    }
+
+    public void updateLoadType(String id, Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.updateLoadType("eq." + id, "*", fields), callback);
+    }
+
+    public void deleteLoadType(String id, ActionCallback callback) {
+        enqueueVoid(api.deleteLoadType("eq." + id), callback);
+    }
+
+    public void getTrainingTasks(ListCallback<TrainingTask> callback) {
+        enqueueList(api.getTrainingTasks("title.asc", "*"), callback, "шаблоны заданий");
+    }
+
+    public void createTrainingTask(Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.createTrainingTask("*", fields), callback);
+    }
+
+    public void updateTrainingTask(String id, Map<String, Object> fields, ActionCallback callback) {
+        enqueueMutation(api.updateTrainingTask("eq." + id, "*", fields), callback);
+    }
+
+    public void deleteTrainingTask(String id, ActionCallback callback) {
+        enqueueVoid(api.deleteTrainingTask("eq." + id), callback);
+    }
+
     public void getStats(StatsCallback callback) {
         StatsAccumulator accumulator = new StatsAccumulator(callback);
         enqueueList(api.getUsers("created_at.desc"), accumulator.users(), "пользователей");
@@ -131,6 +182,53 @@ public class AdminRepository {
         fields.put("name", name);
         fields.put("scheduled_date", date);
         fields.put("notes", notes);
+        return fields;
+    }
+
+    public static Map<String, Object> exerciseFields(String name, String category,
+                                                      String description, String unitType,
+                                                      String prUnit, String prDirection,
+                                                      boolean active) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("name", name);
+        fields.put("category", category);
+        fields.put("description", description);
+        fields.put("unit_type", unitType);
+        fields.put("pr_unit", prUnit);
+        fields.put("pr_better_direction", prDirection);
+        fields.put("is_active", active);
+        return fields;
+    }
+
+    public static Map<String, Object> loadTypeFields(String code, String name,
+                                                     String description, boolean active) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("code", code);
+        fields.put("name", name);
+        fields.put("description", description);
+        fields.put("is_active", active);
+        return fields;
+    }
+
+    public static Map<String, Object> trainingTaskFields(String title,
+                                                         String exerciseId,
+                                                         String loadTypeId,
+                                                         String rxLoad,
+                                                         String optionalExerciseId,
+                                                         String optionalLoadTypeId,
+                                                         String optionalLoad,
+                                                         String notes,
+                                                         boolean active) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("title", title);
+        fields.put("rx_exercise_id", exerciseId);
+        fields.put("load_type_id", loadTypeId);
+        fields.put("rx_load_description", rxLoad);
+        fields.put("optional_exercise_id", optionalExerciseId);
+        fields.put("optional_load_type_id", optionalLoadTypeId);
+        fields.put("optional_load_description", optionalLoad);
+        fields.put("notes", notes);
+        fields.put("is_active", active);
         return fields;
     }
 

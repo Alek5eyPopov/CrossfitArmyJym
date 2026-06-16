@@ -2,9 +2,12 @@ package com.crossfitarmyjym.app.data.api;
 
 import com.crossfitarmyjym.app.data.model.Attendance;
 import com.crossfitarmyjym.app.data.model.Booking;
+import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.GymClass;
+import com.crossfitarmyjym.app.data.model.LoadType;
 import com.crossfitarmyjym.app.data.model.Result;
+import com.crossfitarmyjym.app.data.model.TrainingTask;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 
@@ -76,6 +79,60 @@ public interface AdminApi {
 
     @DELETE("wods")
     Call<Void> deleteWod(@Query("id") String id);
+
+    @GET("exercises")
+    Call<List<Exercise>> getExercises(@Query("order") String order);
+
+    @POST("exercises")
+    Call<List<Exercise>> createExercise(@Query("select") String select,
+                                        @Body Map<String, Object> fields);
+
+    @PATCH("exercises")
+    Call<List<Exercise>> updateExercise(
+            @Query("id") String id,
+            @Query("select") String select,
+            @Body Map<String, Object> fields
+    );
+
+    @DELETE("exercises")
+    Call<Void> deleteExercise(@Query("id") String id);
+
+    @GET("load_types")
+    Call<List<LoadType>> getLoadTypes(@Query("order") String order);
+
+    @POST("load_types")
+    Call<List<LoadType>> createLoadType(@Query("select") String select,
+                                        @Body Map<String, Object> fields);
+
+    @PATCH("load_types")
+    Call<List<LoadType>> updateLoadType(
+            @Query("id") String id,
+            @Query("select") String select,
+            @Body Map<String, Object> fields
+    );
+
+    @DELETE("load_types")
+    Call<Void> deleteLoadType(@Query("id") String id);
+
+    @GET("training_tasks")
+    Call<List<TrainingTask>> getTrainingTasks(
+            @Query("order") String order,
+            @Query("select") String select
+    );
+
+    @POST("training_tasks")
+    Call<List<TrainingTask>> createTrainingTask(@Query("select") String select,
+                                                @Body Map<String, Object> fields);
+
+    @PATCH("training_tasks")
+    Call<List<TrainingTask>> updateTrainingTask(
+            @Query("id") String id,
+            @Query("select") String select,
+            @Body Map<String, Object> fields
+    );
+
+    @DELETE("training_tasks")
+    Call<Void> deleteTrainingTask(@Query("id") String id);
 
     @GET("bookings")
     Call<List<Booking>> getBookings(@Query("status") String status);

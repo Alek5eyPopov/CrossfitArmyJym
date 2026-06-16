@@ -6,10 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -58,6 +62,9 @@ public class WodEditorFragment extends Fragment {
         );
         binding.spinnerFormat.setAdapter(spinnerAdapter(Arrays.asList(FORMATS)));
         binding.btnAddTask.setOnClickListener(v -> addTask());
+        binding.btnCreateExercise.setOnClickListener(v -> showCreateExerciseDialog());
+        binding.btnCreateLoadType.setOnClickListener(v -> showCreateLoadTypeDialog());
+        binding.btnCreateTaskTemplate.setOnClickListener(v -> saveCurrentTaskAsTemplate());
         binding.btnSaveWod.setOnClickListener(v -> saveWod());
         observe();
         viewModel.loadReferenceData();
@@ -88,6 +95,9 @@ public class WodEditorFragment extends Fragment {
             boolean isSaving = Boolean.TRUE.equals(saving);
             binding.btnSaveWod.setEnabled(!isSaving);
             binding.btnAddTask.setEnabled(!isSaving);
+            binding.btnCreateExercise.setEnabled(!isSaving);
+            binding.btnCreateLoadType.setEnabled(!isSaving);
+            binding.btnCreateTaskTemplate.setEnabled(!isSaving);
             binding.progressBar.setVisibility(isSaving ? View.VISIBLE : View.GONE);
         });
         viewModel.getSaveResult().observe(getViewLifecycleOwner(), message -> {
@@ -205,6 +215,133 @@ public class WodEditorFragment extends Fragment {
         binding.etOptionalLoad.setText("");
         binding.etTaskNotes.setText("");
         binding.spinnerOptionalExercise.setSelection(0);
+    }
+
+    private void showCreateExerciseDialog() {
+        LinearLayout content = dialogContent();
+        EditText name = field("Название упражнения", null);
+        Spinner category = spinnerAdapterView(Arrays.asList(
+                "gymnastics", "weightlifting", "cardio", "monostructural"
+        ));
+        EditText description = field("Описание", null);
+        EditText unitType = field("Единица результата: kg, reps, time", "reps");
+        EditText prUnit = field("Единица PR: kg, reps, sec", null);
+        Spinner direction = spinnerAdapterView(Arrays.asList("max", "min"));
+        content.addView(name);
+        content.addView(category);
+        content.addView(description);
+        content.addView(unitType);
+        content.addView(prUnit);
+        content.addView(direction);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Новое упражнение")
+                .setView(content)
+                .setNegativeButton("Отмена", null)
+                .setPositiveButton("Создать", (dialog, which) -> {
+                    String exerciseName = text(name.getText());
+                    if (exerciseName.isEmpty()) {
+                        toast("Введите название упражнения");
+                        return;
+                    }
+                    viewModel.createExercise(
+                            exerciseName,
+                            String.valueOf(category.getSelectedItem()),
+                            text(description.getText()),
+                            text(unitType.getText()).isEmpty() ? "reps" : text(unitType.getText()),
+                            text(prUnit.getText()),
+                            String.valueOf(direction.getSelectedItem())
+                    );
+                })
+                .show();
+    }
+
+    private void showCreateLoadTypeDialog() {
+        LinearLayout content = dialogContent();
+        EditText code = field("Код: emom_every_3_min", null);
+        EditText name = field("Название: EMOM каждые 3 минуты", null);
+        EditText description = field("Описание", null);
+        content.addView(code);
+        content.addView(name);
+        content.addView(description);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Новый тип нагрузки")
+                .setView(content)
+                .setNegativeButton("Отмена", null)
+                .setPositiveButton("Создать", (dialog, which) -> {
+                    String loadCode = normalizeCode(text(code.getText()));
+                    String loadName = text(name.getText());
+                    if (loadCode.isEmpty() || loadName.isEmpty()) {
+                        toast("Введите код и название типа нагрузки");
+                        return;
+                    }
+                    viewModel.createLoadType(loadCode, loadName, text(description.getText()));
+                })
+                .show();
+    }
+
+    private void saveCurrentTaskAsTemplate() {
+        int exercisePosition = binding.spinnerRxExercise.getSelectedItemPosition();
+        int loadTypePosition = binding.spinnerLoadType.getSelectedItemPosition();
+        if (exercisePosition < 0 || exercisePosition >= exercises.size()
+                || loadTypePosition < 0 || loadTypePosition >= loadTypes.size()) {
+            toast("Выберите упражнение и тип нагрузки");
+            return;
+        }
+        Exercise rxExercise = exercises.get(exercisePosition);
+        LoadType loadType = loadTypes.get(loadTypePosition);
+        String title = text(binding.etTaskTitle.getText());
+        String rxLoad = text(binding.etRxLoad.getText());
+        if (rxLoad.isEmpty()) {
+            binding.tilRxLoad.setError("Опишите RX нагрузку");
+            return;
+        }
+        binding.tilRxLoad.setError(null);
+        Exercise optionalExercise = selectedOptionalExercise();
+        String optionalLoad = text(binding.etOptionalLoad.getText());
+        String notes = text(binding.etTaskNotes.getText());
+        viewModel.createTrainingTask(
+                title.isEmpty() ? rxExercise.getName() : title,
+                rxExercise.getId(),
+                loadType.getId(),
+                rxLoad,
+                optionalExercise == null ? null : optionalExercise.getId(),
+                optionalExercise == null ? null : loadType.getId(),
+                optionalLoad,
+                notes
+        );
+    }
+
+    private LinearLayout dialogContent() {
+        LinearLayout content = new LinearLayout(requireContext());
+        content.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (20 * getResources().getDisplayMetrics().density);
+        content.setPadding(padding, 0, padding, 0);
+        return content;
+    }
+
+    private EditText field(String hint, String value) {
+        EditText editText = new EditText(requireContext());
+        editText.setHint(hint);
+        if (value != null) editText.setText(value);
+        return editText;
+    }
+
+    private Spinner spinnerAdapterView(List<String> values) {
+        Spinner spinner = new Spinner(requireContext());
+        spinner.setAdapter(spinnerAdapter(values));
+        return spinner;
+    }
+
+    private String normalizeCode(String value) {
+        return value.toLowerCase(Locale.US)
+                .replaceAll("[^a-z0-9]+", "_")
+                .replaceAll("^_+|_+$", "");
+    }
+
+    private void toast(String value) {
+        Toast.makeText(requireContext(), value, Toast.LENGTH_SHORT).show();
     }
 
     private void saveWod() {

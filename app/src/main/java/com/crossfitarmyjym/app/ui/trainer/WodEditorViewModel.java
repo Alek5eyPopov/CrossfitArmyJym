@@ -13,6 +13,7 @@ import com.crossfitarmyjym.app.data.model.LoadType;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.model.WodTaskCompositionRequest;
 import com.crossfitarmyjym.app.data.model.WodTaskInput;
+import com.crossfitarmyjym.app.data.repository.AdminRepository;
 import com.crossfitarmyjym.app.data.repository.WodRepository;
 
 import java.util.List;
@@ -98,5 +99,47 @@ public class WodEditorViewModel extends AndroidViewModel {
                 errorMessage.postValue(error);
             }
         });
+    }
+
+    public void createExercise(String name, String category, String description,
+                               String unitType, String prUnit, String prDirection) {
+        repository.createExercise(AdminRepository.exerciseFields(
+                name, category, description, unitType, prUnit, prDirection, true
+        ), referenceCallback("Упражнение создано"));
+    }
+
+    public void createLoadType(String code, String name, String description) {
+        repository.createLoadType(AdminRepository.loadTypeFields(
+                code, name, description, true
+        ), referenceCallback("Тип нагрузки создан"));
+    }
+
+    public void createTrainingTask(String title, String exerciseId, String loadTypeId,
+                                   String rxLoad, String optionalExerciseId,
+                                   String optionalLoadTypeId, String optionalLoad,
+                                   String notes) {
+        repository.createTrainingTask(AdminRepository.trainingTaskFields(
+                title, exerciseId, loadTypeId, rxLoad, optionalExerciseId,
+                optionalLoadTypeId, optionalLoad, notes, true
+        ), referenceCallback("Шаблон задания создан"));
+    }
+
+    private WodRepository.ReferenceActionCallback referenceCallback(String successMessage) {
+        return new WodRepository.ReferenceActionCallback() {
+            @Override
+            public void onSuccess() {
+                saveResult.postValue(successMessage);
+                loadReferenceData();
+            }
+
+            @Override
+            public void onError(@NonNull String errorMessage) {
+                errorMessage(errorMessage);
+            }
+        };
+    }
+
+    private void errorMessage(String value) {
+        errorMessage.postValue(value);
     }
 }

@@ -152,6 +152,9 @@
     <string name="wod_task_notes_hint">Комментарий к заданию</string>
     <string name="wod_add_task">Добавить задание</string>
     <string name="wod_no_tasks">Задания не добавлены</string>
+    <string name="create_exercise">Создать упражнение</string>
+    <string name="create_load_type">Создать тип нагрузки</string>
+    <string name="create_task_template">Сохранить как шаблон задания</string>
     <string name="wod_description_hint">Описание и примечания</string>
     <string name="admin_edit_symbol">✎</string>
     <string name="admin_delete_symbol">×</string>

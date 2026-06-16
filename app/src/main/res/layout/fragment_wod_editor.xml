@@ -149,6 +149,39 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_create_exercise"
+                        style="@style/Widget.CrossfitArmyJym.Button.Outlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="@string/create_exercise"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_create_load_type"
+                        style="@style/Widget.CrossfitArmyJym.Button.Outlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/create_load_type"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_create_task_template"
+                        style="@style/Widget.CrossfitArmyJym.Button.Outlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/create_task_template"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_task_title"
                     style="@style/Widget.CrossfitArmyJym.TextInputLayout"
