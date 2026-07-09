@@ -1053,3 +1053,8 @@ Android-контракты новой WOD-модели компилируютс�
 API-клиент начал отправлять `null`-поля в JSON для корректного вызова Supabase RPC `submit_personal_record`,
 а сообщение об ошибке PR теперь включает тело ответа Supabase для дальнейшей диагностики. Выполнены `lintDebug`,
 `testDebugUnitTest`, `assembleDebug` | OK
+
+[INFO] 09.07.2026 | CODEX_SUBAGENTS_SETUP | Добавлена проектная настройка субагентов Codex:
+`android_architect`, `gradle_build_doctor`, `qa_test_writer`, `bug_investigator`,
+`security_privacy_reviewer`, `release_reviewer`. Созданы `AGENTS.md`, `.codex/subagents/subagents.yaml`
+и профили агентов в `.codex/subagents/*.md` | OK

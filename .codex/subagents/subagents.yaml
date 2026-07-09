@@ -1,0 +1,36 @@
+version: 1
+repository: CrossfitArmyJym
+description: "Reusable Codex subagents for Android Java crossfit club app development."
+agents:
+  android_architect:
+    prompt_file: ".codex/subagents/android_architect.md"
+    use_when:
+      - "Before new feature implementation"
+      - "Before refactoring"
+      - "When adding repositories, ViewModels, navigation, modules, or package boundaries"
+  gradle_build_doctor:
+    prompt_file: ".codex/subagents/gradle_build_doctor.md"
+    use_when:
+      - "Build, sync, dependency, AGP, Gradle, signing, R8, or CI problems"
+      - "Before changing Gradle files"
+  qa_test_writer:
+    prompt_file: ".codex/subagents/qa_test_writer.md"
+    use_when:
+      - "Before or after feature implementation"
+      - "After bug fixes"
+      - "Before merging larger changes"
+  bug_investigator:
+    prompt_file: ".codex/subagents/bug_investigator.md"
+    use_when:
+      - "Crashes, ANR, timeouts, lifecycle bugs, navigation bugs, Room/Retrofit/Supabase failures"
+      - "When root cause is not known yet"
+  security_privacy_reviewer:
+    prompt_file: ".codex/subagents/security_privacy_reviewer.md"
+    use_when:
+      - "Authentication, user data, tokens, network, permissions, logging, Supabase policies"
+      - "Before release"
+  release_reviewer:
+    prompt_file: ".codex/subagents/release_reviewer.md"
+    use_when:
+      - "Before debug handoff, internal testing, release APK/AAB, or Google Play publication"
+
