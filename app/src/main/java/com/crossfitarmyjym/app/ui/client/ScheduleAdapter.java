@@ -25,6 +25,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     private List<GymClass> classes = new ArrayList<>();
     private Set<String> bookedClassIds = Collections.emptySet();
+    private boolean bookingEnabled = true;
     private final OnBookClickListener listener;
 
     public interface OnBookClickListener {
@@ -61,8 +62,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
         boolean booked = bookedClassIds.contains(gymClass.getId());
         holder.binding.btnBook.setText(R.string.book);
-        holder.binding.btnBook.setEnabled(!booked && available > 0);
-        holder.binding.btnBook.setVisibility(booked ? View.GONE : View.VISIBLE);
+        holder.binding.btnBook.setEnabled(bookingEnabled && !booked && available > 0);
+        holder.binding.btnBook.setVisibility(bookingEnabled && !booked ? View.VISIBLE : View.GONE);
         holder.binding.tvBookedBadge.setVisibility(booked ? View.VISIBLE : View.GONE);
         holder.binding.rootRow.setBackgroundResource(
                 booked ? R.drawable.bg_schedule_booked_card : R.drawable.bg_schedule_row_card);
@@ -70,7 +71,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 holder.itemView.getContext(), booked ? R.color.army_red : R.color.divider));
         holder.binding.btnBook.setOnClickListener(v -> listener.onBook(gymClass.getId()));
         holder.itemView.setOnClickListener(v -> {
-            if (!booked && available > 0) {
+            if (bookingEnabled && !booked && available > 0) {
                 listener.onBook(gymClass.getId());
             }
         });
@@ -81,11 +82,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return classes.size();
     }
 
-    public void submitData(List<GymClass> newClasses, Set<String> newBookedClassIds) {
+    public void submitData(List<GymClass> newClasses, Set<String> newBookedClassIds,
+                           boolean canBook) {
         classes = newClasses != null ? newClasses : new ArrayList<>();
         bookedClassIds = newBookedClassIds != null
                 ? new HashSet<>(newBookedClassIds)
                 : Collections.emptySet();
+        bookingEnabled = canBook;
         notifyDataSetChanged();
     }
 

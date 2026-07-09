@@ -30,6 +30,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragment_schedule"
+        android:name="com.crossfitarmyjym.app.ui.client.ScheduleFragment"
+        android:label="@string/nav_schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
         android:id="@+id/fragment_wod_editor"
         android:name="com.crossfitarmyjym.app.ui.trainer.WodEditorFragment"
         android:label="WOD редактор"

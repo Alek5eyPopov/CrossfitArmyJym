@@ -93,6 +93,10 @@ public class ScheduleFragment extends Fragment {
         viewModel.getBookedClassIds().observe(getViewLifecycleOwner(), bookedIds ->
                 updateAdapter(viewModel.getClasses().getValue(), bookedIds));
 
+        viewModel.getCanBookClasses().observe(getViewLifecycleOwner(), canBook ->
+                updateAdapter(viewModel.getClasses().getValue(),
+                        viewModel.getBookedClassIds().getValue()));
+
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.btnRefresh.setEnabled(!isLoading);
@@ -114,7 +118,8 @@ public class ScheduleFragment extends Fragment {
     private void updateAdapter(List<GymClass> classes, Set<String> bookedIds) {
         adapter.submitData(
                 classes != null ? classes : Collections.emptyList(),
-                bookedIds != null ? bookedIds : Collections.emptySet());
+                bookedIds != null ? bookedIds : Collections.emptySet(),
+                Boolean.TRUE.equals(viewModel.getCanBookClasses().getValue()));
     }
 
     private void renderDateTabs(List<Date> dates, Date selectedDate) {

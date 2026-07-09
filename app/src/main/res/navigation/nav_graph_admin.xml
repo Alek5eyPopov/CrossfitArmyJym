@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_users" />
 
     <fragment
+        android:id="@+id/fragment_schedule"
+        android:name="com.crossfitarmyjym.app.ui.client.ScheduleFragment"
+        android:label="@string/nav_schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
         android:id="@+id/fragment_statistics"
         android:name="com.crossfitarmyjym.app.ui.admin.StatisticsFragment"
         android:label="Статистика"

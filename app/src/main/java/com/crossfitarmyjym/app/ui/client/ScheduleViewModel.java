@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.crossfitarmyjym.app.data.model.Booking;
 import com.crossfitarmyjym.app.data.model.GymClass;
+import com.crossfitarmyjym.app.data.preferences.PreferencesManager;
 import com.crossfitarmyjym.app.data.repository.BookingRepository;
 import com.crossfitarmyjym.app.data.repository.ClassRepository;
 
@@ -26,9 +27,11 @@ public class ScheduleViewModel extends AndroidViewModel {
 
     private final ClassRepository classRepository;
     private final BookingRepository bookingRepository;
+    private final PreferencesManager preferencesManager;
     private final MutableLiveData<List<Date>> visibleDates = new MutableLiveData<>(Collections.emptyList());
     private final MutableLiveData<Date> selectedDate = new MutableLiveData<>();
     private final MutableLiveData<String> monthTitle = new MutableLiveData<>("");
+    private final MutableLiveData<Boolean> canBookClasses = new MutableLiveData<>(false);
     private final List<GymClass> loadedClasses = new ArrayList<>();
     private final MutableLiveData<List<GymClass>> classes = new MutableLiveData<>(Collections.emptyList());
     private final MutableLiveData<Set<String>> bookedClassIds = new MutableLiveData<>(Collections.emptySet());
@@ -40,6 +43,8 @@ public class ScheduleViewModel extends AndroidViewModel {
         super(application);
         classRepository = ClassRepository.getInstance(application);
         bookingRepository = BookingRepository.getInstance(application);
+        preferencesManager = PreferencesManager.getInstance();
+        canBookClasses.setValue("athlete".equals(preferencesManager.getUserRole()));
         Date today = startOfDay(new Date());
         selectedDate.setValue(today);
         updateVisibleDates(today);
@@ -55,6 +60,10 @@ public class ScheduleViewModel extends AndroidViewModel {
 
     public LiveData<String> getMonthTitle() {
         return monthTitle;
+    }
+
+    public LiveData<Boolean> getCanBookClasses() {
+        return canBookClasses;
     }
 
     public LiveData<List<GymClass>> getClasses() {
@@ -145,6 +154,10 @@ public class ScheduleViewModel extends AndroidViewModel {
     }
 
     public void bookClass(String classId) {
+        if (!Boolean.TRUE.equals(canBookClasses.getValue())) {
+            bookingStatus.setValue("Запись доступна только атлетам");
+            return;
+        }
         isLoading.setValue(true);
         bookingRepository.createBooking(classId, new BookingRepository.SingleBookingCallback() {
             @Override
@@ -162,6 +175,11 @@ public class ScheduleViewModel extends AndroidViewModel {
     }
 
     private void loadBookingState() {
+        if (!Boolean.TRUE.equals(canBookClasses.getValue())) {
+            bookedClassIds.setValue(Collections.emptySet());
+            isLoading.setValue(false);
+            return;
+        }
         bookingRepository.refreshMyBookings(new BookingRepository.BookingCallback() {
             @Override
             public void onSuccess(List<Booking> bookings) {
