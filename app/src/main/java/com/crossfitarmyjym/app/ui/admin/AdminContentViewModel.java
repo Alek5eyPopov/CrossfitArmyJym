@@ -2,6 +2,8 @@ package com.crossfitarmyjym.app.ui.admin;
 
 import android.app.Application;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -11,10 +13,12 @@ import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.data.model.LoadType;
+import com.crossfitarmyjym.app.data.model.NewsPost;
 import com.crossfitarmyjym.app.data.model.TrainingTask;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.repository.AdminRepository;
+import com.crossfitarmyjym.app.data.repository.NewsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +27,14 @@ import java.util.Map;
 public class AdminContentViewModel extends AndroidViewModel {
 
     private final AdminRepository repository = new AdminRepository();
+    private final NewsRepository newsRepository;
     private final MutableLiveData<List<Group>> groups = new MutableLiveData<>();
     private final MutableLiveData<List<GymClass>> classes = new MutableLiveData<>();
     private final MutableLiveData<List<Wod>> wods = new MutableLiveData<>();
     private final MutableLiveData<List<Exercise>> exercises = new MutableLiveData<>();
     private final MutableLiveData<List<LoadType>> loadTypes = new MutableLiveData<>();
     private final MutableLiveData<List<TrainingTask>> trainingTasks = new MutableLiveData<>();
+    private final MutableLiveData<List<NewsPost>> news = new MutableLiveData<>();
     private final MutableLiveData<List<User>> trainers = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> message = new MutableLiveData<>();
@@ -36,6 +42,7 @@ public class AdminContentViewModel extends AndroidViewModel {
 
     public AdminContentViewModel(@NonNull Application application) {
         super(application);
+        newsRepository = NewsRepository.getInstance(application);
     }
 
     public LiveData<List<Group>> getGroups() { return groups; }
@@ -44,6 +51,7 @@ public class AdminContentViewModel extends AndroidViewModel {
     public LiveData<List<Exercise>> getExercises() { return exercises; }
     public LiveData<List<LoadType>> getLoadTypes() { return loadTypes; }
     public LiveData<List<TrainingTask>> getTrainingTasks() { return trainingTasks; }
+    public LiveData<List<NewsPost>> getNews() { return news; }
     public LiveData<List<User>> getTrainers() { return trainers; }
     public LiveData<Boolean> getLoading() { return loading; }
     public LiveData<String> getMessage() { return message; }
@@ -57,6 +65,17 @@ public class AdminContentViewModel extends AndroidViewModel {
         repository.getExercises(listCallback(exercises));
         repository.getLoadTypes(listCallback(loadTypes));
         repository.getTrainingTasks(listCallback(trainingTasks));
+        newsRepository.getAdminNews(new NewsRepository.NewsListCallback() {
+            @Override
+            public void onSuccess(List<NewsPost> posts) {
+                news.postValue(posts);
+            }
+
+            @Override
+            public void onError(@NonNull String value) {
+                error.postValue(value);
+            }
+        });
         repository.getUsers(new AdminRepository.ListCallback<User>() {
             @Override
             public void onSuccess(List<User> items) {
@@ -144,6 +163,42 @@ public class AdminContentViewModel extends AndroidViewModel {
     public void deleteTrainingTask(TrainingTask task) {
         action(callback -> repository.deleteTrainingTask(task.getId(), callback),
                 "Шаблон задания удалён");
+    }
+
+    public void saveNews(NewsPost post, String title, String summary, String body,
+                         String status, Uri imageUri) {
+        loading.setValue(true);
+        newsRepository.saveNews(post, title, summary, body, status, imageUri,
+                new NewsRepository.ActionCallback() {
+                    @Override
+                    public void onSuccess() {
+                        message.postValue("Новость сохранена");
+                        load();
+                    }
+
+                    @Override
+                    public void onError(@NonNull String value) {
+                        error.postValue(value);
+                        loading.postValue(false);
+                    }
+                });
+    }
+
+    public void archiveNews(NewsPost post) {
+        loading.setValue(true);
+        newsRepository.archiveNews(post, new NewsRepository.ActionCallback() {
+            @Override
+            public void onSuccess() {
+                message.postValue("Новость архивирована");
+                load();
+            }
+
+            @Override
+            public void onError(@NonNull String value) {
+                error.postValue(value);
+                loading.postValue(false);
+            }
+        });
     }
 
     private <T> AdminRepository.ListCallback<T> listCallback(MutableLiveData<List<T>> target) {

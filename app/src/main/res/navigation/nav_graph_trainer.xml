@@ -36,6 +36,18 @@
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
+        android:id="@+id/fragment_news"
+        android:name="com.crossfitarmyjym.app.ui.client.NewsFragment"
+        android:label="@string/nav_news"
+        tools:layout="@layout/fragment_news" />
+
+    <fragment
+        android:id="@+id/fragment_news_detail"
+        android:name="com.crossfitarmyjym.app.ui.client.NewsDetailFragment"
+        android:label="@string/nav_news"
+        tools:layout="@layout/fragment_news_detail" />
+
+    <fragment
         android:id="@+id/fragment_wod_editor"
         android:name="com.crossfitarmyjym.app.ui.trainer.WodEditorFragment"
         android:label="WOD редактор"
@@ -52,5 +64,11 @@
         android:name="com.crossfitarmyjym.app.ui.client.ProfileFragment"
         android:label="@string/nav_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/fragment_more"
+        android:name="com.crossfitarmyjym.app.ui.client.MoreFragment"
+        android:label="@string/nav_more"
+        tools:layout="@layout/fragment_client_placeholder" />
 
 </navigation>

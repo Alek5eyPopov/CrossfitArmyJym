@@ -33,6 +33,7 @@ public final class ApiClient {
     private static AttendanceApi attendanceApi;
     private static WodApi wodApi;
     private static AdminApi adminApi;
+    private static NewsApi newsApi;
 
     // Приватный конструктор
     private ApiClient() {
@@ -170,6 +171,13 @@ public final class ApiClient {
         return adminApi;
     }
 
+    public static NewsApi getNewsApi() {
+        if (newsApi == null) {
+            newsApi = getClient().create(NewsApi.class);
+        }
+        return newsApi;
+    }
+
     /**
      * Очистка Retrofit instance (используется при выходе).
      */
@@ -182,6 +190,7 @@ public final class ApiClient {
         attendanceApi = null;
         wodApi = null;
         adminApi = null;
+        newsApi = null;
         Log.d(TAG, "ApiClient cleared");
     }
 }

@@ -106,6 +106,8 @@
     <string name="bookings_empty_hint">Выберите подходящую тренировку в расписании</string>
     <string name="news_title">НОВОСТИ</string>
     <string name="news_placeholder_message">Здесь появятся новости клуба, объявления тренеров и важные события ARMY.</string>
+    <string name="news_empty_title">НОВОСТЕЙ НЕТ</string>
+    <string name="news_empty_message">Опубликованные новости клуба появятся здесь.</string>
     <string name="more_title">ЕЩЕ</string>
     <string name="more_placeholder_message">Здесь позже появится список дополнительных возможностей приложения.</string>
     <string name="profile_title">ПРОФИЛЬ</string>
@@ -202,6 +204,7 @@
     <string name="admin_exercises_section">УПРАЖНЕНИЯ</string>
     <string name="admin_load_types_section">ТИПЫ НАГРУЗКИ</string>
     <string name="admin_task_templates_section">ШАБЛОНЫ ЗАДАНИЙ</string>
+    <string name="admin_news_section">НОВОСТИ</string>
     <string name="admin_users_metric">Всего</string>
     <string name="admin_active_metric">Активны</string>
     <string name="admin_groups_metric">Группы</string>

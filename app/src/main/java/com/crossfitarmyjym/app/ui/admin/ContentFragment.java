@@ -1,5 +1,6 @@
 package com.crossfitarmyjym.app.ui.admin;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,10 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -24,11 +28,13 @@ import com.crossfitarmyjym.app.data.model.Exercise;
 import com.crossfitarmyjym.app.data.model.Group;
 import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.data.model.LoadType;
+import com.crossfitarmyjym.app.data.model.NewsPost;
 import com.crossfitarmyjym.app.data.model.TrainingTask;
 import com.crossfitarmyjym.app.data.model.User;
 import com.crossfitarmyjym.app.data.model.Wod;
 import com.crossfitarmyjym.app.data.repository.AdminRepository;
 import com.crossfitarmyjym.app.databinding.FragmentContentBinding;
+import com.crossfitarmyjym.app.ui.news.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +52,21 @@ public class ContentFragment extends Fragment {
     private List<User> trainers = new ArrayList<>();
     private List<Exercise> exercises = new ArrayList<>();
     private List<LoadType> loadTypes = new ArrayList<>();
+    private ActivityResultLauncher<String> newsImagePicker;
+    private Uri selectedNewsImageUri;
+    private ImageView selectedNewsPreview;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        newsImagePicker = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            if (uri == null) return;
+            selectedNewsImageUri = uri;
+            if (selectedNewsPreview != null) {
+                selectedNewsPreview.setImageURI(uri);
+            }
+        });
+    }
 
     @Nullable
     @Override
@@ -64,6 +85,7 @@ public class ContentFragment extends Fragment {
         binding.btnAddExercise.setOnClickListener(v -> showExerciseDialog(null));
         binding.btnAddLoadType.setOnClickListener(v -> showLoadTypeDialog(null));
         binding.btnAddTrainingTask.setOnClickListener(v -> showTrainingTaskDialog(null));
+        binding.btnAddNews.setOnClickListener(v -> showNewsDialog(null));
         binding.btnCreateWod.setOnClickListener(v -> NavHostFragment.findNavController(this)
                 .navigate(R.id.action_content_to_wod_editor));
         observe();
@@ -77,6 +99,7 @@ public class ContentFragment extends Fragment {
         setupLoadTypes();
         setupTrainingTasks();
         setupWods();
+        setupNews();
     }
 
     private void setupGroups() {
@@ -200,6 +223,25 @@ public class ContentFragment extends Fragment {
         ));
     }
 
+    private void setupNews() {
+        binding.rvNews.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvNews.setAdapter(new AdminRowAdapter<>(
+                new AdminRowAdapter.Presenter<NewsPost>() {
+                    @Override public String title(NewsPost item) { return item.getTitle(); }
+                    @Override public String subtitle(NewsPost item) {
+                        return item.getStatus() + " • " + value(item.getPublishedAt(), "не опубликована");
+                    }
+                },
+                new AdminRowAdapter.Listener<NewsPost>() {
+                    @Override public void onEdit(NewsPost item) { showNewsDialog(item); }
+                    @Override public void onDelete(NewsPost item) {
+                        confirm("Архивировать новость «" + item.getTitle() + "»?",
+                                () -> viewModel.archiveNews(item));
+                    }
+                }
+        ));
+    }
+
     @SuppressWarnings("unchecked")
     private void observe() {
         viewModel.getGroups().observe(getViewLifecycleOwner(), value -> {
@@ -220,6 +262,8 @@ public class ContentFragment extends Fragment {
                 ((AdminRowAdapter<TrainingTask>) binding.rvTrainingTasks.getAdapter()).submitList(value));
         viewModel.getWods().observe(getViewLifecycleOwner(), value ->
                 ((AdminRowAdapter<Wod>) binding.rvWods.getAdapter()).submitList(value));
+        viewModel.getNews().observe(getViewLifecycleOwner(), value ->
+                ((AdminRowAdapter<NewsPost>) binding.rvNews.getAdapter()).submitList(value));
         viewModel.getTrainers().observe(getViewLifecycleOwner(), value ->
                 trainers = value != null ? value : new ArrayList<>());
         viewModel.getLoading().observe(getViewLifecycleOwner(), value ->
@@ -441,6 +485,67 @@ public class ContentFragment extends Fragment {
                 )).show();
     }
 
+    private void showNewsDialog(NewsPost existing) {
+        selectedNewsImageUri = null;
+        LinearLayout content = dialogContent();
+        EditText title = field("Заголовок", existing == null ? null : existing.getTitle());
+        EditText summary = field("Краткое описание", existing == null ? null : existing.getSummary());
+        EditText body = field("Текст новости", existing == null ? null : existing.getBody());
+        body.setMinLines(5);
+        Spinner status = spinner(Arrays.asList(
+                NewsPost.STATUS_DRAFT,
+                NewsPost.STATUS_PUBLISHED,
+                NewsPost.STATUS_ARCHIVED
+        ));
+        if (existing != null) {
+            selectValue(status, existing.getStatus());
+        }
+        ImageView preview = new ImageView(requireContext());
+        preview.setAdjustViewBounds(true);
+        preview.setMinimumHeight((int) (140 * getResources().getDisplayMetrics().density));
+        preview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        selectedNewsPreview = preview;
+        if (existing != null && existing.getImageUrl() != null && !existing.getImageUrl().isEmpty()) {
+            ImageLoader.load(preview, existing.getImageUrl(), R.drawable.bg_army_hero);
+        } else {
+            preview.setImageResource(R.drawable.bg_army_hero);
+        }
+
+        com.google.android.material.button.MaterialButton imageButton =
+                new com.google.android.material.button.MaterialButton(requireContext());
+        imageButton.setText("Выбрать изображение");
+        imageButton.setAllCaps(false);
+        imageButton.setOnClickListener(v -> newsImagePicker.launch("image/*"));
+
+        content.addView(title);
+        content.addView(summary);
+        content.addView(body);
+        content.addView(status);
+        content.addView(imageButton);
+        content.addView(preview);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle(existing == null ? "Новая новость" : "Изменить новость")
+                .setView(content)
+                .setNegativeButton("Отмена", null)
+                .setPositiveButton("Сохранить", (dialog, which) -> {
+                    if (text(title).isEmpty() || text(body).isEmpty()) {
+                        toast("Введите заголовок и текст новости");
+                        return;
+                    }
+                    viewModel.saveNews(
+                            existing,
+                            text(title),
+                            text(summary),
+                            text(body),
+                            String.valueOf(status.getSelectedItem()),
+                            selectedNewsImageUri
+                    );
+                    selectedNewsImageUri = null;
+                    selectedNewsPreview = null;
+                }).show();
+    }
+
     private LinearLayout dialogContent() {
         LinearLayout content = new LinearLayout(requireContext());
         content.setOrientation(LinearLayout.VERTICAL);
@@ -612,5 +717,6 @@ public class ContentFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        selectedNewsPreview = null;
     }
 }

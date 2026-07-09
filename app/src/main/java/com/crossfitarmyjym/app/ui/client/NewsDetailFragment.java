@@ -10,25 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.crossfitarmyjym.app.R;
-import com.crossfitarmyjym.app.databinding.FragmentNewsBinding;
+import com.crossfitarmyjym.app.data.model.NewsPost;
+import com.crossfitarmyjym.app.databinding.FragmentNewsDetailBinding;
+import com.crossfitarmyjym.app.ui.news.ImageLoader;
 import com.crossfitarmyjym.app.ui.news.NewsAdapter;
 import com.crossfitarmyjym.app.ui.news.NewsViewModel;
 
-public class NewsFragment extends Fragment {
+public class NewsDetailFragment extends Fragment {
 
-    private FragmentNewsBinding binding;
+    private FragmentNewsDetailBinding binding;
     private NewsViewModel viewModel;
-    private NewsAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentNewsBinding.inflate(inflater, container, false);
+        binding = FragmentNewsDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -36,29 +36,30 @@ public class NewsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
-        adapter = new NewsAdapter(post -> {
-            Bundle args = new Bundle();
-            args.putString("news_id", post.getId());
-            Navigation.findNavController(view).navigate(R.id.fragment_news_detail, args);
-        });
-        binding.rvNews.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvNews.setAdapter(adapter);
+        binding.btnBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         observe();
-        viewModel.loadNews();
+        String newsId = getArguments() == null ? null : getArguments().getString("news_id");
+        if (newsId == null || newsId.isEmpty()) {
+            Toast.makeText(requireContext(), "Новость не выбрана", Toast.LENGTH_SHORT).show();
+            NavHostFragment.findNavController(this).navigateUp();
+            return;
+        }
+        viewModel.loadNewsPost(newsId);
     }
 
     private void observe() {
-        viewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
-            adapter.submitList(posts);
-            boolean empty = posts == null || posts.isEmpty();
-            binding.rvNews.setVisibility(empty ? View.GONE : View.VISIBLE);
-            binding.emptyContainer.setVisibility(empty ? View.VISIBLE : View.GONE);
-        });
-        viewModel.getLoading().observe(getViewLifecycleOwner(), loading ->
-                binding.progressBar.setVisibility(Boolean.TRUE.equals(loading) ? View.VISIBLE : View.GONE));
+        viewModel.getSelectedPost().observe(getViewLifecycleOwner(), this::bind);
         viewModel.getError().observe(getViewLifecycleOwner(), error -> {
             if (error != null) Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void bind(NewsPost post) {
+        if (post == null) return;
+        binding.tvNewsTitle.setText(post.getTitle());
+        binding.tvNewsDate.setText(NewsAdapter.formatDate(post.getPublishedAt()));
+        binding.tvNewsBody.setText(post.getBody());
+        ImageLoader.load(binding.ivHero, post.getImageUrl(), R.drawable.bg_army_hero);
     }
 
     @Override

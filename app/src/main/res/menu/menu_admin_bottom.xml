@@ -9,15 +9,15 @@
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/nav_users" />
     <item
-        android:id="@+id/fragment_statistics"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/nav_statistics" />
-    <item
-        android:id="@+id/fragment_content"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="@string/nav_content" />
+        android:id="@+id/fragment_news"
+        android:icon="@drawable/ic_news"
+        android:title="@string/nav_news" />
     <item
         android:id="@+id/fragment_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/nav_profile" />
+    <item
+        android:id="@+id/fragment_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/nav_more" />
 </menu>
