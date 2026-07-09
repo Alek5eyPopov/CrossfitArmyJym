@@ -1083,3 +1083,7 @@ RLS разрешает всем авторизованным пользоват�
 В Android добавлены лента, детальный экран, загрузка изображений в Supabase Storage, админский CRUD и доступ к новостям
 из нижней панели всех ролей. Выполнены `lintDebug`, `testDebugUnitTest`, `assembleDebug`; SQL-валидатор недоступен
 из-за отсутствующего/несовместимого `pglast` в локальном Python окружении | OK
+
+[INFO] 09.07.2026 | NEWS_DEMO_SEED | Added `database/seed_news_demo.sql` with six idempotent demo news posts:
+five `published` posts for athlete/trainer/admin feeds and one `draft` post for admin-only content checks. The seed uses fixed UUIDs,
+external HTTPS image URLs for immediate visual testing, and updates existing demo rows on repeated runs | OK
