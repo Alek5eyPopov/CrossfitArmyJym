@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         binding.cardScheduleAction.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.fragment_schedule));
         binding.cardBookingsAction.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.fragment_bookings));
+                Navigation.findNavController(v).navigate(R.id.fragment_schedule));
         binding.btnOpenSchedule.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.fragment_schedule));
         binding.btnSubmitResult.setOnClickListener(v -> showResultDialog());

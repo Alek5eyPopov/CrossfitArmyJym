@@ -34,6 +34,7 @@ public class ClientMainActivity extends AppCompatActivity {
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
+            binding.bottomNavigation.bringToFront();
         }
 
         Log.d(TAG, "ClientMainActivity created");

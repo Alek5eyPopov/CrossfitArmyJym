@@ -1058,3 +1058,9 @@ API-клиент начал отправлять `null`-поля в JSON для 
 `android_architect`, `gradle_build_doctor`, `qa_test_writer`, `bug_investigator`,
 `security_privacy_reviewer`, `release_reviewer`. Созданы `AGENTS.md`, `.codex/subagents/subagents.yaml`
 и профили агентов в `.codex/subagents/*.md` | OK
+
+[INFO] 09.07.2026 | CLIENT_BOTTOM_NAV_REWORK | Нижняя панель атлета изменена на
+`Главная`, `Расписание`, `Новости`, `Профиль`, `Еще`; `Мои записи` убраны из bottom menu и временно
+перенаправлены в расписание из быстрого действия на главной. Добавлены placeholder-экраны `Новости` и `Еще`,
+нижняя панель клиента поднята через `elevation`/`translationZ` и `bringToFront`. Выполнены `lintDebug`,
+`testDebugUnitTest`, `assembleDebug` | OK

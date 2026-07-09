@@ -23,6 +23,8 @@
         android:layout_height="@dimen/bottom_navigation_height"
         android:layout_gravity="bottom"
         android:background="@color/army_navy"
+        android:elevation="@dimen/bottom_navigation_elevation"
+        android:translationZ="@dimen/bottom_navigation_elevation"
         app:activeIndicatorLabelPadding="@dimen/bottom_navigation_icon_label_spacing"
         app:itemActiveIndicatorStyle="@null"
         app:itemIconTint="@color/nav_item_color"

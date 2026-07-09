@@ -9,11 +9,15 @@
         android:icon="@drawable/ic_schedule"
         android:title="@string/nav_schedule" />
     <item
-        android:id="@+id/fragment_bookings"
-        android:icon="@drawable/ic_bookings"
-        android:title="@string/nav_my_bookings" />
+        android:id="@+id/fragment_news"
+        android:icon="@drawable/ic_news"
+        android:title="@string/nav_news" />
     <item
         android:id="@+id/fragment_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/nav_profile" />
+    <item
+        android:id="@+id/fragment_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/nav_more" />
 </menu>
