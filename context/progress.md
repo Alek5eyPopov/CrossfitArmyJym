@@ -1087,3 +1087,6 @@ RLS разрешает всем авторизованным пользоват�
 [INFO] 09.07.2026 | NEWS_DEMO_SEED | Added `database/seed_news_demo.sql` with six idempotent demo news posts:
 five `published` posts for athlete/trainer/admin feeds and one `draft` post for admin-only content checks. The seed uses fixed UUIDs,
 external HTTPS image URLs for immediate visual testing, and updates existing demo rows on repeated runs | OK
+
+[FIX] 09.07.2026 | SCHEDULE_TOP_INSET_NAV_SPACING | Adjusted schedule screen top safe area with `fitsSystemWindows`
+to avoid header/status-bar overlap on emulator devices with cutouts, and reduced bottom navigation icon-label spacing from `4dp` to `2dp` | OK
