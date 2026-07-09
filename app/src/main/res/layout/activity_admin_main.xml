@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.admin.AdminMainActivity">
 
     <!-- Фрагмент для навигации -->
@@ -30,6 +29,8 @@
         app:itemIconTint="@color/nav_item_color"
         app:itemPaddingBottom="@dimen/bottom_navigation_item_padding_bottom"
         app:itemPaddingTop="@dimen/bottom_navigation_item_padding_top"
+        app:itemTextAppearanceActive="@style/TextAppearance.CrossfitArmyJym.BottomNavigationLabel"
+        app:itemTextAppearanceInactive="@style/TextAppearance.CrossfitArmyJym.BottomNavigationLabel"
         app:itemTextColor="@color/nav_item_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_admin_bottom" />
