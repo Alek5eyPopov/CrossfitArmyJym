@@ -89,7 +89,10 @@
     <string name="no_upcoming_training">Ближайших тренировок пока нет</string>
     <string name="open_schedule">Открыть расписание</string>
     <string name="schedule_title">РАСПИСАНИЕ</string>
-    <string name="schedule_subtitle">Выберите тренировку на ближайшие 7 дней</string>
+    <string name="schedule_subtitle">Выберите день и тренировку</string>
+    <string name="schedule_prev_week">‹</string>
+    <string name="schedule_next_week">›</string>
+    <string name="refresh_short">↻</string>
     <string name="bookings_title">МОИ ЗАПИСИ</string>
     <string name="bookings_subtitle">Ваши предстоящие тренировки</string>
     <string name="refresh">Обновить</string>

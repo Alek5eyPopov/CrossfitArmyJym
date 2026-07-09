@@ -1,9 +1,11 @@
 package com.crossfitarmyjym.app.ui.client;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.crossfitarmyjym.app.R;
@@ -44,22 +46,34 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         GymClass gymClass = classes.get(position);
         String location = gymClass.getLocation();
-        holder.binding.tvClassName.setText(
-                location == null || location.isEmpty() ? "CrossFit" : location);
         Date classDate = parseDate(gymClass.getScheduledStart());
-        holder.binding.tvDateDay.setText(formatDate(classDate, "dd", "--"));
-        holder.binding.tvDateMonth.setText(
-                formatDate(classDate, "MMM", "---").replace(".", "").toUpperCase(Locale.getDefault()));
+        Date endDate = parseDate(gymClass.getScheduledEnd());
+
+        holder.binding.tvClassName.setText(
+                location == null || location.trim().isEmpty() ? "CROSSFIT" : location.toUpperCase(Locale.getDefault()));
+        holder.binding.tvLocation.setText(R.string.group_training_label);
         holder.binding.tvClassTime.setText(formatDate(classDate, "HH:mm", "Время уточняется"));
+        holder.binding.tvClassDuration.setText(formatDuration(classDate, endDate));
 
         int available = Math.max(gymClass.getAvailableSlots(), 0);
         holder.binding.tvAvailableSlots.setText(
                 holder.itemView.getContext().getString(R.string.slots_left, available));
 
         boolean booked = bookedClassIds.contains(gymClass.getId());
-        holder.binding.btnBook.setText(booked ? R.string.already_booked : R.string.book);
+        holder.binding.btnBook.setText(R.string.book);
         holder.binding.btnBook.setEnabled(!booked && available > 0);
+        holder.binding.btnBook.setVisibility(booked ? View.GONE : View.VISIBLE);
+        holder.binding.tvBookedBadge.setVisibility(booked ? View.VISIBLE : View.GONE);
+        holder.binding.rootRow.setBackgroundResource(
+                booked ? R.drawable.bg_schedule_booked_card : R.drawable.bg_schedule_row_card);
+        holder.binding.accentBar.setBackgroundColor(ContextCompat.getColor(
+                holder.itemView.getContext(), booked ? R.color.army_red : R.color.divider));
         holder.binding.btnBook.setOnClickListener(v -> listener.onBook(gymClass.getId()));
+        holder.itemView.setOnClickListener(v -> {
+            if (!booked && available > 0) {
+                listener.onBook(gymClass.getId());
+            }
+        });
     }
 
     @Override
@@ -101,6 +115,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     private static String formatDate(Date date, String pattern, String fallback) {
         if (date == null) return fallback;
         return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
+    }
+
+    private static String formatDuration(Date start, Date end) {
+        if (start == null || end == null || !end.after(start)) {
+            return "55 мин.";
+        }
+        long minutes = (end.getTime() - start.getTime()) / 60000;
+        return minutes + " мин.";
     }
 
     public static String formatDay(String isoDate) {

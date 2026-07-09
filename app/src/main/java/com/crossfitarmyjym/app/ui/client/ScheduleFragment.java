@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +19,12 @@ import com.crossfitarmyjym.app.R;
 import com.crossfitarmyjym.app.data.model.GymClass;
 import com.crossfitarmyjym.app.databinding.FragmentScheduleBinding;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -51,6 +58,8 @@ public class ScheduleFragment extends Fragment {
         setupRecyclerView();
         setupObservers();
         binding.btnRefresh.setOnClickListener(v -> viewModel.refreshSchedule());
+        binding.btnPrevWeek.setOnClickListener(v -> viewModel.shiftWeek(-1));
+        binding.btnNextWeek.setOnClickListener(v -> viewModel.shiftWeek(1));
 
         viewModel.loadSchedule();
     }
@@ -63,6 +72,15 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void setupObservers() {
+        viewModel.getMonthTitle().observe(getViewLifecycleOwner(), month ->
+                binding.tvMonth.setText(month == null ? "" : month.toUpperCase(Locale.getDefault())));
+
+        viewModel.getVisibleDates().observe(getViewLifecycleOwner(), dates ->
+                renderDateTabs(dates, viewModel.getSelectedDate().getValue()));
+
+        viewModel.getSelectedDate().observe(getViewLifecycleOwner(), selected ->
+                renderDateTabs(viewModel.getVisibleDates().getValue(), selected));
+
         viewModel.getClasses().observe(getViewLifecycleOwner(), gymClasses -> {
             if (gymClasses != null) {
                 updateAdapter(gymClasses, viewModel.getBookedClassIds().getValue());
@@ -97,6 +115,71 @@ public class ScheduleFragment extends Fragment {
         adapter.submitData(
                 classes != null ? classes : Collections.emptyList(),
                 bookedIds != null ? bookedIds : Collections.emptySet());
+    }
+
+    private void renderDateTabs(List<Date> dates, Date selectedDate) {
+        if (binding == null || dates == null) return;
+        binding.dateTabs.removeAllViews();
+        for (Date date : dates) {
+            boolean selected = isSameDay(date, selectedDate);
+            LinearLayout dayView = createDayView(date, selected);
+            dayView.setOnClickListener(v -> viewModel.selectDate(date));
+            binding.dateTabs.addView(dayView);
+        }
+    }
+
+    private LinearLayout createDayView(Date date, boolean selected) {
+        LinearLayout container = new LinearLayout(requireContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setGravity(android.view.Gravity.CENTER);
+        container.setBackgroundResource(selected
+                ? R.drawable.bg_schedule_day_selected
+                : R.drawable.bg_schedule_day_default);
+        container.setClickable(true);
+        container.setFocusable(true);
+        int verticalPadding = dp(7);
+        container.setPadding(0, verticalPadding, 0, verticalPadding);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+        params.setMargins(dp(2), 0, dp(2), 0);
+        container.setLayoutParams(params);
+
+        TextView dayNumber = new TextView(requireContext());
+        dayNumber.setText(formatDate(date, "d"));
+        dayNumber.setTextColor(ContextCompat.getColor(requireContext(),
+                selected ? R.color.text_on_primary : R.color.text_primary));
+        dayNumber.setTextSize(24);
+        dayNumber.setTypeface(dayNumber.getTypeface(), android.graphics.Typeface.BOLD);
+        dayNumber.setGravity(android.view.Gravity.CENTER);
+
+        TextView dayName = new TextView(requireContext());
+        dayName.setText(formatDate(date, "EE").replace(".", "").toUpperCase(Locale.getDefault()));
+        dayName.setTextColor(ContextCompat.getColor(requireContext(),
+                selected ? R.color.text_on_primary : R.color.text_secondary));
+        dayName.setTextSize(14);
+        dayName.setGravity(android.view.Gravity.CENTER);
+
+        container.addView(dayNumber);
+        container.addView(dayName);
+        return container;
+    }
+
+    private boolean isSameDay(Date first, Date second) {
+        if (first == null || second == null) return false;
+        Calendar firstCalendar = Calendar.getInstance();
+        Calendar secondCalendar = Calendar.getInstance();
+        firstCalendar.setTime(first);
+        secondCalendar.setTime(second);
+        return firstCalendar.get(Calendar.YEAR) == secondCalendar.get(Calendar.YEAR)
+                && firstCalendar.get(Calendar.DAY_OF_YEAR) == secondCalendar.get(Calendar.DAY_OF_YEAR);
+    }
+
+    private String formatDate(Date date, String pattern) {
+        return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density);
     }
 
     @Override
