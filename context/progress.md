@@ -1090,3 +1090,7 @@ external HTTPS image URLs for immediate visual testing, and updates existing dem
 
 [FIX] 09.07.2026 | SCHEDULE_TOP_INSET_NAV_SPACING | Adjusted schedule screen top safe area with `fitsSystemWindows`
 to avoid header/status-bar overlap on emulator devices with cutouts, and reduced bottom navigation icon-label spacing from `4dp` to `2dp` | OK
+
+[FIX] 09.07.2026 | GLOBAL_MAIN_INSETS_NAV_ICON_PADDING | Moved safe-area handling to all main activity roots so top insets apply
+across client/trainer/admin screens, and added Material `itemIconPadding=1dp` to bottom navigation because `activeIndicatorLabelPadding`
+does not affect icon-label spacing when active indicators are disabled | OK
